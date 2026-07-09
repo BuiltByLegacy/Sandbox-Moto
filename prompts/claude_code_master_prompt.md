@@ -62,5 +62,43 @@ Aim for a Sandcastle-like cozy handcrafted sandbox diorama:
 - Tiny cones.
 - Toy dump truck.
 
-Avoid gritty realistic motocross, serious racing sim presentation, business analytics, and pro racing management systems.
+## Toy Dirt Bike Art Direction
 
+The bikes should look like collectible toy motocross bikes that came alive in a kid's imagination.
+
+Use nostalgic 1:12 scale toy motocross bike inspiration, not real licensed motorcycles.
+
+Do not use real motorcycle brand names, logos, graphics, or exact model designs. Avoid Honda, Yamaha, Kawasaki, KTM, Husqvarna, and Suzuki branding. Use fictional toy-style brands and original graphics instead.
+
+Bike visual targets:
+
+- Chunky plastic bodywork.
+- Slightly oversized fenders.
+- Thick toy-like tires.
+- Simplified engines.
+- Simplified forks and swingarms.
+- Glossy molded plastic.
+- Rounded toy-safe edges.
+- Plastic number plates.
+- Simple decals.
+- Tiny scratches and sand or dirt on tires.
+- Premium collectible toy-store feel.
+
+Fictional brand examples:
+
+- Legacy Moto.
+- Sandbox Racing.
+- TrailWorks.
+- DirtCo.
+- MotoForge.
+- TinyMoto.
+- Backyard Factory.
+- PitKid Racing.
+
+Each race should spawn toy bikes from a collectible pool. Each bike gets a random number, random colorway, random temporary skill profile, and random race behavior with no permanent real-world identity.
+
+Riders should look toy-like too: oversized helmets, chunky boots, simplified plastic body proportions, colorful gear, and an articulated action-figure feeling. Do not use real rider names or licensed gear.
+
+Animation should feel like toys brought to life by imagination: slight bounce while riding, simple wheelie over jumps, whole-bike tilt in air, simple landing bounce, and tiny roost or sand spray. Do not build toward full realistic suspension simulation.
+
+Avoid gritty realistic motocross, serious racing sim presentation, business analytics, and pro racing management systems.
