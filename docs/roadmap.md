@@ -10,6 +10,7 @@ This roadmap follows the Sandbox Moto north star: unlock imagination, not power.
 - Spawn toy bike racers.
 - Show imagination feedback bubbles.
 - Keep the loop: Play Time -> Press Play -> toy race -> feedback -> adjust -> one more race.
+- Establish the initial Steam Early Access release checklist.
 
 ## Version 2: Better Sculpting And Toy Bikes
 
@@ -45,6 +46,8 @@ This roadmap follows the Sandbox Moto north star: unlock imagination, not power.
 
 Each location should have mood, lighting, sound, props, dirt/sand type, and unlocks.
 
+Environmental polish should make the sandbox feel alive: butterflies, leaves, wind, moving grass, ants, bird shadows, kids laughing, and cloud shadows.
+
 ## Version 5: Sharing And Community
 
 - Track sharing.
@@ -53,6 +56,23 @@ Each location should have mood, lighting, sound, props, dirt/sand type, and unlo
 - Community sandbox gallery.
 - Shareable Polaroid/scrapbook pages.
 - Custom toy collections.
+- Photo mode with tilt shift, golden hour, Polaroid frames, scrapbook borders, hide UI, and screenshot shortcut.
+
+## Steam Early Access Preparation
+
+- Steamworks account.
+- Steam Direct registration.
+- Steam store page.
+- Capsule art.
+- Trailer.
+- Screenshots.
+- Tags.
+- Description.
+- Wishlist campaign.
+- Steam achievements.
+- Cloud save investigation.
+- Steam Deck compatibility.
+- Early Access checklist.
 
 ## Version 6: Sandbox Neighborhood / Larger World
 

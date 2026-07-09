@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- docs: update roadmap for Steam release prep, living sandbox polish, and photo mode.
 - docs: add design bible and north star for Sandbox Moto.
 - docs: add scrapbook, toy box, one-more-race, and played-in dirt concepts.
 - Refined the creative direction around Sandbox Moto as a nostalgic toy sandbox imagination game, not a racing simulator or track manager.
