@@ -1,86 +1,72 @@
 # Reusable AI Prompts
 
-Use these prompts to keep Claude, Codex, and Higgsfield aligned with the same creative north star.
+These prompts keep Claude Code, Codex, and Higgsfield aligned with Sandbox Moto's creative direction.
 
-## Claude / Claude Code Master Prompt
+## Claude Code / Codex Development Prompt
 
 You are working on Sandbox Moto, a cozy nostalgic motocross sandbox game built in Godot 4.x with GDScript.
 
-Emotional north star: Sandbox Moto should feel like being a kid again, building motocross tracks in the sandbox and imagining toy bikes racing them.
+Read `VISION.md` first, then use the docs in `/docs` as the source of truth.
 
-This is not a pro racing simulator, not a business sim, and not a track management game. Building is the main mechanic. Racing validates the player's handmade track and creates playful imagination feedback.
+Creative north star: Sandbox Moto should feel like being a kid again, kneeling beside a sandbox, dirt pile, or motocross pit area, building tiny motocross tracks with toy bikes and imagination.
 
-Core loop: Build track -> run toy race -> get imagination feedback -> modify track -> race again.
+This is not a racing simulator. This is not primarily a track manager. This is not about money, business, or pro racing. This is about childhood motocross imagination.
 
-Preserve these directions:
+Core loop: Build -> Race -> Imagine Feedback -> Adjust -> Race Again.
 
-- Smooth free-draw track, not a blocky grid system.
-- Cozy sandbox diorama visual style.
-- Warm golden sand and handmade dirt.
-- Tiny toy dirt bikes.
-- Oversized grass, buckets, shovels, cones, and backyard props.
-- Placeholder visuals are acceptable, but code should be organized for future art.
-- Rider names, numbers, colors, and skills randomize independently every race.
-- Bigger jumps have risk/reward.
-- Beginner riders roll or crash on bigger features.
-- Better riders clear bigger features more often.
-- Feedback is playful and imagination-style, not analytics.
+Design pillars:
 
-When coding, keep the prototype simple, readable, and expandable.
+1. Nostalgia first.
+2. Building is the main mechanic.
+3. Racing validates the track.
+4. The riders are toy bikes brought to life by imagination.
+5. No pressure, no game over.
+6. The world should feel tiny, warm, handmade, and playful.
+7. Feedback should feel like imagination, not analytics.
 
-## Codex Prompt
+Implementation guardrails:
 
-Continue developing Sandbox Moto in the existing Godot 4.x repo.
-
-Read `VISION.md` first, then use the docs in `/docs` as the source of truth. Keep the project aligned with the childhood sandbox motocross fantasy.
-
-Prioritize:
-
-- Working playable increments.
-- Clean GDScript.
-- Smooth track building.
-- Toy-like rider behavior.
-- Cozy placeholder visuals that can later be replaced by handmade art.
-- No gritty realism, pro sim complexity, or business sim systems.
-
-Before changing behavior, check the current scripts and preserve the build -> race -> feedback -> adjust loop.
-
-## Higgsfield Visual Prompt
-
-Create visual direction for Sandbox Moto, a cozy nostalgic motocross sandbox diorama game.
-
-The scene should feel like a child kneeling beside a warm sandbox, building a tiny motocross track from golden sand and dirt, then imagining toy dirt bikes racing around it.
-
-Visual ingredients:
-
-- Warm golden sand.
-- Handmade dirt mounds.
-- Smooth miniature motocross track.
-- Tiny colorful toy dirt bikes.
-- Oversized grass blades.
-- Plastic buckets.
-- Toy shovels and rakes.
-- Small cones and fence pieces.
-- Soft sunny backyard light.
-- Cozy handcrafted Sandcastle-like mood, but motocross.
-
-Avoid gritty realism, professional stadium racing, mud-heavy realism, dark garages, sponsor-heavy motorsport branding, and serious simulation energy.
+- Preserve the free-draw smooth track system.
+- Do not switch to a blocky grid track system.
+- If grid logic is introduced later, use it only as an editing helper while visuals remain smooth and natural.
+- Keep rider names, numbers, colors, and skills randomized independently each race.
+- Use toy-like behavior, not real motorcycle physics.
+- Keep feedback playful and qualitative.
 
 ## Higgsfield Game Prompt
 
-Create a cozy gameplay concept visual for Sandbox Moto.
+Create a Sandcastle-like cozy sandbox visual prototype for Sandbox Moto, a nostalgic motocross sandbox game about building tiny dirt bike tracks with toys and imagination.
 
-Show a miniature sandbox motocross track with toy dirt bikes racing through playful handmade features: single, double, triple, tabletop, whoops, rollers, sand patch, and hill.
+The image should feel like being a kid kneeling beside a warm backyard sandbox or dirt pile. A miniature motocross track is sculpted through golden sand with handmade dirt mounds, berms, whoops, rollers, a tabletop, a double, and a triple. Tiny colorful toy dirt bikes are racing on the track as if they have come alive through imagination.
 
-The image should communicate the loop:
+World scale should feel tiny and playful:
 
-Build track -> run toy race -> get imagination feedback -> modify track -> race again.
+- Oversized grass blades around the sandbox edge.
+- A red plastic bucket.
+- A plastic shovel and rake.
+- Popsicle sticks used like track markers.
+- Tiny cones and flags.
+- A toy dump truck.
+- Pebbles that feel like mountains.
+- A garden hose in the background.
+- A fence or backyard edge far behind the sandbox.
 
-Include simple playful feedback bubbles such as:
+Mood and lighting:
+
+- Warm golden sand.
+- Soft sunny shadows.
+- Cozy handcrafted diorama.
+- Relaxed tactile building mood.
+- Nostalgic childhood motocross imagination.
+
+Include subtle imagination feedback bubbles:
 
 - Blue bike almost cleared the triple!
-- Green bike got stuck in the sand.
-- That double might be too big.
+- Red bike loved that berm.
+- Green bike got stuck in the sand again.
+- I want to race again!
 
-Keep it warm, nostalgic, handmade, and toy-like. It should feel like childhood imagination, not professional racing simulation.
+Avoid gritty realism, pro motocross stadiums, serious racing simulation, dark garage menus, sponsor-heavy visuals, mud-heavy realism, and business management UI.
+
+The final result should communicate: Build -> Race -> Imagine Feedback -> Adjust -> Race Again.
 

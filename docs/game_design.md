@@ -1,129 +1,81 @@
-# Sandbox Moto Game Design
+# Game Design
 
 ## Core Concept
 
-Sandbox Moto is a cozy, nostalgic motocross sandbox game. It should feel like being a kid again, kneeling next to a sandbox or dirt pile, building toy motocross tracks with imagination, then watching tiny toy riders race the track.
+Sandbox Moto is a cozy nostalgic motocross sandbox game. It should feel like being a kid again, kneeling beside a sandbox, dirt pile, or motocross pit area, building tiny motocross tracks with toy bikes and imagination.
 
-The emotional goal is not realistic racing simulation. The emotional goal is childhood motocross imagination.
+The emotional goal is childhood motocross imagination, not realistic racing simulation.
 
-## High-Level Pitch
+## Tagline Options
 
-Remember when every pile of dirt became a motocross track?
+- Remember when every pile of dirt became a motocross track?
+- Build the tracks you imagined as a kid.
+- Every pile of dirt was a Supercross track.
 
-Sandbox Moto turns that memory into a relaxed build-and-race loop. Players sculpt and sketch tiny motocross tracks, place playful obstacles, run a race, laugh at what happened, and adjust the track for the next imaginary moto.
+## Important Design Pivot
 
-## Inspiration
+This is not a racing simulator.
 
-- Sandcastle-style cozy sandbox building and warm handcrafted visuals.
-- Tiny Glade-style relaxed creation.
-- Mini Motorways-style simple tool bubbles and clean interaction.
-- Childhood motocross sandbox and toy bike play.
+This is not primarily a track manager.
 
-## What This Is Not
+This is not about money, business, or pro racing.
 
-- Not a pro racing simulator.
-- Not a hardcore physics simulation.
-- Not primarily a track manager.
-- Not a business, promotion, or career sim.
-- Not a fail-state-driven game.
+This is about childhood motocross imagination.
+
+## Player Fantasy
+
+The player is not explicitly told they are a kid, but the game should quietly make them feel like one.
+
+They build tracks, watch toy riders come alive, imagine stories, fix jumps, change berms, re-race, and keep playing because they want to build one cooler track.
+
+## Core Gameplay Loop
+
+Build -> Race -> Imagine Feedback -> Adjust -> Race Again
 
 ## Design Pillars
 
 1. Nostalgia first.
 2. Building is the main mechanic.
-3. Racing validates the player's track.
-4. No pressure, no game over.
-5. The player is not a promoter; they are a kid imagining races.
-6. The world should feel tiny, handmade, and playful.
+3. Racing validates the track.
+4. The riders are toy bikes brought to life by imagination.
+5. No pressure, no game over.
+6. The world should feel tiny, warm, handmade, and playful.
+7. Feedback should feel like imagination, not analytics.
 
-## Gameplay Loop
+## What The Player Does
 
-Build -> Race -> Imagine Feedback -> Adjust -> Race Again
+The player draws and shapes a smooth toy motocross track, places handmade features, drops a start gate and finish marker, then starts a race.
 
-### Build
+Tiny riders spawn with temporary identities and skills. They get good starts, roll jumps, crash on risky triples, struggle in sand, or flow through a section. After the race, the game gives playful feedback that makes the player want to adjust the track.
 
-The player draws a smooth track path and places start, finish, jumps, whoops, sand, rollers, hills, and playful utility tools like a dozer. Building should feel casual and tactile, closer to smoothing sand with a hand than operating a professional editor.
+## Emotional Moments
 
-### Race
+Sandbox Moto should create moments like:
 
-Tiny toy riders spawn with fresh names, numbers, colors, and skill profiles. They follow the player-built path, spread into lanes, interact with obstacles, and create toy-like race moments.
+- You build a huge jump and everyone crashes.
+- One rider finally clears it.
+- You fix a landing and the race suddenly flows.
+- A rider almost clears a triple and you adjust it.
+- The camera zooms out and reveals the whole track is in a sandbox.
+- A fake Polaroid or scrapbook saves a favorite track memory.
 
-The race is a validation pass, not a judgment. It answers playful questions:
+## Progression
 
-- Is the double too big?
-- Does the sand slow everyone down?
-- Did the green bike have a great start?
-- Did someone almost clear the triple?
+Avoid money-focused progression.
 
-### Feedback
+Progression should feel like growing imagination:
 
-After the race, feedback appears as imagination-style bubbles:
+- New toy bikes.
+- New buckets.
+- New shovels.
+- New environments.
+- New decorations.
+- New track markers.
+- New dirt and sand types.
+- New props.
+- Scrapbook memories.
 
-- Blue bike almost cleared the triple!
-- Red bike loved the berm.
-- Green bike got stuck in the sand.
-- That double might be too big.
+## Implementation Note
 
-Feedback should feel like a child narrating an imaginary race, not like a telemetry dashboard.
-
-### Adjust
-
-The game returns to build mode. The player can redraw, place more obstacles, move the finish, or press Play Race again.
-
-## Prototype Tool List
-
-- Shovel / Track
-- Start Gate
-- Finish
-- Single
-- Double
-- Triple
-- Tabletop
-- Whoops
-- Sand
-- Rollers
-- Hill
-- Dozer
-- Play Race
-
-## Rider Generation
-
-Each race creates new riders. Names and skills are not linked. A rider called "Milo" should not always be good at whoops, and the blue bike should not always be fast.
-
-Each rider has:
-
-- jump_skill
-- whoop_skill
-- sand_skill
-- roller_skill
-- hill_skill
-- start_skill
-- aggression
-- consistency
-
-## Toy Bike Feel
-
-Riders should not behave like realistic motorcycles. They are imagined toy bikes. Motion should be smooth, readable, and playful. A crash can be a small spin-out or wobble, not a serious accident.
-
-Important behavior:
-
-- Bigger jumps have risk/reward.
-- Low-skill riders often roll doubles and triples.
-- Aggressive low-skill riders may attempt and crash.
-- High-skill riders clear bigger jumps more often.
-- Holeshot and start skill create early race variation.
-- Line changes are smooth and should not jitter.
-- Riders should not constantly bounce between lanes.
-
-## Visual Direction
-
-The current prototype can use placeholder shapes, but the target mood is a warm sandbox diorama:
-
-- Soft warm sand colors.
-- Miniature toy scale.
-- Simple toy bikes.
-- Handmade obstacle shapes.
-- Oversized props later: grass blades, buckets, toy shovels, cones, fence, pits.
-- Avoid gritty realism.
-- Prioritize cozy, nostalgic, handmade play.
+Keep the current free-draw smooth track system as the baseline for now. Do not switch back to a blocky grid system. If grid logic is introduced later, it should only guide editing while visuals remain smooth and natural.
 

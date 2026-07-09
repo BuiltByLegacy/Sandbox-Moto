@@ -1,89 +1,99 @@
 # Visual Style Guide
 
-## North Star
+## Visual Target
 
-Sandbox Moto should look and feel like a cozy sandbox diorama where a child is imagining a motocross race with toy dirt bikes.
+Sandbox Moto should look and feel similar in spirit to Sandcastle:
 
-Think: Sandcastle-style handcrafted warmth, but motocross.
+- Cozy handcrafted sandbox diorama.
+- Warm golden sand.
+- Soft shadows.
+- Miniature scale.
+- Playful toy-like objects.
+- Relaxing tactile building.
 
-## Mood
+It should be motocross imagined through sandbox play, not gritty realistic motocross.
+
+## Mood Words
 
 - Cozy.
 - Nostalgic.
 - Handmade.
-- Sunny.
+- Warm.
+- Tiny.
 - Playful.
-- Miniature.
-- Safe and low-pressure.
+- Relaxed.
+- Tactile.
 
-Avoid gritty realism, harsh motorsport aggression, mud-splattered simulation aesthetics, sponsor-heavy pro racing presentation, or dark industrial UI.
+## World Scale
 
-## World
+Everything should feel tiny:
 
-The world should feel tiny and built by hand:
-
-- Warm golden sand.
-- Soft dirt mounds.
-- Smooth hand-shaped track paths.
-- Toy dirt bikes.
-- Tiny gates and cones.
+- Toy bikes.
+- Toy riders.
 - Oversized grass blades.
-- Buckets, shovels, toy rakes, fences, and backyard objects.
-- Track features that feel sculpted from a sandbox or dirt pile.
-
-The camera should make the player feel like they are kneeling beside the sandbox.
+- Plastic shovel.
+- Red bucket.
+- Garden hose.
+- Popsicle sticks.
+- Rocks as mountains.
+- Tiny cones.
+- Toy dump truck.
+- Fence in the background.
+- Real motocross bikes heard far away.
 
 ## Palette
 
-Primary colors:
+Primary:
 
-- Golden sand.
-- Toasted dirt brown.
-- Soft clay orange.
-- Sun-warmed yellow.
-- Muted backyard green.
+- Warm golden sand.
+- Soft dirt brown.
+- Sunlit clay.
+- Faded backyard green.
+- Bucket red.
 
-Accent colors:
+Accents:
 
-- Toy bike red.
-- Toy bike blue.
-- Toy bike green.
-- Plastic bucket yellow.
-- Shovel handle red or teal.
+- Toy-bike blue.
+- Toy-bike red.
+- Toy-bike green.
+- Plastic yellow.
+- Flag white and orange.
 
-Keep contrast readable, but avoid a cold, gritty, or realistic racing palette.
+Avoid cold, gritty, high-contrast racing palettes.
 
 ## Materials
 
-Use simple, tactile materials:
+Sand and dirt should feel soft and shapeable. Track features should look hand-formed, with rounded edges and imperfect charm.
 
-- Sand should feel soft, matte, and warm.
-- Dirt should feel shaped by hands, not machinery.
-- Toy bikes can be bright plastic or painted metal.
-- Props should feel oversized compared to the riders.
+Toy objects should be readable and slightly chunky:
 
-Future art should favor soft bevels, rounded edges, and visible handmade charm.
+- Bright toy bike bodies.
+- Chunky tires.
+- Simple number plates.
+- Small cones and flags.
+- Plastic bucket and shovel surfaces.
+
+## Camera Feeling
+
+The camera should make the player feel like they are kneeling beside the sandbox. Later scenes can reveal the larger real-world setting around the tiny track.
 
 ## UI Direction
 
-The UI should feel like simple play tools, not a professional editor:
+The UI should feel like play tools:
 
-- Mini Motorways-style clean tool bubbles.
-- Clear icons.
-- Warm panel surfaces.
-- Low visual noise.
-- No business analytics.
-- No mechanical tuning dashboards.
+- Simple tool bubbles.
+- Shovel, rake, bucket, stamp, and flag icons.
+- Warm panels.
+- No pro telemetry.
+- No business dashboards.
 
-Feedback should appear like imagination bubbles or playful notes.
-
-## What To Avoid
+## Avoid
 
 - Gritty realism.
-- Hyper-detailed motorcycle physics visuals.
-- Stadium racing presentation.
-- Sponsor banners as a core identity.
+- Serious racing sim presentation.
+- Stadium broadcast energy.
+- Sponsor-heavy visuals.
+- Mud-heavy simulation tone.
 - Dark garage menus.
-- Spreadsheet-like race analysis.
-- Military, industrial, or esports styling.
+- Mechanical CAD/editor aesthetics.
 

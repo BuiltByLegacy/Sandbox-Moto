@@ -2,47 +2,49 @@
 
 ## Goal
 
-Feedback should help the player imagine what happened and decide what to change next.
+Feedback should feel like imagination, not analytics.
 
-It should not feel like telemetry, analytics, or a racing engineer report.
+It should help the player understand what happened in the toy race and inspire the next edit.
 
-## Feedback Voice
+## Voice
 
-Use playful imagination bubbles:
+Use short imagination bubbles:
 
 - Blue bike almost cleared the triple!
-- Red bike loved the berm.
-- Green bike got stuck in the sand.
-- That double might be too big.
-- The whoops made everyone wobble.
-- The start was wild that time.
+- Red bike loved that berm.
+- Green bike got stuck in the sand again.
+- Nobody could clear that jump.
+- That tabletop was awesome.
+- Make the whoops smoother.
+- I want to race again!
 
-## Feedback Rules
+## Avoid
 
-Feedback should be:
+- Business analytics.
+- Serious telemetry.
+- Money, revenue, sponsor, or attendance language.
+- Lap charts as the main feedback.
+- Engineering-style diagnostics.
+- Harsh failure language.
 
-- Short.
+## Good Feedback Should Be
+
+- Playful.
 - Specific.
-- Emotional.
-- Track-focused.
-- Helpful without being critical.
+- Track-aware.
+- Easy to understand.
+- Emotionally light.
+- Useful enough to make the player adjust the track.
 
-Avoid:
+## Feedback Sources
 
-- Percentages.
-- Lap charts.
-- Revenue language.
-- Business recommendations.
-- Simulation-heavy terminology.
+Feedback can come from:
 
-## Timing
-
-Show feedback after the race ends. Then return to build mode so the player can modify the track and race again.
-
-## Future Ideas
-
-- Bubble appears near the obstacle that caused it.
-- Replay ghosts highlight the funny moment.
-- Tiny hand-drawn stickers or arrows mark problem areas.
-- Riders can have tiny speech bubbles, but they should stay toy-like and sparse.
+- A rider almost clearing a jump.
+- Nobody clearing a feature.
+- A rider loving a berm.
+- Multiple riders slowing in sand.
+- Whoops causing bobbles.
+- A fixed landing making the section flow.
+- A race being funny enough to save as a scrapbook memory.
 
