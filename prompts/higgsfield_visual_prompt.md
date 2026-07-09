@@ -2,38 +2,26 @@
 
 Create visual direction for Sandbox Moto, a cozy nostalgic motocross sandbox imagination game.
 
-The scene should feel like a child kneeling beside a warm sandbox, building a tiny motocross track from golden sand and dirt, then imagining toy dirt bikes racing around it.
+The scene should feel like a childhood motocross sandbox memory: warm golden sand, handmade dirt mounds, tiny fictional toy motocross bikes, oversized real-world props, and a relaxed handcrafted diorama style.
 
-Create cozy Sandcastle-inspired visuals for Sandbox Moto featuring tiny fictional toy motocross bikes racing through a handmade sandbox track. The bikes are 1:12 scale toy-style dirt bikes with glossy plastic bodywork, chunky tires, simplified engines, oversized fenders, colorful fictional graphics, and no real-world branding. They should feel like nostalgic toy store motocross bikes brought to life by a kid's imagination.
+Visual direction:
 
-Visual ingredients:
+- Sandcastle-inspired cozy sandbox diorama.
+- Tiny Glade-inspired relaxed creation mood.
+- Mini Motorways-inspired clean tool bubbles and editability.
+- 1:12 scale fictional toy motocross bikes.
+- Glossy molded plastic.
+- Chunky toy bike proportions.
+- Warm golden lighting.
+- Soft shadows.
+- Toy plastic finish.
+- Played-in dirt with darker ruts, tire marks, roost piles, worn jump faces, and sand pushed out of corners.
+- Oversized grass, buckets, shovels, cones, toy trucks, fences, old tires, tunnels, cardboard ramps, and toy spectators.
+- Scrapbook or Polaroid-style memory element.
 
-- Warm golden sand.
-- Handmade dirt mounds.
-- Smooth miniature motocross track.
-- Tiny colorful toy dirt bikes with collectible toy proportions.
-- Glossy molded plastic bodywork.
-- Thick toy-like tires.
-- Plastic number plates.
-- Simple original decals.
-- Tiny scratches and sand or dirt on tires.
-- Oversized grass blades.
-- Plastic buckets.
-- Toy shovels and rakes.
-- Small cones and fence pieces.
-- Soft sunny backyard light.
-- Cozy handcrafted Sandcastle-like mood, but motocross.
-- Tiny Glade-inspired calm creation mood.
-- Mini Motorways-inspired simple toy-like tool bubbles.
-- Played-in dirt with ruts, worn jump faces, tire marks, and little roost piles.
-- Toy crowd spectators such as army men, dinosaurs, block-style figures, stuffed animals, rubber ducks, plastic animals, and toy trucks.
-- Toy box unlock props such as old tires, popsicle-stick fences, plastic tunnels, cardboard ramps, stickers, and number plates.
-- A scrapbook or Polaroid-style memory element.
+Use fictional toy brands only. Do not include Honda, Yamaha, Kawasaki, KTM, Husqvarna, Suzuki, real motorcycle logos, exact graphics, licensed riders, or real model replicas.
 
-Use fictional toy-style brands only, such as Legacy Moto, Sandbox Racing, TrailWorks, DirtCo, MotoForge, TinyMoto, Backyard Factory, or PitKid Racing.
+The image should feel like toy bikes came alive in a kid's imagination. Avoid gritty realism, pro racing, sponsor-heavy visuals, dark garage menus, business management UI, and simulator energy.
 
-Avoid gritty realism, professional stadium racing, mud-heavy realism, dark garages, sponsor-heavy motorsport branding, real motorcycle brand names, real logos, exact real model designs, licensed rider gear, and serious simulation energy.
+Imply the loop: build -> race -> imagination feedback -> adjust -> one more race.
 
-The image should imply the loop: Play Time / Build Track -> Press Play -> Sandbox comes alive -> Toy bikes race -> Imagination feedback appears -> Everything becomes still again -> Adjust track -> Race again.
-
-Include the soft childlike prompt "One more race?" rather than a competitive retry UI.

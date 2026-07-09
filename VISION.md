@@ -1,16 +1,38 @@
 # Sandbox Moto Vision
 
-Sandbox Moto should feel like being a kid again, kneeling beside a sandbox, dirt pile, or motocross pit area, building tiny motocross tracks with toy bikes and imagination.
+Sandbox Moto is a cozy sandbox imagination game that recreates the feeling of being a kid building motocross tracks in dirt, sand, or a sandbox with toy bikes.
 
-Every design, code, art, sound, and systems decision should support that emotional north star.
+## North Star
 
-## The Feeling
+If someone who grew up riding or loving motocross smiles because Sandbox Moto reminds them of spending entire afternoons building tracks in the dirt with toy bikes, we succeeded.
 
-The player is not explicitly told they are a kid, but the game should quietly make them feel like one.
+Every design, code, art, sound, UI, camera, tool, and progression decision should answer:
 
-They should remember the feeling of looking at a pile of dirt and seeing a full Supercross track. They should want to smooth a landing, make the whoops better, move the berm, run the toy race again, and imagine what happened.
+Does this make the player feel more like they are reliving a childhood motocross sandbox memory?
 
-## The Promise
+## Boundaries
+
+This is not a motocross simulator.
+
+This is not a track manager.
+
+This is not a business game.
+
+This is not about realism, racing licenses, or pro riders.
+
+This is about childhood imagination, nostalgia, tactile building, toy bikes, and "one more race."
+
+## Game Pillars
+
+1. Nostalgia first.
+2. Creativity over optimization.
+3. Building is the core mechanic.
+4. Racing validates the player's imagination.
+5. No pressure, no game over.
+6. Unlock imagination, not power.
+7. The world should feel tiny, warm, handmade, playful, and emotionally familiar.
+
+## Core Loop
 
 Play Time / Build Track
 -> Press Play
@@ -19,28 +41,8 @@ Play Time / Build Track
 -> Imagination feedback appears
 -> Everything becomes still again
 -> Adjust track
--> Race again.
+-> One more race
 
-The emotional goal is nostalgia, warmth, creativity, and the feeling of "one more race."
+## Canonical Docs
 
-## The Boundaries
-
-Sandbox Moto is not a racing simulator.
-
-Sandbox Moto is not primarily a track manager.
-
-Sandbox Moto is not about money, business, sponsors, careers, or pro racing.
-
-Sandbox Moto is about childhood motocross imagination.
-
-The player fantasy is not promoter, racer, or business owner. The fantasy is imagination: seeing a pile of dirt and turning it into a tiny Supercross world with toy bikes.
-
-## Design Pillars
-
-1. Nostalgia first.
-2. Building is the main mechanic.
-3. Racing validates the track.
-4. The riders are toy bikes brought to life by imagination.
-5. No pressure, no game over.
-6. The world should feel tiny, warm, handmade, and playful.
-7. Feedback should feel like imagination, not analytics.
+Read `docs/GAME_VISION.md` and `docs/NORTH_STAR.md` first. The rest of the uppercase docs in `docs/` are the design bible for art, camera, sandbox behavior, toy bikes, input, toy box, worlds, audio, story, unlocks, memory book, screenshots, and long-term vision.

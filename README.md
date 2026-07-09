@@ -10,9 +10,9 @@ Tagline options:
 
 ## Creative North Star
 
-Sandbox Moto should feel like being a kid again, kneeling beside a sandbox, dirt pile, or motocross pit area, building tiny motocross tracks with toy bikes and imagination.
+If someone who grew up riding or loving motocross smiles because Sandbox Moto reminds them of spending entire afternoons building tracks in the dirt with toy bikes, we succeeded.
 
-The player is not explicitly told they are a kid, but the game should quietly make them feel like one. They build tracks, watch toy riders come alive, imagine stories, fix jumps, change berms, re-race, and keep playing because they want to build one cooler track.
+Sandbox Moto should feel like being a kid again, kneeling beside a sandbox, dirt pile, or motocross pit area, building tiny motocross tracks with toy bikes and imagination.
 
 ## What This Is
 
@@ -43,12 +43,12 @@ Play Time / Build Track
 ## Design Pillars
 
 1. Nostalgia first.
-2. Building is the main mechanic.
-3. Racing validates the track.
-4. The riders are toy bikes brought to life by imagination.
+2. Creativity over optimization.
+3. Building is the core mechanic.
+4. Racing validates the player's imagination.
 5. No pressure, no game over.
-6. The world should feel tiny, warm, handmade, and playful.
-7. Feedback should feel like imagination, not analytics.
+6. Unlock imagination, not power.
+7. The world should feel tiny, warm, handmade, playful, and emotionally familiar.
 
 ## Current Prototype
 
@@ -79,6 +79,22 @@ Examples include toy bikes, toy riders, shovels, buckets, rakes, molds, cones, f
 
 ## Key Docs
 
+- `docs/GAME_VISION.md` - Canonical full concept, fantasy, loop, and boundaries.
+- `docs/NORTH_STAR.md` - One-page design filter.
+- `docs/EMOTIONAL_PILLARS.md` - Emotional goals and feature support.
+- `docs/ART_BIBLE.md` - Canonical visual direction.
+- `docs/CAMERA_DESIGN.md` - Kneeling-beside-the-sandbox camera language.
+- `docs/SANDBOX_RULES.md` - Dirt, sand, sculpting, and played-in track behavior.
+- `docs/TOY_BIKE_BIBLE.md` - Fictional 1:12 toy bike rules.
+- `docs/INPUT_PHILOSOPHY.md` - Tactile input and platform priorities.
+- `docs/TOY_BOX_DESIGN.md` - Toy-box menus and unlockable play objects.
+- `docs/WORLD_BIBLE.md` - Memory locations.
+- `docs/AUDIO_BIBLE.md` - Cozy nostalgic sound direction.
+- `docs/STORY_BIBLE.md` - Imagination story rules and signature moments.
+- `docs/UNLOCK_PHILOSOPHY.md` - Unlock imagination, not power.
+- `docs/MEMORY_BOOK.md` - Scrapbook/save-memory system.
+- `docs/SCREENSHOT_PHILOSOPHY.md` - Shareable toy photography direction.
+- `docs/LONG_TERM_VISION.md` - Version and platform strategy.
 - `VISION.md` - Emotional north star.
 - `docs/game_design.md` - Full creative direction.
 - `docs/visual_style_guide.md` - Sandcastle-like visual target.
