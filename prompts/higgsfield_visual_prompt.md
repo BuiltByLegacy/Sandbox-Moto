@@ -25,9 +25,15 @@ Visual ingredients:
 - Cozy handcrafted Sandcastle-like mood, but motocross.
 - Tiny Glade-inspired calm creation mood.
 - Mini Motorways-inspired simple toy-like tool bubbles.
+- Played-in dirt with ruts, worn jump faces, tire marks, and little roost piles.
+- Toy crowd spectators such as army men, dinosaurs, block-style figures, stuffed animals, rubber ducks, plastic animals, and toy trucks.
+- Toy box unlock props such as old tires, popsicle-stick fences, plastic tunnels, cardboard ramps, stickers, and number plates.
+- A scrapbook or Polaroid-style memory element.
 
 Use fictional toy-style brands only, such as Legacy Moto, Sandbox Racing, TrailWorks, DirtCo, MotoForge, TinyMoto, Backyard Factory, or PitKid Racing.
 
 Avoid gritty realism, professional stadium racing, mud-heavy realism, dark garages, sponsor-heavy motorsport branding, real motorcycle brand names, real logos, exact real model designs, licensed rider gear, and serious simulation energy.
 
 The image should imply the loop: Play Time / Build Track -> Press Play -> Sandbox comes alive -> Toy bikes race -> Imagination feedback appears -> Everything becomes still again -> Adjust track -> Race again.
+
+Include the soft childlike prompt "One more race?" rather than a competitive retry UI.

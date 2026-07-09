@@ -55,9 +55,17 @@ After the race, the game responds with imagination bubbles instead of analytics:
 - I want to race again!
 - That finish jump was awesome.
 
+After every race, show a soft prompt:
+
+One more race?
+
+This should feel like childhood play continuing, not a competitive retry screen.
+
 ## Everything Becomes Still Again
 
 After the race, the toy world settles. Bikes stop, dust fades, and the sandbox becomes quiet again. This stillness is important because it makes the race feel imagined and temporary.
+
+For a cozy pause/save moment, "Mom called Dinner" can freeze the world, fade the sunlight slightly, and save the sandbox exactly how the player left it.
 
 ## Adjust Track
 

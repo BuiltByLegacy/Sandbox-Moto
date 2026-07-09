@@ -19,6 +19,12 @@ Use short imagination bubbles:
 - I want to race again!
 - That finish jump was awesome.
 
+After every race, show a soft prompt:
+
+One more race?
+
+This should feel like childhood play, not a competitive retry screen.
+
 ## Avoid
 
 - Business analytics.
@@ -49,3 +55,7 @@ Feedback can come from:
 - A fixed landing making the section flow.
 - A race being funny enough to save as a scrapbook memory.
 - The toy world becoming still again after the race.
+- The biggest crash.
+- The best jump.
+- The winning bike color.
+- The funniest feedback bubble.

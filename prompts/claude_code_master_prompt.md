@@ -55,6 +55,8 @@ Play Time / Build Track
 - Make better riders clear bigger features more often.
 - Keep feedback playful, short, and imagination-style.
 - Use "Play Time" for player-facing building/editing language where appropriate.
+- After every race, show a soft "One more race?" prompt that feels like childhood play, not a competitive retry screen.
+- Support scrapbook-style saved memories instead of analytics-first race history.
 
 ## Visual Direction
 
@@ -76,6 +78,8 @@ Aim for a Sandcastle-like cozy handcrafted sandbox diorama:
 - Real-world props that make the toy world feel tiny.
 
 Memory locations include backyard sandbox, garage floor in winter, living room rug, driveway dirt pile, camping trip, beach vacation, local motocross pits, tailgate at race day, edge of a practice track, snow pile, and toy room.
+
+The sandbox should become visually played in over time: darker ruts, worn jump faces, sand pushed out of corners, smoother landings, tire marks, and little roost piles.
 
 ## Toy Dirt Bike Art Direction
 
@@ -128,5 +132,20 @@ Animation should feel like toys brought to life by imagination: slight bounce wh
 - Mom calls "Dinner!" and the world freezes.
 - Dad's real dirt bike revs in the distance.
 - One tiny rider finally clears the impossible jump.
+- A scrapbook saves a track name, winning bike color, best jump, biggest crash, funniest feedback bubble, and a Polaroid-style snapshot.
+- The player finds new toy box unlocks: bike colors, cones, flags, old tires, popsicle-stick fences, toy dump trucks, plastic tunnels, cardboard ramps, toy spectators, stickers, and number plates.
+- A toy crowd of army men, dinosaurs, block-style figures, stuffed animals, rubber ducks, plastic animals, and toy trucks watches the imagined race.
+
+## Building Tool Feel
+
+Tool animations should feel tactile and kid-like:
+
+- Shovel scoops dirt.
+- Finger smooths landings.
+- Toy bulldozer pushes sand.
+- Bucket pours water.
+- Rake shapes lines.
+
+Kid-style track names should sound imagined, such as Dragon Hill, Mega Jump Raceway, Backyard National, Big Sand SX, The Impossible Triple, Bucket Turn Speedway, and Dad's Garage Supercross.
 
 Avoid gritty realistic motocross, serious racing sim presentation, business analytics, and pro racing management systems.

@@ -75,6 +75,8 @@ Sandbox Moto should create moments like:
 - Mom calls "Dinner!" and the world freezes.
 - Dad's real dirt bike revs in the distance.
 - One tiny rider finally clears the impossible jump.
+- After every race, a soft "One more race?" prompt appears like childhood play continuing.
+- The sandbox starts to look played in after repeated races.
 
 ## Progression
 
@@ -111,6 +113,45 @@ Unlock examples:
 - Toy trees.
 - Toy campers.
 - Spectators.
+- Old tires.
+- Popsicle-stick fences.
+- Stickers and number plates.
+
+## Memory Scrapbook
+
+Favorite race moments can be saved as scrapbook memories, like a small Polaroid taped into a notebook.
+
+Each memory can save:
+
+- Track name.
+- Winning bike color.
+- Best jump.
+- Biggest crash.
+- Funniest feedback bubble.
+- Small snapshot or Polaroid-style image.
+
+Kid-style generated track names should sound imagined:
+
+- Dragon Hill.
+- Mega Jump Raceway.
+- Backyard National.
+- Big Sand SX.
+- The Impossible Triple.
+- Bucket Turn Speedway.
+- Dad's Garage Supercross.
+
+## Played-In Dirt
+
+The sandbox should visually remember play:
+
+- Darker ruts.
+- Worn jump faces.
+- Sand pushed out of corners.
+- Smoother landings after repeated races.
+- Tire marks.
+- Little roost piles.
+
+The track should start to look played in, like a real sandbox after a long afternoon.
 
 ## Implementation Note
 

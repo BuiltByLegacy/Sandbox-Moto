@@ -16,6 +16,9 @@
 - More toy bike visuals.
 - Obstacle risk/reward.
 - Scrapbook and memory system.
+- One More Race prompt after races.
+- Mom called Dinner pause/save moment.
+- Played-in dirt visuals: ruts, tire marks, worn faces, roost piles.
 - Improve tactile actions: pile, smooth, flatten, carve, shape, water, repair, knock down, rebuild.
 
 ## Phase 3: Memory Worlds And Toy Progression
@@ -24,6 +27,9 @@
 - Toy collection progression.
 - Richer feedback.
 - Environmental props.
+- Toy box unlocks: bike colors, cones, flags, old tires, popsicle-stick fences, toy dump trucks, tunnels, ramps, spectators, stickers, number plates.
+- Kid-style track name generation.
+- Toy crowds with army men, dinosaurs, block-style figures, stuffed animals, rubber ducks, plastic animals, and toy trucks.
 - Location-specific ambience, sand/dirt types, and unlockable toy items.
 
 ## Phase 4: Sharing And Community Play

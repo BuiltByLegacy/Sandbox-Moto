@@ -87,6 +87,8 @@ Examples include toy bikes, toy riders, shovels, buckets, rakes, molds, cones, f
 - `docs/rider_imagination_system.md` - Random toy rider behavior.
 - `docs/building_tools.md` - Dirt-play building tools.
 - `docs/collectible_bike_system.md` - Toy collection progression.
+- `docs/progression.md` - Toy box unlocks and non-money progression.
+- `docs/memory_scrapbook.md` - Polaroid-style saved race memories.
 - `docs/feedback_system.md` - Imagination feedback language.
 - `docs/sound_and_mood.md` - Cozy ambience and sound direction.
 - `docs/toy_bike_art_direction.md` - 1:12 fictional toy bike art direction.

@@ -18,6 +18,8 @@ World scale should feel tiny and playful:
 - A garden hose in the background.
 - A fence or backyard edge far behind the sandbox.
 - Real-world props that make the track feel tiny.
+- Toy spectators like army men, dinosaurs, block-style figures, stuffed animals, rubber ducks, plastic animals, and toy trucks.
+- Toy box unlock items such as old tires, popsicle-stick fences, plastic tunnels, cardboard ramps, stickers, and number plates.
 
 Mood and lighting:
 
@@ -36,6 +38,9 @@ Include subtle imagination feedback bubbles, handwritten or playful:
 - Make the whoops smoother.
 - That finish jump was awesome.
 - I want to race again!
+- One more race?
+
+Show the sandbox as played in: darker ruts, worn jump faces, sand pushed out of corners, tire marks, smoother landings, and little roost piles. Include a scrapbook or Polaroid-style memory card nearby with kid-style track-name energy like "Mega Jump Raceway" or "The Impossible Triple."
 
 Avoid gritty realism, pro motocross stadiums, serious racing simulation, dark garage menus, sponsor-heavy visuals, mud-heavy realism, business management UI, and real motorcycle logos or exact real model designs.
 

@@ -60,6 +60,29 @@ Tools should be direct and playful:
 
 Avoid making tools feel like CAD, a professional terrain editor, or a business management interface.
 
+## Tiny Hand Tool Animations
+
+Building tools should reinforce the feeling that the player is a kid playing in sand:
+
+- Shovel scoops dirt.
+- Finger smooths landings.
+- Toy bulldozer pushes sand.
+- Bucket pours water.
+- Rake shapes lines.
+
+These animations should be simple, tactile, and readable. They are emotional feedback as much as utility feedback.
+
+## Played-In Track Changes
+
+The track should visually change from use:
+
+- Darker ruts.
+- Worn jump faces.
+- Sand pushed out of corners.
+- Smoother landings after repeated races.
+- Tire marks.
+- Little roost piles.
+
 ## Track Editing Baseline
 
 Keep the current free-draw smooth track system as the baseline for now.

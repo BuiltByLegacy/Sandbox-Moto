@@ -53,6 +53,8 @@ Everything should feel tiny:
 - Toy trees.
 - Toy campers.
 - Tiny spectators.
+- Old tires.
+- Toy spectators.
 - Fence in the background.
 - Real motocross bikes heard far away.
 
@@ -155,6 +157,33 @@ Riders should also look toy-like:
 - Colorful gear.
 - Articulated action-figure feeling.
 - No real rider names or licensed gear.
+
+## Toy Crowd
+
+Spectators should be toys that make the race feel imagined:
+
+- Army men.
+- Dinosaurs.
+- LEGO-style figures.
+- Stuffed animals.
+- Rubber ducks.
+- Plastic animals.
+- Toy trucks.
+
+Use generic toy-like figures rather than licensed characters.
+
+## Played-In Dirt Look
+
+The sandbox should start to look played in:
+
+- Darker ruts.
+- Worn jump faces.
+- Sand pushed out of corners.
+- Smoother landings after repeated races.
+- Tire marks.
+- Little roost piles.
+
+This should feel like an afternoon of play accumulating in the dirt.
 
 ## Camera Feeling
 
