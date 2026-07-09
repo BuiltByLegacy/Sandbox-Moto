@@ -31,7 +31,14 @@ The player is not explicitly told they are a kid, but the game should quietly ma
 
 ## Core Loop
 
-Build -> Race -> Imagine Feedback -> Adjust -> Race Again
+Play Time / Build Track
+-> Press Play
+-> Sandbox comes alive
+-> Toy bikes race
+-> Imagination feedback appears
+-> Everything becomes still again
+-> Adjust track
+-> Race again
 
 ## Design Pillars
 
@@ -58,6 +65,12 @@ The current Godot prototype includes:
 
 Important implementation note: keep the current free-draw smooth track system as the baseline for now. Do not switch back to a blocky grid system. If grid logic is introduced later, it should only guide editing while visuals remain smooth and natural.
 
+## Progression Direction
+
+Progression should not be money-first. It should feel like growing imagination, collecting toys, unlocking memories, and filling a scrapbook.
+
+Examples include toy bikes, toy riders, shovels, buckets, rakes, molds, cones, flags, toy dump trucks, mini excavators, bridges, PVC pipes, cardboard ramps, plastic tunnels, toy trees, toy campers, and tiny spectators.
+
 ## How To Run
 
 1. Install Godot 4.x.
@@ -73,9 +86,12 @@ Important implementation note: keep the current free-draw smooth track system as
 - `docs/worlds_and_locations.md` - Tiny-world settings and props.
 - `docs/rider_imagination_system.md` - Random toy rider behavior.
 - `docs/building_tools.md` - Dirt-play building tools.
+- `docs/collectible_bike_system.md` - Toy collection progression.
 - `docs/feedback_system.md` - Imagination feedback language.
 - `docs/sound_and_mood.md` - Cozy ambience and sound direction.
+- `docs/toy_bike_art_direction.md` - 1:12 fictional toy bike art direction.
+- `docs/signature_moments.md` - Emotional moments the game should create.
 - `docs/roadmap.md` - Development phases.
 - `prompts/claude_code_master_prompt.md` - Claude Code alignment prompt.
 - `prompts/higgsfield_game_prompt.md` - Higgsfield visual/game prompt.
-
+- `CHANGELOG.md` - Documentation and direction changes.

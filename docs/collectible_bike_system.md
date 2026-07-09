@@ -6,6 +6,8 @@ The bike system should support the feeling of a toy collection, not a roster of 
 
 Each race should feel like the player grabbed a few toy dirt bikes from a collection and imagined a new moto.
 
+Progression should not be money-first. It should feel like imagination, memories, toys, scrapbook pages, and playful unlocks.
+
 ## Collectible Pool
 
 Each race should spawn toy bikes from a collectible pool.
@@ -63,6 +65,26 @@ Variant families:
 
 Collecting bikes can be part of progression, but it should not feel like money, business, or pro racing.
 
+Unlock examples:
+
+- Toy bikes.
+- Toy riders.
+- Shovels.
+- Buckets.
+- Rakes.
+- Molds.
+- Cones.
+- Flags.
+- Toy dump trucks.
+- Mini excavators.
+- Bridges.
+- PVC pipes.
+- Cardboard ramps.
+- Plastic tunnels.
+- Toy trees.
+- Toy campers.
+- Spectators.
+
 Better progression language:
 
 - Found a new toy bike.
@@ -84,4 +106,3 @@ Riders should remain toy-like and imaginary:
 - Articulated action-figure feeling.
 - No real rider names.
 - No licensed gear.
-

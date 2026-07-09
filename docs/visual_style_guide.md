@@ -13,6 +13,14 @@ Sandbox Moto should look and feel similar in spirit to Sandcastle:
 
 It should be motocross imagined through sandbox play, not gritty realistic motocross.
 
+Creative references by spirit:
+
+- Sandcastle-inspired cozy sandbox look.
+- Tiny Glade-inspired relaxing creation and low-pressure shaping.
+- Mini Motorways-inspired simple tool bubbles and editability.
+- Handmade miniature diorama staging.
+- 1:12 toy motocross bikes.
+
 ## Mood Words
 
 - Cozy.
@@ -38,6 +46,13 @@ Everything should feel tiny:
 - Rocks as mountains.
 - Tiny cones.
 - Toy dump truck.
+- Mini excavators.
+- PVC pipes.
+- Cardboard ramps.
+- Plastic tunnels.
+- Toy trees.
+- Toy campers.
+- Tiny spectators.
 - Fence in the background.
 - Real motocross bikes heard far away.
 
@@ -50,6 +65,7 @@ Primary:
 - Sunlit clay.
 - Faded backyard green.
 - Bucket red.
+- Warm golden lighting.
 
 Accents:
 
@@ -64,6 +80,8 @@ Avoid cold, gritty, high-contrast racing palettes.
 ## Materials
 
 Sand and dirt should feel soft and shapeable. Track features should look hand-formed, with rounded edges and imperfect charm.
+
+Lighting should use warm golden light and soft shadows. Plastic objects should have a toy plastic finish, with glossy molded highlights and rounded toy-safe edges.
 
 Toy objects should be readable and slightly chunky:
 

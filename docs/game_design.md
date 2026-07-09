@@ -28,9 +28,20 @@ The player is not explicitly told they are a kid, but the game should quietly ma
 
 They build tracks, watch toy riders come alive, imagine stories, fix jumps, change berms, re-race, and keep playing because they want to build one cooler track.
 
+The player is not a promoter, racer, or business owner. The game implies childhood through scale, sound, props, camera, and interaction rather than stating it directly.
+
+The emotional goal is nostalgia, warmth, creativity, and "one more race."
+
 ## Core Gameplay Loop
 
-Build -> Race -> Imagine Feedback -> Adjust -> Race Again
+Play Time / Build Track
+-> Press Play
+-> Sandbox comes alive
+-> Toy bikes race
+-> Imagination feedback appears
+-> Everything becomes still again
+-> Adjust track
+-> Race again
 
 ## Design Pillars
 
@@ -57,7 +68,13 @@ Sandbox Moto should create moments like:
 - You fix a landing and the race suddenly flows.
 - A rider almost clears a triple and you adjust it.
 - The camera zooms out and reveals the whole track is in a sandbox.
+- A kid's hand reaches in to move a jump.
+- The race starts and the quiet sandbox becomes alive.
+- After the race, everything becomes still again.
 - A fake Polaroid or scrapbook saves a favorite track memory.
+- Mom calls "Dinner!" and the world freezes.
+- Dad's real dirt bike revs in the distance.
+- One tiny rider finally clears the impossible jump.
 
 ## Progression
 
@@ -75,7 +92,26 @@ Progression should feel like growing imagination:
 - New props.
 - Scrapbook memories.
 
+Unlock examples:
+
+- Toy bikes.
+- Toy riders.
+- Shovels.
+- Buckets.
+- Rakes.
+- Molds.
+- Cones.
+- Flags.
+- Toy dump trucks.
+- Mini excavators.
+- Bridges.
+- PVC pipes.
+- Cardboard ramps.
+- Plastic tunnels.
+- Toy trees.
+- Toy campers.
+- Spectators.
+
 ## Implementation Note
 
 Keep the current free-draw smooth track system as the baseline for now. Do not switch back to a blocky grid system. If grid logic is introduced later, it should only guide editing while visuals remain smooth and natural.
-

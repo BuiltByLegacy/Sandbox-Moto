@@ -1,8 +1,8 @@
-# Build Mode Design
+# Play Time Design
 
 ## Goal
 
-Build mode is the heart of Sandbox Moto. It should feel like shaping a sandbox track with imagination, not operating a professional track editor.
+Play Time is the heart of Sandbox Moto. It should feel like shaping a sandbox track with imagination, not operating a professional track editor.
 
 ## Core Actions
 
@@ -40,5 +40,4 @@ Potential tools:
 
 ## Tone
 
-Build mode should feel calm and creative. There is no timer, score pressure, economy, or failure state.
-
+Play Time should feel calm and creative. There is no timer, score pressure, economy, or failure state.

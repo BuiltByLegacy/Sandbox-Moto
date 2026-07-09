@@ -10,6 +10,8 @@ Sandbox Moto should feel like being a kid again, kneeling beside a sandbox, dirt
 
 The player is not explicitly told they are a kid, but the game should quietly make them feel like one.
 
+The player is not a promoter, racer, or business owner. The game should imply childhood through scale, sound, props, camera, and interaction.
+
 ## Boundaries
 
 This is not a racing simulator.
@@ -22,7 +24,14 @@ This is about childhood motocross imagination.
 
 ## Core Loop
 
-Build -> Race -> Imagine Feedback -> Adjust -> Race Again
+Play Time / Build Track
+-> Press Play
+-> Sandbox comes alive
+-> Toy bikes race
+-> Imagination feedback appears
+-> Everything becomes still again
+-> Adjust track
+-> Race again
 
 ## Design Pillars
 
@@ -45,6 +54,7 @@ Build -> Race -> Imagine Feedback -> Adjust -> Race Again
 - Make beginner riders roll or crash on bigger features.
 - Make better riders clear bigger features more often.
 - Keep feedback playful, short, and imagination-style.
+- Use "Play Time" for player-facing building/editing language where appropriate.
 
 ## Visual Direction
 
@@ -53,6 +63,8 @@ Aim for a Sandcastle-like cozy handcrafted sandbox diorama:
 - Warm golden sand.
 - Soft shadows.
 - Miniature scale.
+- Tiny Glade-inspired relaxing creation.
+- Mini Motorways-inspired simple tool bubbles and editability.
 - Toy dirt bikes.
 - Oversized grass blades.
 - Plastic shovel.
@@ -61,6 +73,9 @@ Aim for a Sandcastle-like cozy handcrafted sandbox diorama:
 - Popsicle sticks.
 - Tiny cones.
 - Toy dump truck.
+- Real-world props that make the toy world feel tiny.
+
+Memory locations include backyard sandbox, garage floor in winter, living room rug, driveway dirt pile, camping trip, beach vacation, local motocross pits, tailgate at race day, edge of a practice track, snow pile, and toy room.
 
 ## Toy Dirt Bike Art Direction
 
@@ -99,6 +114,19 @@ Each race should spawn toy bikes from a collectible pool. Each bike gets a rando
 
 Riders should look toy-like too: oversized helmets, chunky boots, simplified plastic body proportions, colorful gear, and an articulated action-figure feeling. Do not use real rider names or licensed gear.
 
+Rider personalities are temporary and imagined. Examples: fearless, careful, always sends it, smooth, bad starter, great jumper, struggles in sand, loves whoops, crashes a lot. Do not make skills name-specific.
+
 Animation should feel like toys brought to life by imagination: slight bounce while riding, simple wheelie over jumps, whole-bike tilt in air, simple landing bounce, and tiny roost or sand spray. Do not build toward full realistic suspension simulation.
+
+## Signature Moments
+
+- Camera zooms out and reveals the whole race is in a sandbox.
+- A kid's hand reaches in to move a jump.
+- The race starts and the quiet sandbox becomes alive.
+- After the race, everything becomes still again.
+- Fake Polaroid or scrapbook saves favorite track memories.
+- Mom calls "Dinner!" and the world freezes.
+- Dad's real dirt bike revs in the distance.
+- One tiny rider finally clears the impossible jump.
 
 Avoid gritty realistic motocross, serious racing sim presentation, business analytics, and pro racing management systems.

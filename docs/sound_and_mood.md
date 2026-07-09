@@ -18,6 +18,8 @@ Possible ambience layers:
 - Campground crickets.
 - Garage radio in winter map.
 - Soft neighborhood sounds.
+- Mom calling "Dinner!" as a rare memory moment.
+- Dad's real dirt bike revving in the distance.
 
 ## Toy And Building Sounds
 
@@ -47,3 +49,10 @@ They can sound like:
 
 Music should be minimal. If used, it should be warm, light, and sparse. Avoid high-energy racing music.
 
+## Mood Timing
+
+The soundscape should support the loop:
+
+- During Play Time, the world is mostly calm: sand tools, birds, wind, distant life.
+- When Play is pressed, tiny toy engines and sand spray make the sandbox come alive.
+- After the race, the toy engines fade and everything becomes still again.

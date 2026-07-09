@@ -17,6 +17,7 @@ Use short imagination bubbles:
 - That tabletop was awesome.
 - Make the whoops smoother.
 - I want to race again!
+- That finish jump was awesome.
 
 ## Avoid
 
@@ -47,4 +48,4 @@ Feedback can come from:
 - Whoops causing bobbles.
 - A fixed landing making the section flow.
 - A race being funny enough to save as a scrapbook memory.
-
+- The toy world becoming still again after the race.

@@ -12,7 +12,16 @@ They should remember the feeling of looking at a pile of dirt and seeing a full 
 
 ## The Promise
 
-Build track -> run toy race -> get imagination feedback -> modify track -> race again.
+Play Time / Build Track
+-> Press Play
+-> Sandbox comes alive
+-> Toy bikes race
+-> Imagination feedback appears
+-> Everything becomes still again
+-> Adjust track
+-> Race again.
+
+The emotional goal is nostalgia, warmth, creativity, and the feeling of "one more race."
 
 ## The Boundaries
 
@@ -24,6 +33,8 @@ Sandbox Moto is not about money, business, sponsors, careers, or pro racing.
 
 Sandbox Moto is about childhood motocross imagination.
 
+The player fantasy is not promoter, racer, or business owner. The fantasy is imagination: seeing a pile of dirt and turning it into a tiny Supercross world with toy bikes.
+
 ## Design Pillars
 
 1. Nostalgia first.
@@ -33,4 +44,3 @@ Sandbox Moto is about childhood motocross imagination.
 5. No pressure, no game over.
 6. The world should feel tiny, warm, handmade, and playful.
 7. Feedback should feel like imagination, not analytics.
-

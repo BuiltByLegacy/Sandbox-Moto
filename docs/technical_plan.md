@@ -12,11 +12,11 @@
 
 Owns the high-level mode loop:
 
-- Build mode.
+- Play Time / build-state editing.
 - Race mode.
 - Race completion.
 - Feedback display.
-- Return to build mode.
+- Return to Play Time.
 
 It connects the tool panel, track builder, rider spawning, and feedback system.
 
@@ -94,5 +94,5 @@ The prototype should preserve these visual priorities:
 - Keep names and skills independently randomized every race.
 - Keep track drawing smooth.
 - Avoid overbuilding simulation systems before the build/race/adjust loop is fun.
+- Use Play Time as the player-facing name for building/editing, even if code still uses build-state names internally.
 - Prefer data-driven obstacle metadata so future obstacle types are easy to add.
-

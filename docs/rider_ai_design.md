@@ -1,8 +1,8 @@
-# Rider AI Design
+# Rider Imagination AI Design
 
 ## Goal
 
-Riders should feel like imagined toy bikes, not realistic motocross athletes.
+Riders should feel like toy bikes brought to life by imagination, not realistic motocross athletes.
 
 They should be readable, playful, and slightly unpredictable. The system should create little stories without needing complex physics.
 
@@ -10,12 +10,25 @@ They should be readable, playful, and slightly unpredictable. The system should 
 
 Each race generates riders with:
 
-- Random name.
+- Random color identity or toy-like nickname.
 - Random number.
 - Random bike color.
+- Random temporary personality.
 - Random skill profile.
 
-Names and skills must not be tied together. A rider named Milo should not always be good at jumps, and a blue bike should not always be fast.
+There are no real riders. Names, if used, are toy-like nicknames only. Names and skills must not be tied together. A rider named Milo should not always be good at jumps, and the blue bike should not always be fast.
+
+Temporary personality examples:
+
+- Fearless.
+- Careful.
+- Always sends it.
+- Smooth.
+- Bad starter.
+- Great jumper.
+- Struggles in sand.
+- Loves whoops.
+- Crashes a lot.
 
 ## Skill Profile
 

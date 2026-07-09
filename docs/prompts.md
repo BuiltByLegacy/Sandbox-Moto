@@ -10,9 +10,9 @@ Read `VISION.md` first, then use the docs in `/docs` as the source of truth.
 
 Creative north star: Sandbox Moto should feel like being a kid again, kneeling beside a sandbox, dirt pile, or motocross pit area, building tiny motocross tracks with toy bikes and imagination.
 
-This is not a racing simulator. This is not primarily a track manager. This is not about money, business, or pro racing. This is about childhood motocross imagination.
+This is not a racing simulator. This is not primarily a track manager. This is not about money, business, or pro racing. This is about childhood motocross imagination. The player is not a promoter, racer, or business owner.
 
-Core loop: Build -> Race -> Imagine Feedback -> Adjust -> Race Again.
+Core loop: Play Time / Build Track -> Press Play -> Sandbox comes alive -> Toy bikes race -> Imagination feedback appears -> Everything becomes still again -> Adjust track -> Race again.
 
 Design pillars:
 
@@ -32,12 +32,13 @@ Implementation guardrails:
 - Keep rider names, numbers, colors, and skills randomized independently each race.
 - Use toy-like behavior, not real motorcycle physics.
 - Keep feedback playful and qualitative.
+- Use Play Time as the player-facing building/editing language where appropriate.
 
 ## Higgsfield Game Prompt
 
 Create a Sandcastle-like cozy sandbox visual prototype for Sandbox Moto, a nostalgic motocross sandbox game about building tiny dirt bike tracks with toys and imagination.
 
-The image should feel like being a kid kneeling beside a warm backyard sandbox or dirt pile. A miniature motocross track is sculpted through golden sand with handmade dirt mounds, berms, whoops, rollers, a tabletop, a double, and a triple. Tiny colorful toy dirt bikes are racing on the track as if they have come alive through imagination.
+The image should feel like being a kid kneeling beside a warm backyard sandbox or dirt pile. A miniature motocross track is sculpted through golden sand with handmade dirt mounds, berms, whoops, rollers, a tabletop, a double, and a triple. Tiny fictional 1:12 toy motocross bikes are racing on the track as if they have come alive through imagination.
 
 World scale should feel tiny and playful:
 
@@ -64,9 +65,9 @@ Include subtle imagination feedback bubbles:
 - Blue bike almost cleared the triple!
 - Red bike loved that berm.
 - Green bike got stuck in the sand again.
+- That finish jump was awesome.
 - I want to race again!
 
 Avoid gritty realism, pro motocross stadiums, serious racing simulation, dark garage menus, sponsor-heavy visuals, mud-heavy realism, and business management UI.
 
-The final result should communicate: Build -> Race -> Imagine Feedback -> Adjust -> Race Again.
-
+The final result should communicate: Play Time / Build Track -> Press Play -> Sandbox comes alive -> Toy bikes race -> Imagination feedback appears -> Everything becomes still again -> Adjust track -> Race again.

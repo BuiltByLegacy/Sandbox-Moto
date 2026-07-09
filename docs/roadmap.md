@@ -1,54 +1,43 @@
 # Roadmap
 
-## Phase 1: Vision And Prototype Foundation
+## Phase 1: Cozy Sandbox Prototype
 
-- Capture the full creative direction in docs.
-- Preserve the Godot 4.x prototype.
-- Keep free-draw smooth track editing.
-- Maintain the build -> race -> feedback -> adjust loop.
+- Cozy sandbox prototype.
+- Free-draw smooth track.
+- Toy bike racers.
+- Obstacle placement.
+- Imagination feedback bubbles.
+- Preserve the Play Time -> Press Play -> toy race -> feedback -> adjust loop.
 
-## Phase 2: Building Feel
+## Phase 2: Better Sculpting And Memories
 
-- Improve smooth drawing and track shaping.
-- Add move, rotate, delete, and undo for features.
-- Add berms, ruts, and better smoothing tools.
-- Add shovel, rake, bucket, stamp, and dozer tool language.
-- Keep visuals smooth and natural even if grid helpers are added later.
+- Better sculpting tools.
+- Editable track sections.
+- More toy bike visuals.
+- Obstacle risk/reward.
+- Scrapbook and memory system.
+- Improve tactile actions: pile, smooth, flatten, carve, shape, water, repair, knock down, rebuild.
 
-## Phase 3: Toy Race Stories
+## Phase 3: Memory Worlds And Toy Progression
 
-- Improve start spread and holeshot variation.
-- Improve rider line stability.
-- Add better toy-like jump arcs.
-- Add clearer roll, clear, bobble, and crash outcomes.
-- Expand feedback bubbles.
+- Multiple memory locations.
+- Toy collection progression.
+- Richer feedback.
+- Environmental props.
+- Location-specific ambience, sand/dirt types, and unlockable toy items.
 
-## Phase 4: Sandcastle-Like Diorama Art
+## Phase 4: Sharing And Community Play
 
-- Warm golden sand materials.
-- Soft handmade dirt.
-- Toy bikes and tiny riders.
-- Oversized props: grass, bucket, shovel, hose, popsicle sticks, rocks, cones, toy dump truck.
-- Camera framing that reveals the tiny world.
+- Sharing tracks.
+- Challenge seeds.
+- Custom toy collections.
+- Community sandbox gallery.
+- Favorite-track postcards, fake Polaroids, and scrapbook pages.
 
-## Phase 5: Worlds And Memories
+## Permanent Guardrails
 
-- Add backyard sandbox.
-- Add garage floor winter map.
-- Add local motocross pits.
-- Add camping weekend map.
-- Add scrapbook or fake Polaroid memories.
-
-## Phase 6: Progression Without Money
-
-- New toy bikes.
-- New buckets.
-- New shovels.
-- New track markers.
-- New environments.
-- New decorations.
-- New dirt and sand types.
-- New props.
-
-Progression should feel like growing imagination, not running a business.
-
+- No money-first progression.
+- No promoter, business, or pro racing focus.
+- No gritty realism.
+- No blocky grid track visuals replacing smooth track language.
+- No real motorcycle branding or exact real bike designs.

@@ -54,6 +54,13 @@ Better riders:
 - Carry momentum through sand and hills.
 - Create exciting but still toy-like race moments.
 
+Feedback should stay imagination-first:
+
+- Blue bike almost cleared the triple!
+- Nobody could clear that jump.
+- Make the whoops smoother.
+- That finish jump was awesome.
+
 ## Visual Requirements
 
 Each obstacle should have a clear silhouette:
@@ -65,4 +72,3 @@ Each obstacle should have a clear silhouette:
 - Hills should feel larger and smoother.
 
 Future versions should replace placeholders with handmade sandbox-style art.
-

@@ -10,9 +10,10 @@ They should not be fixed real rider personalities. They should feel like fresh i
 
 Each race should generate toy riders with random:
 
-- Name or color identity.
+- Color identity.
 - Number.
 - Bike color.
+- Temporary personality.
 - Temporary skill profile.
 - Aggression.
 - Consistency.
@@ -23,7 +24,19 @@ Each race should generate toy riders with random:
 - Hill skill.
 - Start skill.
 
-Names and skills must not be permanently tied together. A rider named Ace should not always be brave, and a blue bike should not always be fast.
+There are no real riders. Names, if used, are toy-like nicknames only. Skills must not be name-specific. A rider named Ace should not always be brave, and a blue bike should not always be fast.
+
+Temporary personality examples:
+
+- Fearless.
+- Careful.
+- Always sends it.
+- Smooth.
+- Bad starter.
+- Great jumper.
+- Struggles in sand.
+- Loves whoops.
+- Crashes a lot.
 
 ## Rider Behavior
 
@@ -35,6 +48,7 @@ Races should create little stories naturally:
 - Some riders clear triples.
 - Some riders struggle in whoops or sand.
 - Some riders become the imaginary hero of that one race.
+- Some riders seem fearless for one moto, then the next race creates a different story.
 
 ## Skill Interpretation
 
@@ -67,4 +81,3 @@ Rider motion should feel playful and readable:
 - Grounded riders stay close to the track.
 
 This should not become full real-life motorcycle physics.
-
