@@ -13,6 +13,10 @@ var active_riders: Array = []
 var finished_count := 0
 var race_running := false
 
+func _process(_delta: float) -> void:
+	if race_running:
+		cozy_camera.focus_on_riders(active_riders)
+
 func _ready() -> void:
 	rng.randomize()
 	tool_panel.tool_selected.connect(_on_tool_selected)
@@ -81,6 +85,7 @@ func _end_race() -> void:
 	feedback_system.show_feedback(messages)
 	track_builder.set_build_enabled(true)
 	tool_panel.set_build_enabled(true)
+	cozy_camera.focus_on_track(track_builder.get_race_path())
 
 func _clear_riders() -> void:
 	for child in riders_root.get_children():

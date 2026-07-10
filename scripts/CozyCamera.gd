@@ -7,6 +7,8 @@ const ZOOM_STEP := 0.08
 const PAN_SPEED := 540.0
 const ROTATE_STEP := 0.015
 const MAX_ROTATION := 0.08
+const BUILD_ZOOM := 1.0
+const RACE_ZOOM := 1.18
 
 var dragging := false
 var target_zoom := Vector2.ONE
@@ -56,6 +58,21 @@ func focus_on_track(points: Array[Vector2]) -> void:
 		max_point.x = maxf(max_point.x, point.x)
 		max_point.y = maxf(max_point.y, point.y)
 	target_position = min_point.lerp(max_point, 0.5)
+	_set_zoom(BUILD_ZOOM)
+
+func focus_on_riders(riders: Array) -> void:
+	if riders.is_empty():
+		return
+	var center := Vector2.ZERO
+	var count := 0
+	for rider in riders:
+		if is_instance_valid(rider) and not rider.finished_race:
+			center += rider.global_position
+			count += 1
+	if count == 0:
+		return
+	target_position = center / count
+	_set_zoom(RACE_ZOOM)
 
 func _set_zoom(value: float) -> void:
 	var clamped := clampf(value, MIN_ZOOM, MAX_ZOOM)
