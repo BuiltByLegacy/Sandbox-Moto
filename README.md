@@ -110,6 +110,7 @@ Examples include toy bikes, toy riders, shovels, buckets, rakes, molds, cones, f
 - `docs/toy_bike_art_direction.md` - 1:12 fictional toy bike art direction.
 - `docs/signature_moments.md` - Emotional moments the game should create.
 - `docs/roadmap.md` - Development phases.
+- `CLAUDE.md` - Root agent directive: roles, session-start routine, workflow rules.
 - `prompts/claude_code_master_prompt.md` - Claude Code alignment prompt.
 - `prompts/higgsfield_game_prompt.md` - Higgsfield visual/game prompt.
 - `CHANGELOG.md` - Documentation and direction changes.
