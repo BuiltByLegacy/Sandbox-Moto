@@ -8,9 +8,11 @@ const ToyRiderScene := preload("res://scripts/ToyRider.gd")
 @onready var riders_root: Node2D = $Riders
 @onready var cozy_camera = $CozyCamera
 @onready var signature_moment = $SignatureMoment
+@onready var photo_mode = $PhotoMode
 
 var rng := RandomNumberGenerator.new()
 var active_riders: Array = []
+var finish_order: Array = []
 var finished_count := 0
 var race_running := false
 var wear_timer := 0.0
@@ -19,6 +21,7 @@ var signature_active := false
 func _process(delta: float) -> void:
 	if race_running:
 		cozy_camera.focus_on_riders(active_riders)
+		_update_rider_pack()
 		wear_timer -= delta
 		if wear_timer <= 0.0:
 			wear_timer = 0.08
@@ -28,11 +31,13 @@ func _ready() -> void:
 	rng.randomize()
 	tool_panel.tool_selected.connect(_on_tool_selected)
 	tool_panel.race_requested.connect(_on_race_requested)
+	photo_mode.set_targets([tool_panel, feedback_system])
 	track_builder.set_tool("track")
 	feedback_system.show_feedback([
 		"Draw a smooth track in the sand.",
 		"Place a start gate, finish, and a few jumps.",
-		"Press Play Race when the imaginary moto is ready."
+		"Press Play Race when the imaginary moto is ready.",
+		"Press P for pretend Polaroid mode."
 	])
 
 func _on_tool_selected(tool_name: String) -> void:
@@ -51,6 +56,7 @@ func _on_race_requested() -> void:
 func _start_race(path: Array[Vector2]) -> void:
 	race_running = true
 	finished_count = 0
+	finish_order.clear()
 	wear_timer = 0.0
 	_clear_riders()
 	feedback_system.clear()
@@ -68,12 +74,17 @@ func _start_race(path: Array[Vector2]) -> void:
 
 func _on_rider_finished(rider) -> void:
 	finished_count += 1
+	if not finish_order.has(rider):
+		finish_order.append(rider)
 	if finished_count >= active_riders.size():
 		_end_race()
 
 func _end_race() -> void:
 	race_running = false
 	var messages: Array[String] = []
+	if not finish_order.is_empty():
+		var winner = finish_order[0]
+		messages.append(winner.get_color_name() + " bike won the pretend moto!")
 	for rider in active_riders:
 		if messages.size() < 2:
 			messages.append(rider.get_imagination_intro())
@@ -123,6 +134,22 @@ func _add_obstacle_wear() -> void:
 	for obstacle in track_builder.get_obstacles():
 		track_builder.add_track_wear(obstacle.global_position, 1.35)
 		track_builder.add_track_wear(obstacle.global_position + Vector2(18, 10), 0.95)
+
+func _update_rider_pack() -> void:
+	for i in range(active_riders.size()):
+		var rider = active_riders[i]
+		if not is_instance_valid(rider) or rider.finished_race:
+			continue
+		var pass_bias := 0.0
+		for j in range(active_riders.size()):
+			if i == j:
+				continue
+			var other = active_riders[j]
+			if is_instance_valid(other) and not other.finished_race:
+				var gap: float = absf(rider.get_progress() - other.get_progress())
+				if gap < 34.0:
+					pass_bias += signf(float(i - j)) * (34.0 - gap) * 0.35
+		rider.nudge_lane(pass_bias)
 
 func _has_obstacle_type(obstacle_type: String) -> bool:
 	for obstacle in track_builder.get_obstacles():

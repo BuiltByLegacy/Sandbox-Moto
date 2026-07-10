@@ -28,6 +28,7 @@ var progress := 0.0
 var speed := 95.0
 var lane_offset := 0.0
 var lane_target := 0.0
+var base_lane := 0.0
 var finished_race := false
 var crashed_timer := 0.0
 var airborne_timer := 0.0
@@ -39,6 +40,7 @@ func setup(new_path: Array[Vector2], race_obstacles: Array, lane: float, rng: Ra
 	obstacles = race_obstacles.duplicate()
 	lane_offset = lane
 	lane_target = lane
+	base_lane = lane
 	rider_name = FIRST_NAMES[rng.randi_range(0, FIRST_NAMES.size() - 1)]
 	number = rng.randi_range(2, 989)
 	bike_color = Color.from_hsv(rng.randf(), 0.62, 0.90)
@@ -94,6 +96,15 @@ func get_feedback() -> Array[String]:
 func get_imagination_intro() -> String:
 	return _color_name() + " bike is " + personality + " this race."
 
+func get_color_name() -> String:
+	return _color_name()
+
+func get_progress() -> float:
+	return progress
+
+func nudge_lane(amount: float) -> void:
+	lane_target = clampf(base_lane + amount, -38.0, 38.0)
+
 func _update_position() -> void:
 	var sample := _sample_path(progress)
 	var tangent: Vector2 = sample.direction
@@ -131,7 +142,7 @@ func _handle_obstacle(obstacle) -> void:
 			speed *= 0.72
 			feedback.append(_color_name() + " bike rolled the " + obstacle.obstacle_type + ".")
 	else:
-		if confidence > difficulty:
+		if obstacle_confidence > difficulty:
 			speed += 8.0
 			if obstacle.obstacle_type == "berm":
 				feedback.append(_color_name() + " bike loved that berm.")
@@ -229,8 +240,14 @@ func _draw() -> void:
 	var body_height := 8.0
 	if airborne_timer > 0.0:
 		body_height = 13.0
-	draw_circle(Vector2(-10, 7), 5, Color(0.08, 0.08, 0.08))
-	draw_circle(Vector2(12, 7), 5, Color(0.08, 0.08, 0.08))
-	draw_rect(Rect2(Vector2(-13, -body_height), Vector2(28, 10)), bike_color, true)
-	draw_circle(Vector2(0, -body_height - 6), 5, Color(0.96, 0.79, 0.56))
-	draw_string(ThemeDB.fallback_font, Vector2(-9, -24), str(number), HORIZONTAL_ALIGNMENT_CENTER, 34, 10, Color(0.12, 0.08, 0.04))
+	draw_circle(Vector2(-12, 8), 6, Color(0.07, 0.07, 0.06))
+	draw_circle(Vector2(13, 8), 6, Color(0.07, 0.07, 0.06))
+	draw_circle(Vector2(-12, 8), 3, Color(0.38, 0.38, 0.34))
+	draw_circle(Vector2(13, 8), 3, Color(0.38, 0.38, 0.34))
+	draw_rect(Rect2(Vector2(-16, -body_height), Vector2(32, 11)), bike_color, true)
+	draw_rect(Rect2(Vector2(-20, -body_height - 4), Vector2(14, 5)), bike_color.lightened(0.16), true)
+	draw_rect(Rect2(Vector2(9, -body_height - 5), Vector2(16, 5)), bike_color.lightened(0.12), true)
+	draw_rect(Rect2(Vector2(-3, -body_height + 4), Vector2(10, 7)), Color(0.24, 0.22, 0.20), true)
+	draw_circle(Vector2(0, -body_height - 8), 6, Color(0.96, 0.79, 0.56))
+	draw_rect(Rect2(Vector2(-9, -body_height - 14), Vector2(18, 7)), bike_color.darkened(0.10), true)
+	draw_string(ThemeDB.fallback_font, Vector2(-10, -27), str(number), HORIZONTAL_ALIGNMENT_CENTER, 36, 10, Color(0.12, 0.08, 0.04))

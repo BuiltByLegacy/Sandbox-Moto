@@ -8,6 +8,8 @@ const TOOLS := [
 	{"label": "Shovel / Track", "tool": "track"},
 	{"label": "Start Gate", "tool": "start"},
 	{"label": "Finish", "tool": "finish"},
+	{"label": "Rake / Smooth", "tool": "smooth"},
+	{"label": "Hand Flatten", "tool": "flatten"},
 	{"label": "Single", "tool": "single"},
 	{"label": "Double", "tool": "double"},
 	{"label": "Triple", "tool": "triple"},
@@ -18,6 +20,9 @@ const TOOLS := [
 	{"label": "Rollers", "tool": "rollers"},
 	{"label": "Hill", "tool": "hill"},
 	{"label": "Dozer", "tool": "dozer"},
+	{"label": "Undo", "tool": "undo"},
+	{"label": "Brush +", "tool": "brush_up"},
+	{"label": "Brush -", "tool": "brush_down"},
 ]
 
 var buttons: Dictionary = {}

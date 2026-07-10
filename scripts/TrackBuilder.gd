@@ -17,12 +17,25 @@ var is_drawing := false
 var build_enabled := true
 var wear_marks: Array[Dictionary] = []
 var wear_rng := RandomNumberGenerator.new()
+var brush_radius := 42.0
+var undo_stack: Array[Dictionary] = []
 
 func _ready() -> void:
 	set_process_input(true)
 	wear_rng.randomize()
 
 func set_tool(tool_name: String) -> void:
+	if tool_name == "undo":
+		_undo()
+		return
+	if tool_name == "brush_up":
+		brush_radius = minf(brush_radius + 10.0, 96.0)
+		queue_redraw()
+		return
+	if tool_name == "brush_down":
+		brush_radius = maxf(brush_radius - 10.0, 20.0)
+		queue_redraw()
+		return
 	active_tool = tool_name
 
 func set_build_enabled(enabled: bool) -> void:
@@ -94,6 +107,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _handle_press(mouse_pos: Vector2) -> void:
 	match active_tool:
 		"track":
+			_push_undo_state()
 			is_drawing = true
 			track_points.clear()
 			smoothed_points.clear()
@@ -101,20 +115,40 @@ func _handle_press(mouse_pos: Vector2) -> void:
 			track_points.append(mouse_pos)
 			queue_redraw()
 		"start":
+			_push_undo_state()
 			start_position = mouse_pos
 			has_start = true
 			track_changed.emit()
 			queue_redraw()
 		"finish":
+			_push_undo_state()
 			finish_position = mouse_pos
 			has_finish = true
 			track_changed.emit()
 			queue_redraw()
+		"smooth":
+			_push_undo_state()
+			_smooth_track()
+			_add_smoothing_wear(mouse_pos)
+			track_changed.emit()
+			queue_redraw()
+		"flatten":
+			_push_undo_state()
+			_flatten_area(mouse_pos)
+			track_changed.emit()
+			queue_redraw()
 		_:
-			if active_tool in ["single", "double", "triple", "tabletop", "whoops", "sand", "berm", "rollers", "hill", "dozer"]:
+			if active_tool == "dozer":
+				_push_undo_state()
+				_flatten_area(mouse_pos)
+				_remove_obstacles_near(mouse_pos)
+				track_changed.emit()
+				queue_redraw()
+			elif active_tool in ["single", "double", "triple", "tabletop", "whoops", "sand", "berm", "rollers", "hill"]:
 				_add_obstacle(active_tool, mouse_pos)
 
 func _add_obstacle(obstacle_type: String, pos: Vector2) -> void:
+	_push_undo_state()
 	var obstacle := ObstacleScene.new()
 	obstacle.setup(obstacle_type)
 	obstacle.position = pos
@@ -122,6 +156,30 @@ func _add_obstacle(obstacle_type: String, pos: Vector2) -> void:
 	add_child(obstacle)
 	obstacles.append(obstacle)
 	track_changed.emit()
+
+func _flatten_area(pos: Vector2) -> void:
+	for i in range(10):
+		var angle := wear_rng.randf_range(0.0, TAU)
+		var distance := wear_rng.randf_range(0.0, brush_radius)
+		wear_marks.append({
+			"position": pos + Vector2(cos(angle), sin(angle)) * distance,
+			"radius": wear_rng.randf_range(7.0, 13.0),
+			"alpha": wear_rng.randf_range(0.08, 0.16),
+			"stretch": wear_rng.randf_range(1.8, 3.2)
+		})
+	if wear_marks.size() > 420:
+		wear_marks = wear_marks.slice(wear_marks.size() - 420)
+
+func _add_smoothing_wear(pos: Vector2) -> void:
+	for i in range(6):
+		add_track_wear(pos, 0.42)
+
+func _remove_obstacles_near(pos: Vector2) -> void:
+	for i in range(obstacles.size() - 1, -1, -1):
+		var obstacle = obstacles[i]
+		if is_instance_valid(obstacle) and obstacle.global_position.distance_to(pos) <= brush_radius:
+			obstacles.remove_at(i)
+			obstacle.queue_free()
 
 func _smooth_track() -> void:
 	smoothed_points.clear()
@@ -153,6 +211,52 @@ func _nearest_path_index(path: Array[Vector2], target: Vector2) -> int:
 			best_distance = distance
 			best_index = i
 	return best_index
+
+func _push_undo_state() -> void:
+	var obstacle_state: Array[Dictionary] = []
+	for obstacle in obstacles:
+		if is_instance_valid(obstacle):
+			obstacle_state.append({
+				"type": obstacle.obstacle_type,
+				"position": obstacle.position
+			})
+	undo_stack.append({
+		"track_points": track_points.duplicate(),
+		"smoothed_points": smoothed_points.duplicate(),
+		"wear_marks": wear_marks.duplicate(true),
+		"obstacles": obstacle_state,
+		"start_position": start_position,
+		"finish_position": finish_position,
+		"has_start": has_start,
+		"has_finish": has_finish
+	})
+	if undo_stack.size() > 16:
+		undo_stack.pop_front()
+
+func _undo() -> void:
+	if undo_stack.is_empty():
+		return
+	var state: Dictionary = undo_stack.pop_back()
+	track_points = state["track_points"].duplicate()
+	smoothed_points = state["smoothed_points"].duplicate()
+	wear_marks = state["wear_marks"].duplicate(true)
+	start_position = state["start_position"]
+	finish_position = state["finish_position"]
+	has_start = state["has_start"]
+	has_finish = state["has_finish"]
+	for obstacle in obstacles:
+		if is_instance_valid(obstacle):
+			obstacle.queue_free()
+	obstacles.clear()
+	for saved in state["obstacles"]:
+		var obstacle := ObstacleScene.new()
+		obstacle.setup(saved["type"])
+		obstacle.position = saved["position"]
+		obstacle.z_index = 12
+		add_child(obstacle)
+		obstacles.append(obstacle)
+	track_changed.emit()
+	queue_redraw()
 
 func _draw() -> void:
 	_draw_sand_texture()
@@ -186,6 +290,8 @@ func _draw_track_wear() -> void:
 		draw_ellipse(pos, radius * stretch, radius * 0.62, Color(0.27, 0.16, 0.08, alpha))
 
 func _draw_start_finish() -> void:
+	if active_tool in ["smooth", "flatten", "dozer"]:
+		draw_arc(get_local_mouse_position(), brush_radius, 0.0, TAU, 64, Color(0.38, 0.24, 0.12, 0.32), 2.0)
 	if has_start:
 		draw_rect(Rect2(start_position - Vector2(30, 18), Vector2(60, 36)), Color(0.15, 0.18, 0.18, 0.85), false, 4.0)
 		draw_line(start_position + Vector2(-28, -16), start_position + Vector2(28, 16), Color.WHITE, 2.0)
