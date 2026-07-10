@@ -4,10 +4,23 @@ extends Node2D
 signal finished(rider)
 
 const FIRST_NAMES := ["Milo", "Rex", "Pip", "June", "Ace", "Sunny", "Dot", "Tuck", "Kit", "Bea", "Dash", "Nico"]
+const PERSONALITIES := [
+	"fearless",
+	"careful",
+	"always sends it",
+	"smooth",
+	"bad starter",
+	"great jumper",
+	"struggles in sand",
+	"loves whoops",
+	"crashes a lot"
+]
 
 var rider_name := "Milo"
 var number := 7
 var bike_color := Color.CORNFLOWER_BLUE
+var personality := "smooth"
+var confidence := 0.5
 var skills := {}
 var path: Array[Vector2] = []
 var obstacles: Array = []
@@ -29,6 +42,8 @@ func setup(new_path: Array[Vector2], race_obstacles: Array, lane: float, rng: Ra
 	rider_name = FIRST_NAMES[rng.randi_range(0, FIRST_NAMES.size() - 1)]
 	number = rng.randi_range(2, 989)
 	bike_color = Color.from_hsv(rng.randf(), 0.62, 0.90)
+	personality = PERSONALITIES[rng.randi_range(0, PERSONALITIES.size() - 1)]
+	confidence = rng.randf()
 	skills = {
 		"jump_skill": rng.randf(),
 		"whoop_skill": rng.randf(),
@@ -37,8 +52,10 @@ func setup(new_path: Array[Vector2], race_obstacles: Array, lane: float, rng: Ra
 		"hill_skill": rng.randf(),
 		"start_skill": rng.randf(),
 		"aggression": rng.randf(),
-		"consistency": rng.randf()
+		"consistency": rng.randf(),
+		"confidence": confidence
 	}
+	_apply_personality()
 	speed = 78.0 + skills["start_skill"] * 58.0 + rng.randf_range(-10.0, 12.0)
 	progress = rng.randf_range(0.0, 10.0) * skills["start_skill"]
 	z_index = 18
@@ -74,6 +91,9 @@ func _process(delta: float) -> void:
 func get_feedback() -> Array[String]:
 	return feedback.duplicate()
 
+func get_imagination_intro() -> String:
+	return _color_name() + " bike is " + personality + " this race."
+
 func _update_position() -> void:
 	var sample := _sample_path(progress)
 	var tangent: Vector2 = sample.direction
@@ -95,12 +115,12 @@ func _handle_obstacle(obstacle) -> void:
 	var skill_key: String = obstacle.get_skill_key()
 	var skill: float = skills.get(skill_key, 0.5)
 	var difficulty: float = obstacle.get_difficulty()
-	var confidence: float = skill * 0.72 + skills["consistency"] * 0.28
+	var obstacle_confidence: float = skill * 0.58 + skills["consistency"] * 0.22 + skills["confidence"] * 0.20
 	var attack: float = skills["aggression"] - difficulty + randf_range(-0.12, 0.12)
 
 	if obstacle.is_jump():
-		if confidence > difficulty:
-			speed += 16.0 * confidence
+		if obstacle_confidence > difficulty:
+			speed += 16.0 * obstacle_confidence
 			airborne_timer = 0.34 + difficulty * 0.34
 			feedback.append(_color_name() + " bike cleared the " + obstacle.obstacle_type + "!")
 		elif attack > 0.08:
@@ -125,6 +145,28 @@ func _handle_obstacle(obstacle) -> void:
 				feedback.append(_color_name() + " bike bobbled through the " + obstacle.obstacle_type + ".")
 
 	speed = clampf(speed, 42.0, 190.0)
+
+func _apply_personality() -> void:
+	match personality:
+		"fearless", "always sends it":
+			skills["aggression"] = max(skills["aggression"], 0.72)
+			skills["confidence"] = max(skills["confidence"], 0.62)
+		"careful":
+			skills["aggression"] = min(skills["aggression"], 0.34)
+			skills["consistency"] = max(skills["consistency"], 0.62)
+		"smooth":
+			skills["consistency"] = max(skills["consistency"], 0.76)
+		"bad starter":
+			skills["start_skill"] = min(skills["start_skill"], 0.28)
+		"great jumper":
+			skills["jump_skill"] = max(skills["jump_skill"], 0.82)
+		"struggles in sand":
+			skills["sand_skill"] = min(skills["sand_skill"], 0.24)
+		"loves whoops":
+			skills["whoop_skill"] = max(skills["whoop_skill"], 0.82)
+		"crashes a lot":
+			skills["aggression"] = max(skills["aggression"], 0.78)
+			skills["consistency"] = min(skills["consistency"], 0.30)
 
 func _sample_path(distance: float) -> Dictionary:
 	var remaining := distance

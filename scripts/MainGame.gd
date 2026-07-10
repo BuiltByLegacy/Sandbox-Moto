@@ -6,6 +6,7 @@ const ToyRiderScene := preload("res://scripts/ToyRider.gd")
 @onready var tool_panel = $ToolPanel
 @onready var feedback_system = $FeedbackSystem
 @onready var riders_root: Node2D = $Riders
+@onready var cozy_camera = $CozyCamera
 
 var rng := RandomNumberGenerator.new()
 var active_riders: Array = []
@@ -51,6 +52,7 @@ func _start_race(path: Array[Vector2]) -> void:
 		rider.finished.connect(_on_rider_finished)
 		riders_root.add_child(rider)
 		active_riders.append(rider)
+	cozy_camera.focus_on_track(path)
 
 func _on_rider_finished(rider) -> void:
 	finished_count += 1
@@ -60,6 +62,9 @@ func _on_rider_finished(rider) -> void:
 func _end_race() -> void:
 	race_running = false
 	var messages: Array[String] = []
+	for rider in active_riders:
+		if messages.size() < 2:
+			messages.append(rider.get_imagination_intro())
 	for rider in active_riders:
 		for message in rider.get_feedback():
 			if messages.size() < 5:

@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://sandbox_moto_main"]
+[gd_scene load_steps=6 format=3 uid="uid://sandbox_moto_main"]
 
 [ext_resource type="Script" path="res://scripts/MainGame.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/TrackBuilder.gd" id="2_track"]
 [ext_resource type="Script" path="res://scripts/ToolPanel.gd" id="3_tools"]
 [ext_resource type="Script" path="res://scripts/FeedbackSystem.gd" id="4_feedback"]
+[ext_resource type="Script" path="res://scripts/CozyCamera.gd" id="5_camera"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
@@ -12,6 +13,10 @@ script = ExtResource("1_main")
 offset_right = 1280.0
 offset_bottom = 720.0
 color = Color(0.82, 0.63, 0.37, 1)
+
+[node name="CozyCamera" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+script = ExtResource("5_camera")
 
 [node name="TrackBuilder" type="Node2D" parent="."]
 z_index = 5
@@ -25,4 +30,3 @@ script = ExtResource("4_feedback")
 
 [node name="ToolPanel" type="CanvasLayer" parent="."]
 script = ExtResource("3_tools")
-
