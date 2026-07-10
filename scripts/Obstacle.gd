@@ -8,6 +8,7 @@ const COLORS := {
 	"tabletop": Color(0.55, 0.36, 0.22),
 	"whoops": Color(0.76, 0.54, 0.28),
 	"sand": Color(0.92, 0.76, 0.47, 0.9),
+	"berm": Color(0.64, 0.40, 0.20),
 	"rollers": Color(0.70, 0.48, 0.25),
 	"hill": Color(0.50, 0.38, 0.20),
 	"dozer": Color(0.92, 0.70, 0.18)
@@ -20,6 +21,7 @@ const LABELS := {
 	"tabletop": "Table",
 	"whoops": "Whoops",
 	"sand": "Sand",
+	"berm": "Berm",
 	"rollers": "Rollers",
 	"hill": "Hill",
 	"dozer": "Dozer"
@@ -46,6 +48,8 @@ func get_difficulty() -> float:
 			return 0.58
 		"sand":
 			return 0.62
+		"berm":
+			return 0.35
 		"rollers":
 			return 0.42
 		"hill":
@@ -59,6 +63,8 @@ func get_skill_key() -> String:
 			return "whoop_skill"
 		"sand":
 			return "sand_skill"
+		"berm":
+			return "roller_skill"
 		"rollers":
 			return "roller_skill"
 		"hill":
@@ -84,6 +90,9 @@ func _draw() -> void:
 			draw_rect(Rect2(Vector2(-42, -24), Vector2(84, 48)), color, true)
 			for i in range(7):
 				draw_circle(Vector2(-32 + i * 11, -4 + (i % 2) * 10), 3, Color(0.98, 0.84, 0.55, 0.8))
+		"berm":
+			draw_arc(Vector2.ZERO, 34, PI * 0.15, PI * 1.15, 28, color, 14.0)
+			draw_arc(Vector2.ZERO, 20, PI * 0.15, PI * 1.15, 24, Color(0.88, 0.62, 0.33, 0.55), 4.0)
 		"dozer":
 			draw_rect(Rect2(Vector2(-24, -16), Vector2(48, 32)), color, true)
 			draw_rect(Rect2(Vector2(18, -24), Vector2(16, 48)), Color(0.55, 0.42, 0.24), true)
@@ -102,4 +111,3 @@ func _draw() -> void:
 
 	draw_arc(Vector2.ZERO, radius, 0.0, TAU, 48, Color(0.35, 0.24, 0.15, 0.45), 2.0)
 	draw_string(ThemeDB.fallback_font, Vector2(-24, 45), label, HORIZONTAL_ALIGNMENT_LEFT, 80, 12, Color(0.24, 0.16, 0.10))
-

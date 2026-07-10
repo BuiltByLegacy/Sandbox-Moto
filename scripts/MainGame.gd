@@ -29,7 +29,7 @@ func _on_tool_selected(tool_name: String) -> void:
 func _on_race_requested() -> void:
 	if race_running:
 		return
-	var path: Array[Vector2] = track_builder.get_track_path()
+	var path: Array[Vector2] = track_builder.get_race_path()
 	if path.size() < 2:
 		feedback_system.show_feedback(["The toy bikes need a smooth track first."])
 		return
@@ -71,6 +71,7 @@ func _end_race() -> void:
 		messages.append("The triple is waiting for a brave toy rider.")
 	if messages.is_empty():
 		messages.append("The little moto felt smooth and fast.")
+	messages.append("One more race?")
 
 	feedback_system.show_feedback(messages)
 	track_builder.set_build_enabled(true)

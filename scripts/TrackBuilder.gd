@@ -31,6 +31,25 @@ func get_track_path() -> Array[Vector2]:
 		return smoothed_points.duplicate()
 	return track_points.duplicate()
 
+func get_race_path() -> Array[Vector2]:
+	var path := get_track_path()
+	if path.size() < 2:
+		return path
+	if not has_start:
+		return path
+
+	var start_index := _nearest_path_index(path, start_position)
+	var ordered_path := path.slice(start_index)
+	if start_index > 0:
+		ordered_path.append_array(path.slice(0, start_index + 1))
+
+	if has_finish and ordered_path.size() > 2:
+		var finish_index := _nearest_path_index(ordered_path, finish_position)
+		if finish_index > 1:
+			ordered_path = ordered_path.slice(0, finish_index + 1)
+
+	return ordered_path
+
 func get_obstacles() -> Array:
 	return obstacles.duplicate()
 
@@ -76,7 +95,7 @@ func _handle_press(mouse_pos: Vector2) -> void:
 			track_changed.emit()
 			queue_redraw()
 		_:
-			if active_tool in ["single", "double", "triple", "tabletop", "whoops", "sand", "rollers", "hill", "dozer"]:
+			if active_tool in ["single", "double", "triple", "tabletop", "whoops", "sand", "berm", "rollers", "hill", "dozer"]:
 				_add_obstacle(active_tool, mouse_pos)
 
 func _add_obstacle(obstacle_type: String, pos: Vector2) -> void:
@@ -108,6 +127,16 @@ func _catmull_rom(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2, t: float) 
 	var t2 := t * t
 	var t3 := t2 * t
 	return 0.5 * ((2.0 * p1) + (-p0 + p2) * t + (2.0 * p0 - 5.0 * p1 + 4.0 * p2 - p3) * t2 + (-p0 + 3.0 * p1 - 3.0 * p2 + p3) * t3)
+
+func _nearest_path_index(path: Array[Vector2], target: Vector2) -> int:
+	var best_index := 0
+	var best_distance := INF
+	for i in range(path.size()):
+		var distance := path[i].distance_squared_to(target)
+		if distance < best_distance:
+			best_distance = distance
+			best_index = i
+	return best_index
 
 func _draw() -> void:
 	_draw_sand_texture()
