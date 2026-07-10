@@ -9,6 +9,7 @@ const ROTATE_STEP := 0.015
 const MAX_ROTATION := 0.08
 const BUILD_ZOOM := 1.0
 const RACE_ZOOM := 1.18
+const SIGNATURE_ZOOM := 0.70
 
 var dragging := false
 var target_zoom := Vector2.ONE
@@ -59,6 +60,11 @@ func focus_on_track(points: Array[Vector2]) -> void:
 		max_point.y = maxf(max_point.y, point.y)
 	target_position = min_point.lerp(max_point, 0.5)
 	_set_zoom(BUILD_ZOOM)
+
+func reveal_sandbox(points: Array[Vector2]) -> void:
+	focus_on_track(points)
+	_set_zoom(SIGNATURE_ZOOM)
+	target_rotation = 0.0
 
 func focus_on_riders(riders: Array) -> void:
 	if riders.is_empty():

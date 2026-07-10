@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://sandbox_moto_main"]
+[gd_scene load_steps=7 format=3 uid="uid://sandbox_moto_main"]
 
 [ext_resource type="Script" path="res://scripts/MainGame.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/TrackBuilder.gd" id="2_track"]
 [ext_resource type="Script" path="res://scripts/ToolPanel.gd" id="3_tools"]
 [ext_resource type="Script" path="res://scripts/FeedbackSystem.gd" id="4_feedback"]
 [ext_resource type="Script" path="res://scripts/CozyCamera.gd" id="5_camera"]
+[ext_resource type="Script" path="res://scripts/SignatureMoment.gd" id="6_signature"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
@@ -30,3 +31,7 @@ script = ExtResource("4_feedback")
 
 [node name="ToolPanel" type="CanvasLayer" parent="."]
 script = ExtResource("3_tools")
+
+[node name="SignatureMoment" type="CanvasLayer" parent="."]
+layer = 5
+script = ExtResource("6_signature")

@@ -7,12 +7,14 @@ const ToyRiderScene := preload("res://scripts/ToyRider.gd")
 @onready var feedback_system = $FeedbackSystem
 @onready var riders_root: Node2D = $Riders
 @onready var cozy_camera = $CozyCamera
+@onready var signature_moment = $SignatureMoment
 
 var rng := RandomNumberGenerator.new()
 var active_riders: Array = []
 var finished_count := 0
 var race_running := false
 var wear_timer := 0.0
+var signature_active := false
 
 func _process(delta: float) -> void:
 	if race_running:
@@ -37,7 +39,7 @@ func _on_tool_selected(tool_name: String) -> void:
 	track_builder.set_tool(tool_name)
 
 func _on_race_requested() -> void:
-	if race_running:
+	if race_running or signature_active:
 		return
 	var path: Array[Vector2] = track_builder.get_race_path()
 	if path.size() < 2:
@@ -93,6 +95,19 @@ func _end_race() -> void:
 	track_builder.set_build_enabled(true)
 	tool_panel.set_build_enabled(true)
 	cozy_camera.focus_on_track(track_builder.get_race_path())
+	if rng.randf() < 0.30:
+		_play_signature_ending()
+
+func _play_signature_ending() -> void:
+	signature_active = true
+	track_builder.set_build_enabled(false)
+	tool_panel.set_build_enabled(false)
+	cozy_camera.reveal_sandbox(track_builder.get_race_path())
+	await signature_moment.play_mom_called()
+	cozy_camera.focus_on_track(track_builder.get_race_path())
+	track_builder.set_build_enabled(true)
+	tool_panel.set_build_enabled(true)
+	signature_active = false
 
 func _clear_riders() -> void:
 	for child in riders_root.get_children():
