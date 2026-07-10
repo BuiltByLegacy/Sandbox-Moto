@@ -15,9 +15,12 @@ var has_start := false
 var has_finish := false
 var is_drawing := false
 var build_enabled := true
+var wear_marks: Array[Dictionary] = []
+var wear_rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
 	set_process_input(true)
+	wear_rng.randomize()
 
 func set_tool(tool_name: String) -> void:
 	active_tool = tool_name
@@ -53,6 +56,18 @@ func get_race_path() -> Array[Vector2]:
 func get_obstacles() -> Array:
 	return obstacles.duplicate()
 
+func add_track_wear(world_pos: Vector2, intensity := 1.0) -> void:
+	var offset := Vector2(wear_rng.randf_range(-9.0, 9.0), wear_rng.randf_range(-7.0, 7.0))
+	wear_marks.append({
+		"position": world_pos + offset,
+		"radius": wear_rng.randf_range(3.5, 8.0) * intensity,
+		"alpha": clampf(wear_rng.randf_range(0.18, 0.36) * intensity, 0.12, 0.52),
+		"stretch": wear_rng.randf_range(1.0, 2.4)
+	})
+	if wear_marks.size() > 420:
+		wear_marks.pop_front()
+	queue_redraw()
+
 func _unhandled_input(event: InputEvent) -> void:
 	if not build_enabled:
 		return
@@ -82,6 +97,7 @@ func _handle_press(mouse_pos: Vector2) -> void:
 			is_drawing = true
 			track_points.clear()
 			smoothed_points.clear()
+			wear_marks.clear()
 			track_points.append(mouse_pos)
 			queue_redraw()
 		"start":
@@ -141,6 +157,7 @@ func _nearest_path_index(path: Array[Vector2], target: Vector2) -> int:
 func _draw() -> void:
 	_draw_sand_texture()
 	_draw_track()
+	_draw_track_wear()
 	_draw_start_finish()
 
 func _draw_sand_texture() -> void:
@@ -159,6 +176,14 @@ func _draw_track() -> void:
 	draw_polyline(PackedVector2Array(path), Color(0.42, 0.26, 0.12, 0.35), 32.0, true)
 	draw_polyline(PackedVector2Array(path), Color(0.68, 0.43, 0.20, 0.65), 20.0, true)
 	draw_polyline(PackedVector2Array(path), Color(0.95, 0.75, 0.42, 0.28), 4.0, true)
+
+func _draw_track_wear() -> void:
+	for mark in wear_marks:
+		var pos: Vector2 = mark["position"]
+		var radius: float = mark["radius"]
+		var alpha: float = mark["alpha"]
+		var stretch: float = mark["stretch"]
+		draw_ellipse(pos, radius * stretch, radius * 0.62, Color(0.27, 0.16, 0.08, alpha))
 
 func _draw_start_finish() -> void:
 	if has_start:

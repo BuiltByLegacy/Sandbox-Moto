@@ -12,10 +12,15 @@ var rng := RandomNumberGenerator.new()
 var active_riders: Array = []
 var finished_count := 0
 var race_running := false
+var wear_timer := 0.0
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if race_running:
 		cozy_camera.focus_on_riders(active_riders)
+		wear_timer -= delta
+		if wear_timer <= 0.0:
+			wear_timer = 0.08
+			_add_race_wear()
 
 func _ready() -> void:
 	rng.randomize()
@@ -44,6 +49,7 @@ func _on_race_requested() -> void:
 func _start_race(path: Array[Vector2]) -> void:
 	race_running = true
 	finished_count = 0
+	wear_timer = 0.0
 	_clear_riders()
 	feedback_system.clear()
 	track_builder.set_build_enabled(false)
@@ -81,6 +87,7 @@ func _end_race() -> void:
 	if messages.is_empty():
 		messages.append("The little moto felt smooth and fast.")
 	messages.append("One more race?")
+	_add_obstacle_wear()
 
 	feedback_system.show_feedback(messages)
 	track_builder.set_build_enabled(true)
@@ -91,6 +98,16 @@ func _clear_riders() -> void:
 	for child in riders_root.get_children():
 		child.queue_free()
 	active_riders.clear()
+
+func _add_race_wear() -> void:
+	for rider in active_riders:
+		if is_instance_valid(rider) and not rider.finished_race:
+			track_builder.add_track_wear(rider.global_position, 0.75)
+
+func _add_obstacle_wear() -> void:
+	for obstacle in track_builder.get_obstacles():
+		track_builder.add_track_wear(obstacle.global_position, 1.35)
+		track_builder.add_track_wear(obstacle.global_position + Vector2(18, 10), 0.95)
 
 func _has_obstacle_type(obstacle_type: String) -> bool:
 	for obstacle in track_builder.get_obstacles():
