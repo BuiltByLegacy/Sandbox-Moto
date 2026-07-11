@@ -1,5 +1,9 @@
 # Sandbox Moto Technical Plan
 
+## Browser Prototype Delivery
+
+The dependency-free prototype in `web/` is deployed through `.github/workflows/deploy-pages.yml`. GitHub Pages publishes only that folder from `main`, keeping the browser build isolated from Godot source and documentation. The canonical playable URL is `https://builtbylegacy.github.io/Sandbox-Moto/`.
+
 ## Target
 
 - Engine: Godot 4.x

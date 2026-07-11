@@ -81,6 +81,8 @@ Examples include toy bikes, toy riders, shovels, buckets, rakes, molds, cones, f
 
 Open `web/index.html` in a modern browser. It is a self-contained playable version of the core loop with smooth track drawing, obstacle placement, randomized toy riders, race stories, track wear, touch support, and no build step.
 
+Play the latest version online at **https://builtbylegacy.github.io/Sandbox-Moto/**. GitHub Pages automatically republishes changes from `web/` after they reach `main`.
+
 ## Key Docs
 
 - `docs/GAME_VISION.md` - Canonical full concept, fantasy, loop, and boundaries.

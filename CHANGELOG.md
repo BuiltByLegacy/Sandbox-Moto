@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- feat: publish the playable HTML prototype through GitHub Pages.
 - docs: add `CLAUDE.md` root directive defining agent roles, session-start reading order, GitHub workflow, Higgsfield prompt standards, and documentation rules.
 - docs: update roadmap for Steam release prep, living sandbox polish, and photo mode.
 - docs: add design bible and north star for Sandbox Moto.
