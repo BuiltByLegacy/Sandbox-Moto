@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- feat: obstacle move and pick-up tools. The kid's hand can now reach in: Hand / Move drags a placed toy to a new spot, Pick Up lifts it out of the sandbox, both leave a little dent in the sand, show a hover ring, support Undo, and autosave/persist like any other build change. Tool panel compacted so all tools fit a 720p window. Headless test in `tests/obstacle_edit_smoke.gd`.
 - feat: publish the playable HTML prototype through GitHub Pages.
 - feat: sandbox track save/load. The sandbox autosaves (debounced, plus on quit and after races) to a versioned JSON file in the user data directory and reloads on launch into quiet Play Time - track path, start/finish, obstacles, and played-in wear all persist; riders never do. Includes cozy "Sandbox saved" whisper, F9 dev save-clear, headless smoke and integration tests in `tests/`, and `docs/SAVE_SYSTEM.md` documenting the schema.
 - docs: add `CLAUDE.md` root directive defining agent roles, session-start reading order, GitHub workflow, Higgsfield prompt standards, and documentation rules.

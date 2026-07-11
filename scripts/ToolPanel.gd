@@ -10,6 +10,8 @@ const TOOLS := [
 	{"label": "Finish", "tool": "finish"},
 	{"label": "Rake / Smooth", "tool": "smooth"},
 	{"label": "Hand Flatten", "tool": "flatten"},
+	{"label": "Hand / Move", "tool": "move"},
+	{"label": "Pick Up", "tool": "pickup"},
 	{"label": "Single", "tool": "single"},
 	{"label": "Double", "tool": "double"},
 	{"label": "Triple", "tool": "triple"},
@@ -48,7 +50,7 @@ func _ready() -> void:
 	panel.add_theme_stylebox_override("panel", style)
 
 	var list := VBoxContainer.new()
-	list.add_theme_constant_override("separation", 6)
+	list.add_theme_constant_override("separation", 4)
 	panel.add_child(list)
 
 	var title := Label.new()
@@ -60,7 +62,8 @@ func _ready() -> void:
 		var button := Button.new()
 		button.text = tool_info.label
 		button.focus_mode = Control.FOCUS_NONE
-		button.custom_minimum_size = Vector2(140, 32)
+		button.custom_minimum_size = Vector2(140, 26)
+		button.add_theme_font_size_override("font_size", 13)
 		button.pressed.connect(_on_tool_pressed.bind(tool_info.tool))
 		list.add_child(button)
 		buttons[tool_info.tool] = button
@@ -68,7 +71,7 @@ func _ready() -> void:
 	var race_button := Button.new()
 	race_button.text = "Play Race"
 	race_button.focus_mode = Control.FOCUS_NONE
-	race_button.custom_minimum_size = Vector2(140, 38)
+	race_button.custom_minimum_size = Vector2(140, 34)
 	race_button.pressed.connect(func() -> void: race_requested.emit())
 	list.add_child(race_button)
 	buttons["race"] = race_button

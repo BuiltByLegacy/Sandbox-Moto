@@ -57,7 +57,7 @@ The current Godot prototype includes:
 - Warm sand/dirt play area.
 - Smooth free-draw track path.
 - Start gate and finish placement.
-- Placeholder obstacle tools.
+- Placeholder obstacle tools, plus Hand / Move and Pick Up for rearranging placed toys.
 - Play Race button.
 - Random toy riders with names, numbers, colors, and temporary skills.
 - Simple obstacle risk/reward.

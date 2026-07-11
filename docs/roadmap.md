@@ -15,7 +15,7 @@ This roadmap follows the Sandbox Moto north star: unlock imagination, not power.
 ## Version 2: Better Sculpting And Toy Bikes
 
 - Better sculpting tools: pile, smooth, flatten, carve, shape, water, repair, knock down, rebuild.
-- Editable track sections and obstacle movement.
+- Editable track sections and obstacle movement. (Obstacle move and pick-up done: Hand / Move and Pick Up tools; track section editing still open.)
 - Tiny hand/tool animations.
 - Better toy-bike visuals and 1:12 collectible proportions.
 - Better obstacle risk/reward and toy-like jump behavior.

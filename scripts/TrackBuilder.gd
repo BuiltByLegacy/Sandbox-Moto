@@ -6,6 +6,7 @@ signal track_changed
 const ObstacleScene := preload("res://scripts/Obstacle.gd")
 const SAVABLE_OBSTACLE_TYPES := ["single", "double", "triple", "tabletop", "whoops", "sand", "berm", "rollers", "hill"]
 const MAX_WEAR_MARKS := 420
+const GRAB_RADIUS := 44.0
 
 var active_tool := "track"
 var track_points: Array[Vector2] = []
@@ -21,6 +22,8 @@ var wear_marks: Array[Dictionary] = []
 var wear_rng := RandomNumberGenerator.new()
 var brush_radius := 42.0
 var undo_stack: Array[Dictionary] = []
+var dragged_obstacle: Node2D = null
+var drag_offset := Vector2.ZERO
 
 func _ready() -> void:
 	set_process_input(true)
@@ -43,6 +46,7 @@ func set_tool(tool_name: String) -> void:
 func set_build_enabled(enabled: bool) -> void:
 	build_enabled = enabled
 	is_drawing = false
+	dragged_obstacle = null
 
 func get_track_path() -> Array[Vector2]:
 	if smoothed_points.size() >= 2:
@@ -210,16 +214,21 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		var mouse_pos := get_global_mouse_position()
-		if mouse_pos.x < 205:
-			return
-		if event.pressed:
-			_handle_press(mouse_pos)
-		else:
+		if not event.pressed:
+			# Always let go on release, even over the tool panel, so toys
+			# and track drawing never stay stuck to the hand.
+			var was_drawing := is_drawing
 			is_drawing = false
-			if active_tool == "track":
+			if was_drawing and active_tool == "track":
 				_smooth_track()
 				track_changed.emit()
 				queue_redraw()
+			elif dragged_obstacle != null:
+				_drop_obstacle()
+			return
+		if mouse_pos.x < 205:
+			return
+		_handle_press(mouse_pos)
 	elif event is InputEventMouseMotion and is_drawing and active_tool == "track":
 		var mouse_pos := get_global_mouse_position()
 		if track_points.is_empty() or track_points.back().distance_to(mouse_pos) > 12.0:
@@ -227,6 +236,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			_smooth_track()
 			track_changed.emit()
 			queue_redraw()
+	elif event is InputEventMouseMotion and dragged_obstacle != null and active_tool == "move":
+		_drag_obstacle_to(get_global_mouse_position())
+	elif event is InputEventMouseMotion and active_tool in ["smooth", "flatten", "dozer", "move", "pickup"]:
+		# Keep the brush circle and hover ring following the hand.
+		queue_redraw()
 
 func _handle_press(mouse_pos: Vector2) -> void:
 	match active_tool:
@@ -250,6 +264,10 @@ func _handle_press(mouse_pos: Vector2) -> void:
 			has_finish = true
 			track_changed.emit()
 			queue_redraw()
+		"move":
+			_grab_obstacle_at(mouse_pos)
+		"pickup":
+			_pickup_obstacle_at(mouse_pos)
 		"smooth":
 			_push_undo_state()
 			_smooth_track()
@@ -280,6 +298,56 @@ func _add_obstacle(obstacle_type: String, pos: Vector2) -> void:
 	add_child(obstacle)
 	obstacles.append(obstacle)
 	track_changed.emit()
+
+func _grab_obstacle_at(pos: Vector2) -> void:
+	var obstacle := _nearest_obstacle_to(pos)
+	if obstacle == null:
+		return
+	_push_undo_state()
+	dragged_obstacle = obstacle
+	drag_offset = obstacle.position - pos
+	_add_toy_dent(obstacle.position)
+	queue_redraw()
+
+func _drag_obstacle_to(pos: Vector2) -> void:
+	if not is_instance_valid(dragged_obstacle):
+		dragged_obstacle = null
+		return
+	dragged_obstacle.position = pos + drag_offset
+	queue_redraw()
+
+func _drop_obstacle() -> void:
+	dragged_obstacle = null
+	track_changed.emit()
+	queue_redraw()
+
+func _pickup_obstacle_at(pos: Vector2) -> void:
+	var obstacle := _nearest_obstacle_to(pos)
+	if obstacle == null:
+		return
+	_push_undo_state()
+	_add_toy_dent(obstacle.position)
+	obstacles.erase(obstacle)
+	obstacle.queue_free()
+	track_changed.emit()
+	queue_redraw()
+
+func _nearest_obstacle_to(pos: Vector2) -> Node2D:
+	var best: Node2D = null
+	var best_distance := GRAB_RADIUS
+	for obstacle in obstacles:
+		if not is_instance_valid(obstacle):
+			continue
+		var distance: float = obstacle.position.distance_to(pos)
+		if distance <= best_distance:
+			best_distance = distance
+			best = obstacle
+	return best
+
+func _add_toy_dent(pos: Vector2) -> void:
+	# A toy lifted out of the sand leaves a little dent behind.
+	for i in range(3):
+		add_track_wear(pos, 0.5)
 
 func _flatten_area(pos: Vector2) -> void:
 	for i in range(10):
@@ -361,6 +429,7 @@ func _undo() -> void:
 	if undo_stack.is_empty():
 		return
 	var state: Dictionary = undo_stack.pop_back()
+	dragged_obstacle = null
 	track_points = state["track_points"].duplicate()
 	smoothed_points = state["smoothed_points"].duplicate()
 	wear_marks = state["wear_marks"].duplicate(true)
@@ -416,6 +485,8 @@ func _draw_track_wear() -> void:
 func _draw_start_finish() -> void:
 	if active_tool in ["smooth", "flatten", "dozer"]:
 		draw_arc(get_local_mouse_position(), brush_radius, 0.0, TAU, 64, Color(0.38, 0.24, 0.12, 0.32), 2.0)
+	if active_tool in ["move", "pickup"]:
+		_draw_grab_ring()
 	if has_start:
 		draw_rect(Rect2(start_position - Vector2(30, 18), Vector2(60, 36)), Color(0.15, 0.18, 0.18, 0.85), false, 4.0)
 		draw_line(start_position + Vector2(-28, -16), start_position + Vector2(28, 16), Color.WHITE, 2.0)
@@ -428,3 +499,13 @@ func _draw_start_finish() -> void:
 				if (x + y) % 2 == 0:
 					draw_rect(Rect2(finish_position + Vector2(-28 + x * 14, -24 + y * 16), Vector2(14, 16)), Color(0.08, 0.08, 0.08), true)
 		draw_string(ThemeDB.fallback_font, finish_position + Vector2(-28, -32), "FINISH", HORIZONTAL_ALIGNMENT_LEFT, 90, 12, Color(0.20, 0.13, 0.07))
+
+func _draw_grab_ring() -> void:
+	# Soft ring around the toy the hand is over (or carrying).
+	var target: Node2D = dragged_obstacle
+	if target == null or not is_instance_valid(target):
+		target = _nearest_obstacle_to(get_local_mouse_position())
+	if target == null:
+		return
+	var ring_color := Color(0.98, 0.86, 0.52, 0.85) if dragged_obstacle != null else Color(0.42, 0.28, 0.14, 0.55)
+	draw_arc(target.position, GRAB_RADIUS + 4.0, 0.0, TAU, 48, ring_color, 3.0)

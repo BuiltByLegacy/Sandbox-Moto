@@ -43,6 +43,7 @@ Handles direct player editing:
 - Start gate placement.
 - Finish marker placement.
 - Obstacle placement.
+- Obstacle move (grab/drag/drop) and single pick-up, with hover ring, undo, and toy dents in the sand.
 - Track and obstacle rendering.
 
 The prototype intentionally avoids a blocky grid track system. Free-draw smooth track behavior should be preserved until there is a stronger terrain editing reason to change it.
@@ -92,7 +93,7 @@ The prototype should preserve these visual priorities:
 
 ## Next Implementation Steps
 
-1. Add editable obstacle movement and deletion.
+1. ~~Add editable obstacle movement and deletion.~~ Done: Hand / Move and Pick Up tools in `TrackBuilder.gd`.
 2. Add path smoothing controls and track width visualization.
 3. Add simple berm placement and feedback.
 4. Add richer toy rider animation: wobble, tiny roost puffs, happy landings.
@@ -109,6 +110,7 @@ Run from the project root with the Godot binary:
 
 - `godot --headless --path . --script res://tests/save_load_smoke.gd` - save/load unit coverage: roundtrip of every obstacle type, missing/empty/malformed/newer-version files, partial corruption, clear.
 - `godot --headless --path . --script res://tests/reload_integration.gd` - boots the real Main scene twice and confirms a built sandbox reloads into quiet Play Time with no riders.
+- `godot --headless --path . --script res://tests/obstacle_edit_smoke.gd` - move/pick-up coverage: grab, drag, drop, missed grabs, undo for both actions, dents, and freed-node safety.
 
 Both exit non-zero on failure. Note for future tests: in `--script` mode `_ready` only fires once the main loop runs, so tests that instance scenes must `await process_frame`, and standalone scripts cannot use `class_name` types (no global class cache).
 

@@ -49,6 +49,8 @@ Tools should be direct and playful:
 - Pull to raise.
 - Push to flatten.
 - Drop flags and cones like toys.
+- Reach in and move a placed toy with your hand.
+- Pick a toy up and out of the sandbox.
 - Pile dirt.
 - Smooth dirt.
 - Flatten.

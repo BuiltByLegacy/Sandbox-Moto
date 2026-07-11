@@ -38,6 +38,17 @@ A soft slow section that tests `sand_skill`. Weak riders may get stuck or lose m
 
 An elevation-style feature that tests `hill_skill`. Better riders carry momentum; weaker riders slow down.
 
+## Editing Placed Obstacles
+
+Placed obstacles are toys, and toys get rearranged:
+
+- Hand / Move: press a toy, drag it somewhere better, let go. This is the interactive version of the "kid's hand reaches in to move a jump" signature moment.
+- Pick Up: tap a toy to lift it out of the sandbox and back to the toy box.
+- Lifting a toy leaves a small dent in the sand where it sat.
+- A soft ring shows which toy the hand is over; it brightens while carrying.
+- Both actions support Undo, autosave like any other build change, and persist through the save system.
+- The Dozer remains the area-clearing tool; Pick Up is for one toy at a time.
+
 ## Rider Outcomes
 
 Beginner riders:
