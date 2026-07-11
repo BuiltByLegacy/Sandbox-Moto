@@ -19,6 +19,8 @@ Each memorable race can save:
 
 ## Kid-Style Track Names
 
+Implemented: `scripts/TrackNamer.gd` generates these, the nameplate above the sandbox shows and edits them, and they persist with the save.
+
 Generated track names should sound like a kid made them:
 
 - Dragon Hill.

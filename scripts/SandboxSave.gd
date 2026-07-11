@@ -9,6 +9,7 @@ const LOCATION_ID := "backyard_sandbox"
 const AUTOSAVE_DEBOUNCE_SECONDS := 2.5
 
 var save_path := SAVE_PATH
+var track_name := ""
 # Deliberately untyped: SandboxSave only needs get_save_state() from the
 # builder, and avoiding the class_name keeps this script loadable in
 # standalone headless test runs.
@@ -52,7 +53,7 @@ func save_now() -> bool:
 		"save_version": SAVE_VERSION,
 		"saved_at": Time.get_datetime_string_from_system(),
 		"location_id": LOCATION_ID,
-		"track_name": "",
+		"track_name": track_name,
 		"track": track_builder.get_save_state()
 	}
 	var file := FileAccess.open(save_path, FileAccess.WRITE)

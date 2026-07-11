@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://sandbox_moto_main"]
+[gd_scene load_steps=11 format=3 uid="uid://sandbox_moto_main"]
 
 [ext_resource type="Script" path="res://scripts/MainGame.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/TrackBuilder.gd" id="2_track"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/LivingSandbox.gd" id="7_living"]
 [ext_resource type="Script" path="res://scripts/PhotoMode.gd" id="8_photo"]
 [ext_resource type="Script" path="res://scripts/SandboxSave.gd" id="9_save"]
+[ext_resource type="Script" path="res://scripts/TrackNameplate.gd" id="10_nameplate"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
@@ -49,3 +50,6 @@ script = ExtResource("8_photo")
 
 [node name="SandboxSave" type="Node" parent="."]
 script = ExtResource("9_save")
+
+[node name="TrackNameplate" type="CanvasLayer" parent="."]
+script = ExtResource("10_nameplate")

@@ -64,6 +64,7 @@ The current Godot prototype includes:
 - Simple obstacle risk/reward.
 - Imagination-style feedback bubbles.
 - Autosaved sandbox: the track, start/finish, obstacles, and wear quietly persist and reload on launch, like toys left out overnight (see `docs/SAVE_SYSTEM.md`; F9 clears the save in debug builds).
+- Kid-style track names: every sandbox gets a suggested name ("The Impossible Triple", "Big Sand SX"), editable on the nameplate, saved with the track, and used as the Polaroid caption.
 
 Important implementation note: keep the current free-draw smooth track system as the baseline for now. Do not switch back to a blocky grid system. If grid logic is introduced later, it should only guide editing while visuals remain smooth and natural.
 

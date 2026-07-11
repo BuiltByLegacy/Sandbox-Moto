@@ -15,6 +15,13 @@ func _ready() -> void:
 func set_targets(layers: Array) -> void:
 	targets_to_hide = layers
 
+func set_caption_name(track_name: String) -> void:
+	# Polaroids are captioned with the track's name, like a kid would.
+	if track_name.strip_edges().is_empty():
+		caption.text = "Sandbox Moto  /  pretend Polaroid"
+	else:
+		caption.text = track_name + "  /  pretend Polaroid"
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_P:

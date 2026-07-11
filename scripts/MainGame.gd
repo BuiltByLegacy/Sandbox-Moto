@@ -1,6 +1,7 @@
 extends Node2D
 
 const ToyRiderScene := preload("res://scripts/ToyRider.gd")
+const TrackNamerScript := preload("res://scripts/TrackNamer.gd")
 
 @onready var track_builder = $TrackBuilder
 @onready var tool_panel = $ToolPanel
@@ -10,6 +11,7 @@ const ToyRiderScene := preload("res://scripts/ToyRider.gd")
 @onready var signature_moment = $SignatureMoment
 @onready var photo_mode = $PhotoMode
 @onready var sandbox_save = $SandboxSave
+@onready var nameplate = $TrackNameplate
 
 var rng := RandomNumberGenerator.new()
 var active_riders: Array = []
@@ -32,13 +34,22 @@ func _ready() -> void:
 	rng.randomize()
 	tool_panel.tool_selected.connect(_on_tool_selected)
 	tool_panel.race_requested.connect(_on_race_requested)
-	photo_mode.set_targets([tool_panel, feedback_system])
+	photo_mode.set_targets([tool_panel, feedback_system, nameplate])
 	track_builder.set_tool("track")
 
 	sandbox_save.setup(track_builder)
 	var restored := _restore_saved_sandbox()
 	track_builder.track_changed.connect(sandbox_save.mark_dirty)
 	sandbox_save.saved.connect(_on_sandbox_saved)
+
+	nameplate.name_changed.connect(_on_track_renamed)
+	nameplate.shuffle_requested.connect(_roll_track_name)
+	nameplate.editing_changed.connect(func(editing: bool) -> void: cozy_camera.keys_enabled = not editing)
+	if sandbox_save.track_name.is_empty():
+		_roll_track_name()
+	else:
+		nameplate.set_track_name(sandbox_save.track_name)
+		photo_mode.set_caption_name(sandbox_save.track_name)
 
 	if restored:
 		feedback_system.show_feedback([
@@ -57,6 +68,7 @@ func _restore_saved_sandbox() -> bool:
 	var saved_state: Dictionary = sandbox_save.load_state()
 	if saved_state.is_empty():
 		return false
+	sandbox_save.track_name = TrackNamerScript.clean_name(saved_state.get("track_name"))
 	var restored: bool = track_builder.apply_save_state(saved_state["track"])
 	if restored:
 		var path: Array[Vector2] = track_builder.get_race_path()
@@ -66,6 +78,21 @@ func _restore_saved_sandbox() -> bool:
 
 func _on_sandbox_saved() -> void:
 	feedback_system.show_whisper("Sandbox saved")
+
+func _on_track_renamed(new_name: String) -> void:
+	var cleaned: String = TrackNamerScript.clean_name(new_name)
+	sandbox_save.track_name = cleaned
+	photo_mode.set_caption_name(cleaned)
+	sandbox_save.mark_dirty()
+
+func _roll_track_name() -> void:
+	var obstacle_types: Array = []
+	for obstacle in track_builder.get_obstacles():
+		if is_instance_valid(obstacle):
+			obstacle_types.append(obstacle.obstacle_type)
+	var suggestion: String = TrackNamerScript.suggest_name(obstacle_types, rng)
+	nameplate.set_track_name(suggestion)
+	_on_track_renamed(suggestion)
 
 func _notification(what: int) -> void:
 	# Leaving the game is the "Mom called dinner" moment: quietly keep the
@@ -83,6 +110,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 		sandbox_save.clear_save()
 		track_builder.clear_all()
+		_roll_track_name()
 		feedback_system.show_feedback([
 			"Fresh sand! (Dev only: saved sandbox cleared with F9.)",
 			"Draw a smooth track to start a new one."
@@ -111,6 +139,7 @@ func _start_race(path: Array[Vector2]) -> void:
 	feedback_system.clear()
 	track_builder.set_build_enabled(false)
 	tool_panel.set_build_enabled(false)
+	nameplate.set_build_enabled(false)
 
 	var lanes := [-24.0, -8.0, 8.0, 24.0]
 	for lane in lanes:
@@ -154,6 +183,7 @@ func _end_race() -> void:
 	feedback_system.show_feedback(messages)
 	track_builder.set_build_enabled(true)
 	tool_panel.set_build_enabled(true)
+	nameplate.set_build_enabled(true)
 	cozy_camera.focus_on_track(track_builder.get_race_path())
 	sandbox_save.set_autosave_paused(false)
 	sandbox_save.mark_dirty()
@@ -164,11 +194,13 @@ func _play_signature_ending() -> void:
 	signature_active = true
 	track_builder.set_build_enabled(false)
 	tool_panel.set_build_enabled(false)
+	nameplate.set_build_enabled(false)
 	cozy_camera.reveal_sandbox(track_builder.get_race_path())
 	await signature_moment.play_mom_called()
 	cozy_camera.focus_on_track(track_builder.get_race_path())
 	track_builder.set_build_enabled(true)
 	tool_panel.set_build_enabled(true)
+	nameplate.set_build_enabled(true)
 	signature_active = false
 
 func _clear_riders() -> void:

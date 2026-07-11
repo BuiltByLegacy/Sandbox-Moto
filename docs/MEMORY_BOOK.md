@@ -2,7 +2,9 @@
 
 The Memory Book is the scrapbook system. It can become the player's save file.
 
-The underlying persistence already exists: the sandbox autosaves to a versioned local file and reloads on launch (see `docs/SAVE_SYSTEM.md`). The save schema reserves a `track_name` field for the kid-style track names below. Memory Book entries build on top of that foundation.
+The underlying persistence already exists: the sandbox autosaves to a versioned local file and reloads on launch (see `docs/SAVE_SYSTEM.md`). Memory Book entries build on top of that foundation.
+
+Kid-style track names are implemented: every sandbox gets a suggested name on a nameplate above the sand (content-aware - a triple can suggest "The Impossible Triple"), players can type their own, the name persists in the save file's `track_name` field, and photo mode Polaroids are captioned with it. Generator lives in `scripts/TrackNamer.gd`.
 
 ## Purpose
 

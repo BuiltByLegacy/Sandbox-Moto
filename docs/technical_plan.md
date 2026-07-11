@@ -72,6 +72,14 @@ The current implementation is intentionally toy-like rather than physically real
 
 Displays cozy imagination feedback. It should stay qualitative and playful rather than analytical. Also provides `show_whisper()` for tiny self-fading corner notes (used by autosave).
 
+### TrackNamer.gd and TrackNameplate.gd
+
+Kid-style track naming, the first Memory Book piece:
+
+- `TrackNamer` (RefCounted, static) suggests names from what is on the track - content-gated specials like "The Impossible Triple" only appear when the feature exists. Also owns `clean_name()` sanitizing (trim, 28-char cap, non-strings become empty).
+- `TrackNameplate` (CanvasLayer) shows the editable name centered above the sandbox with a New Name button. Camera key input is disabled while typing.
+- Names persist through the save schema's `track_name` field and caption photo mode Polaroids.
+
 ### SandboxSave.gd
 
 Persists the player's sandbox to `user://sandbox_save.json` so leaving the game feels like leaving toys out overnight:
@@ -113,6 +121,7 @@ Run from the project root with the Godot binary:
 - `godot --headless --path . --script res://tests/reload_integration.gd` - boots the real Main scene twice and confirms a built sandbox reloads into quiet Play Time with no riders.
 - `godot --headless --path . --script res://tests/obstacle_edit_smoke.gd` - move/pick-up coverage: grab, drag, drop, missed grabs, undo for both actions, dents, and freed-node safety.
 - `godot --headless --path . --script res://tests/rider_animation_smoke.gd` - rider animation state machine: takeoff/flight/landing, roost, puff cap and fade, crash dust, and that riders still finish races.
+- `godot --headless --path . --script res://tests/track_name_smoke.gd` - track names: generator content rules, sanitizing, save-file roundtrip, and the name surviving a full scene restart.
 
 Both exit non-zero on failure. Note for future tests: in `--script` mode `_ready` only fires once the main loop runs, so tests that instance scenes must `await process_frame`, and standalone scripts cannot use `class_name` types (no global class cache).
 

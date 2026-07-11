@@ -26,7 +26,7 @@ This roadmap follows the Sandbox Moto north star: unlock imagination, not power.
 
 - Memory Book / scrapbook save system.
 - Polaroid-style race memories.
-- Kid-style track names.
+- Done: kid-style track names - suggested from track contents, editable on the nameplate, saved with the sandbox, and used as the Polaroid caption.
 - Toy box unlocks: bikes, colors, props, shovels, buckets, molds, stickers, spectators, and frames.
 - One More Race prompt after each race.
 - Mom called Dinner pause/save moment.

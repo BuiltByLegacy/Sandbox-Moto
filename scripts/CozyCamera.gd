@@ -15,6 +15,8 @@ var dragging := false
 var target_zoom := Vector2.ONE
 var target_position := Vector2(640, 360)
 var target_rotation := 0.0
+# Off while the player is typing a track name, so WASD/QE stay text.
+var keys_enabled := true
 
 func _ready() -> void:
 	make_current()
@@ -33,12 +35,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		target_position -= event.relative / max(target_zoom.x, 0.001)
 
 func _process(delta: float) -> void:
-	var move := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	target_position += move * PAN_SPEED * delta / max(target_zoom.x, 0.001)
+	if keys_enabled:
+		var move := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+		target_position += move * PAN_SPEED * delta / max(target_zoom.x, 0.001)
 
-	if Input.is_key_pressed(KEY_Q):
+	if keys_enabled and Input.is_key_pressed(KEY_Q):
 		target_rotation -= ROTATE_STEP
-	elif Input.is_key_pressed(KEY_E):
+	elif keys_enabled and Input.is_key_pressed(KEY_E):
 		target_rotation += ROTATE_STEP
 	else:
 		target_rotation = lerpf(target_rotation, 0.0, delta * 1.7)

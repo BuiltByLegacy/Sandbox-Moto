@@ -62,8 +62,9 @@ Notes:
   they do. Obstacle `rotation` round-trips the real node rotation.
 - `location_id` is fixed to `backyard_sandbox` until multiple memory
   locations exist (roadmap Version 4).
-- `track_name` is an empty placeholder until the Memory Book adds kid-style
-  track naming (roadmap Version 3).
+- `track_name` holds the player's track name (typed or suggested by
+  `TrackNamer`), trimmed and capped at 28 characters on load. Empty means
+  unnamed; a fresh suggestion is rolled on launch.
 
 ## Versioning And Safety
 
