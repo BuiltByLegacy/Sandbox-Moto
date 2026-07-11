@@ -4,6 +4,8 @@
 
 The browser prototype in `web/` is deployed through `.github/workflows/deploy-pages.yml`. It uses Three.js from a pinned CDN module to render a true 3D sandbox diorama, toy bikes, track geometry, obstacles, props, lighting, and shadows. GitHub Pages publishes only that folder from `main`. The canonical playable URL is `https://builtbylegacy.github.io/Sandbox-Moto/`.
 
+Browser placement samples the Catmull-Rom track curve, projects each placed feature to its nearest point, and derives yaw from the local tangent. Gate yaw is offset 90 degrees to span the track. Undo snapshots persist snapped position and rotation together.
+
 ## Target
 
 - Engine: Godot 4.x

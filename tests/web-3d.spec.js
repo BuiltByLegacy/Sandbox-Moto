@@ -25,6 +25,14 @@ test("renders, builds, and starts a 3D race", async ({ page }) => {
 
   const after = crypto.createHash("sha256").update(await canvas.screenshot()).digest("hex");
   expect(after).not.toBe(before);
+
+  await page.locator('[data-tool="double"]').click();
+  await page.mouse.click(box.x + box.width * .72, box.y + box.height * .28);
+  const placement = await page.evaluate(() => window.__sandboxMotoDebug.placementState());
+  expect(placement.obstacles).toHaveLength(1);
+  expect(placement.obstacles[0].snapped).toBe(true);
+  expect(Number.isFinite(placement.obstacles[0].rotation)).toBe(true);
+
   await page.locator("#raceButton").click();
   await expect(page.locator("#modeLabel")).toHaveText("The sandbox is alive");
   await page.waitForTimeout(1200);

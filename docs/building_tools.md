@@ -90,3 +90,7 @@ The track should visually change from use:
 Keep the current free-draw smooth track system as the baseline for now.
 
 Do not switch back to a blocky grid system. If grid logic is introduced later, it should only guide editing while visuals remain smooth and natural.
+
+## Track-Aware Placement
+
+Start gates, finish markers, jumps, and rhythm obstacles should snap to the nearest point on the smooth track when placed. Jumps and rhythm sections face along the riding direction; gates span across it. Placement should feel automatic and toy-like, with manual rotation reserved for a later refinement tool rather than required for basic building.
