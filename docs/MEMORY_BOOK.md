@@ -2,6 +2,8 @@
 
 The Memory Book is the scrapbook system. It can become the player's save file.
 
+The underlying persistence already exists: the sandbox autosaves to a versioned local file and reloads on launch (see `docs/SAVE_SYSTEM.md`). The save schema reserves a `track_name` field for the kid-style track names below. Memory Book entries build on top of that foundation.
+
 ## Purpose
 
 Save favorite races as Polaroid-style memories instead of analytics pages.

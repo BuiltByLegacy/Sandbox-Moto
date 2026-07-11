@@ -3,6 +3,7 @@
 ## Unreleased
 
 - feat: publish the playable HTML prototype through GitHub Pages.
+- feat: sandbox track save/load. The sandbox autosaves (debounced, plus on quit and after races) to a versioned JSON file in the user data directory and reloads on launch into quiet Play Time - track path, start/finish, obstacles, and played-in wear all persist; riders never do. Includes cozy "Sandbox saved" whisper, F9 dev save-clear, headless smoke and integration tests in `tests/`, and `docs/SAVE_SYSTEM.md` documenting the schema.
 - docs: add `CLAUDE.md` root directive defining agent roles, session-start reading order, GitHub workflow, Higgsfield prompt standards, and documentation rules.
 - docs: update roadmap for Steam release prep, living sandbox polish, and photo mode.
 - docs: add design bible and north star for Sandbox Moto.

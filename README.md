@@ -62,6 +62,7 @@ The current Godot prototype includes:
 - Random toy riders with names, numbers, colors, and temporary skills.
 - Simple obstacle risk/reward.
 - Imagination-style feedback bubbles.
+- Autosaved sandbox: the track, start/finish, obstacles, and wear quietly persist and reload on launch, like toys left out overnight (see `docs/SAVE_SYSTEM.md`; F9 clears the save in debug builds).
 
 Important implementation note: keep the current free-draw smooth track system as the baseline for now. Do not switch back to a blocky grid system. If grid logic is introduced later, it should only guide editing while visuals remain smooth and natural.
 
@@ -99,6 +100,7 @@ Play the latest version online at **https://builtbylegacy.github.io/Sandbox-Moto
 - `docs/STORY_BIBLE.md` - Imagination story rules and signature moments.
 - `docs/UNLOCK_PHILOSOPHY.md` - Unlock imagination, not power.
 - `docs/MEMORY_BOOK.md` - Scrapbook/save-memory system.
+- `docs/SAVE_SYSTEM.md` - Sandbox autosave: schema, save location, safety rules.
 - `docs/SCREENSHOT_PHILOSOPHY.md` - Shareable toy photography direction.
 - `docs/LONG_TERM_VISION.md` - Version and platform strategy.
 - `VISION.md` - Emotional north star.

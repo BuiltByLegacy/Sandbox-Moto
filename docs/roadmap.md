@@ -20,6 +20,7 @@ This roadmap follows the Sandbox Moto north star: unlock imagination, not power.
 - Better toy-bike visuals and 1:12 collectible proportions.
 - Better obstacle risk/reward and toy-like jump behavior.
 - Played-in dirt: ruts, tire marks, worn jump faces, roost piles.
+- Done: local sandbox autosave and reload (`docs/SAVE_SYSTEM.md`) - the track, start/finish, obstacles, and wear survive closing the game. Foundation for the Memory Book and track sharing.
 
 ## Version 3: Scrapbook And Toy Box Progression
 

@@ -4,6 +4,8 @@ extends Node2D
 signal track_changed
 
 const ObstacleScene := preload("res://scripts/Obstacle.gd")
+const SAVABLE_OBSTACLE_TYPES := ["single", "double", "triple", "tabletop", "whoops", "sand", "berm", "rollers", "hill"]
+const MAX_WEAR_MARKS := 420
 
 var active_tool := "track"
 var track_points: Array[Vector2] = []
@@ -77,9 +79,131 @@ func add_track_wear(world_pos: Vector2, intensity := 1.0) -> void:
 		"alpha": clampf(wear_rng.randf_range(0.18, 0.36) * intensity, 0.12, 0.52),
 		"stretch": wear_rng.randf_range(1.0, 2.4)
 	})
-	if wear_marks.size() > 420:
+	if wear_marks.size() > MAX_WEAR_MARKS:
 		wear_marks.pop_front()
 	queue_redraw()
+
+func get_save_state() -> Dictionary:
+	var point_pairs: Array = []
+	for point in track_points:
+		point_pairs.append(_vec_to_pair(point))
+	var obstacle_state: Array = []
+	for obstacle in obstacles:
+		if is_instance_valid(obstacle):
+			obstacle_state.append({
+				"type": obstacle.obstacle_type,
+				"position": _vec_to_pair(obstacle.position),
+				"rotation": obstacle.rotation
+			})
+	var wear_state: Array = []
+	for mark in wear_marks:
+		wear_state.append({
+			"position": _vec_to_pair(mark["position"]),
+			"radius": mark["radius"],
+			"alpha": mark["alpha"],
+			"stretch": mark["stretch"]
+		})
+	return {
+		"points": point_pairs,
+		"start": {"position": _vec_to_pair(start_position), "rotation": 0.0, "placed": has_start},
+		"finish": {"position": _vec_to_pair(finish_position), "rotation": 0.0, "placed": has_finish},
+		"obstacles": obstacle_state,
+		"wear_marks": wear_state
+	}
+
+func apply_save_state(state: Dictionary) -> bool:
+	clear_all()
+	var restored := false
+
+	var saved_points: Variant = state.get("points")
+	if saved_points is Array:
+		for pair in saved_points:
+			var point: Variant = _pair_to_vec(pair)
+			if point is Vector2:
+				track_points.append(point)
+		if not track_points.is_empty():
+			restored = true
+		_smooth_track()
+
+	var saved_start: Variant = state.get("start")
+	if saved_start is Dictionary and saved_start.get("placed") == true:
+		var start_point: Variant = _pair_to_vec(saved_start.get("position"))
+		if start_point is Vector2:
+			start_position = start_point
+			has_start = true
+			restored = true
+
+	var saved_finish: Variant = state.get("finish")
+	if saved_finish is Dictionary and saved_finish.get("placed") == true:
+		var finish_point: Variant = _pair_to_vec(saved_finish.get("position"))
+		if finish_point is Vector2:
+			finish_position = finish_point
+			has_finish = true
+			restored = true
+
+	var saved_obstacles: Variant = state.get("obstacles")
+	if saved_obstacles is Array:
+		for entry in saved_obstacles:
+			if not entry is Dictionary:
+				continue
+			var obstacle_type: Variant = entry.get("type")
+			var obstacle_point: Variant = _pair_to_vec(entry.get("position"))
+			if not (obstacle_type is String and obstacle_type in SAVABLE_OBSTACLE_TYPES and obstacle_point is Vector2):
+				continue
+			var obstacle := ObstacleScene.new()
+			obstacle.setup(obstacle_type)
+			obstacle.position = obstacle_point
+			var obstacle_rotation: Variant = entry.get("rotation", 0.0)
+			if obstacle_rotation is float:
+				obstacle.rotation = obstacle_rotation
+			obstacle.z_index = 12
+			add_child(obstacle)
+			obstacles.append(obstacle)
+			restored = true
+
+	var saved_wear: Variant = state.get("wear_marks")
+	if saved_wear is Array:
+		for entry in saved_wear:
+			if wear_marks.size() >= MAX_WEAR_MARKS:
+				break
+			if not entry is Dictionary:
+				continue
+			var wear_point: Variant = _pair_to_vec(entry.get("position"))
+			if not (wear_point is Vector2 and entry.get("radius") is float and entry.get("alpha") is float and entry.get("stretch") is float):
+				continue
+			wear_marks.append({
+				"position": wear_point,
+				"radius": entry["radius"],
+				"alpha": entry["alpha"],
+				"stretch": entry["stretch"]
+			})
+
+	queue_redraw()
+	return restored
+
+func clear_all() -> void:
+	track_points.clear()
+	smoothed_points.clear()
+	wear_marks.clear()
+	undo_stack.clear()
+	start_position = Vector2(280, 360)
+	finish_position = Vector2(980, 360)
+	has_start = false
+	has_finish = false
+	is_drawing = false
+	for obstacle in obstacles:
+		if is_instance_valid(obstacle):
+			obstacle.queue_free()
+	obstacles.clear()
+	queue_redraw()
+
+static func _vec_to_pair(point: Vector2) -> Array:
+	return [point.x, point.y]
+
+static func _pair_to_vec(value: Variant) -> Variant:
+	if value is Array and value.size() == 2 and value[0] is float and value[1] is float:
+		return Vector2(value[0], value[1])
+	return null
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not build_enabled:
@@ -167,8 +291,8 @@ func _flatten_area(pos: Vector2) -> void:
 			"alpha": wear_rng.randf_range(0.08, 0.16),
 			"stretch": wear_rng.randf_range(1.8, 3.2)
 		})
-	if wear_marks.size() > 420:
-		wear_marks = wear_marks.slice(wear_marks.size() - 420)
+	if wear_marks.size() > MAX_WEAR_MARKS:
+		wear_marks = wear_marks.slice(wear_marks.size() - MAX_WEAR_MARKS)
 
 func _add_smoothing_wear(pos: Vector2) -> void:
 	for i in range(6):

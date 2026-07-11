@@ -68,7 +68,18 @@ The current implementation is intentionally toy-like rather than physically real
 
 ### FeedbackSystem.gd
 
-Displays cozy imagination feedback. It should stay qualitative and playful rather than analytical.
+Displays cozy imagination feedback. It should stay qualitative and playful rather than analytical. Also provides `show_whisper()` for tiny self-fading corner notes (used by autosave).
+
+### SandboxSave.gd
+
+Persists the player's sandbox to `user://sandbox_save.json` so leaving the game feels like leaving toys out overnight:
+
+- Debounced autosave driven by `TrackBuilder.track_changed`.
+- Save on window close, flush after each race, paused during races.
+- Versioned, validated JSON; malformed or newer files fall back to a fresh sandbox without crashing.
+- Serialization stays out of UI code: SandboxSave owns file IO and the schema, TrackBuilder owns `get_save_state()` / `apply_save_state()` / `clear_all()`.
+
+See `docs/SAVE_SYSTEM.md` for the schema, save location, and safety rules.
 
 ## Layering Rules
 
@@ -85,12 +96,21 @@ The prototype should preserve these visual priorities:
 2. Add path smoothing controls and track width visualization.
 3. Add simple berm placement and feedback.
 4. Add richer toy rider animation: wobble, tiny roost puffs, happy landings.
-5. Add save/load for created tracks.
+5. ~~Add save/load for created tracks.~~ Done: `SandboxSave.gd`, see `docs/SAVE_SYSTEM.md`.
 6. Replace placeholder colors with handmade art assets.
 7. Add environmental toy props: bucket, shovel, cones, grass blades, fence, toy pits.
 8. Add a lightweight camera pan/zoom tool.
 9. Add input affordances for gamepad and touch.
-10. Add automated Godot scene smoke test if the project gains CI.
+10. Wire the headless tests in `tests/` into CI when the project gains it.
+
+## Headless Tests
+
+Run from the project root with the Godot binary:
+
+- `godot --headless --path . --script res://tests/save_load_smoke.gd` - save/load unit coverage: roundtrip of every obstacle type, missing/empty/malformed/newer-version files, partial corruption, clear.
+- `godot --headless --path . --script res://tests/reload_integration.gd` - boots the real Main scene twice and confirms a built sandbox reloads into quiet Play Time with no riders.
+
+Both exit non-zero on failure. Note for future tests: in `--script` mode `_ready` only fires once the main loop runs, so tests that instance scenes must `await process_frame`, and standalone scripts cannot use `class_name` types (no global class cache).
 
 ## Technical Constraints
 

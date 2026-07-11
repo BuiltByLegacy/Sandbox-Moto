@@ -9,6 +9,7 @@ const ToyRiderScene := preload("res://scripts/ToyRider.gd")
 @onready var cozy_camera = $CozyCamera
 @onready var signature_moment = $SignatureMoment
 @onready var photo_mode = $PhotoMode
+@onready var sandbox_save = $SandboxSave
 
 var rng := RandomNumberGenerator.new()
 var active_riders: Array = []
@@ -33,12 +34,59 @@ func _ready() -> void:
 	tool_panel.race_requested.connect(_on_race_requested)
 	photo_mode.set_targets([tool_panel, feedback_system])
 	track_builder.set_tool("track")
-	feedback_system.show_feedback([
-		"Draw a smooth track in the sand.",
-		"Place a start gate, finish, and a few jumps.",
-		"Press Play Race when the imaginary moto is ready.",
-		"Press P for pretend Polaroid mode."
-	])
+
+	sandbox_save.setup(track_builder)
+	var restored := _restore_saved_sandbox()
+	track_builder.track_changed.connect(sandbox_save.mark_dirty)
+	sandbox_save.saved.connect(_on_sandbox_saved)
+
+	if restored:
+		feedback_system.show_feedback([
+			"Your sandbox is just how you left it.",
+			"Adjust the track, or press Play Race when the moto is ready."
+		])
+	else:
+		feedback_system.show_feedback([
+			"Draw a smooth track in the sand.",
+			"Place a start gate, finish, and a few jumps.",
+			"Press Play Race when the imaginary moto is ready.",
+			"Press P for pretend Polaroid mode."
+		])
+
+func _restore_saved_sandbox() -> bool:
+	var saved_state: Dictionary = sandbox_save.load_state()
+	if saved_state.is_empty():
+		return false
+	var restored: bool = track_builder.apply_save_state(saved_state["track"])
+	if restored:
+		var path: Array[Vector2] = track_builder.get_race_path()
+		if path.size() >= 2:
+			cozy_camera.focus_on_track(path)
+	return restored
+
+func _on_sandbox_saved() -> void:
+	feedback_system.show_whisper("Sandbox saved")
+
+func _notification(what: int) -> void:
+	# Leaving the game is the "Mom called dinner" moment: quietly keep the
+	# sandbox exactly as the player left it. Riders are never saved, so a
+	# race in progress simply is not part of the snapshot.
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		if sandbox_save != null:
+			sandbox_save.save_now()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not OS.is_debug_build():
+		return
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
+		if race_running or signature_active:
+			return
+		sandbox_save.clear_save()
+		track_builder.clear_all()
+		feedback_system.show_feedback([
+			"Fresh sand! (Dev only: saved sandbox cleared with F9.)",
+			"Draw a smooth track to start a new one."
+		])
 
 func _on_tool_selected(tool_name: String) -> void:
 	track_builder.set_tool(tool_name)
@@ -55,6 +103,7 @@ func _on_race_requested() -> void:
 
 func _start_race(path: Array[Vector2]) -> void:
 	race_running = true
+	sandbox_save.set_autosave_paused(true)
 	finished_count = 0
 	finish_order.clear()
 	wear_timer = 0.0
@@ -106,6 +155,8 @@ func _end_race() -> void:
 	track_builder.set_build_enabled(true)
 	tool_panel.set_build_enabled(true)
 	cozy_camera.focus_on_track(track_builder.get_race_path())
+	sandbox_save.set_autosave_paused(false)
+	sandbox_save.mark_dirty()
 	if rng.randf() < 0.30:
 		_play_signature_ending()
 

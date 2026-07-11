@@ -39,6 +39,21 @@ func show_feedback(messages: Array) -> void:
 		bubble.add_child(label)
 		bubble_container.add_child(bubble)
 
+func show_whisper(text: String) -> void:
+	# A tiny corner note that fades away on its own. Used for quiet moments
+	# like autosave, where a full feedback bubble would feel too loud.
+	var whisper := Label.new()
+	whisper.text = text
+	whisper.offset_left = 1090
+	whisper.offset_top = 688
+	whisper.add_theme_color_override("font_color", Color(0.32, 0.21, 0.11, 0.75))
+	whisper.add_theme_font_size_override("font_size", 13)
+	add_child(whisper)
+	var tween := create_tween()
+	tween.tween_interval(1.2)
+	tween.tween_property(whisper, "modulate:a", 0.0, 0.9)
+	tween.tween_callback(whisper.queue_free)
+
 func clear() -> void:
 	for child in bubble_container.get_children():
 		child.queue_free()
