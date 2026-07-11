@@ -30,7 +30,7 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.05;
+renderer.toneMappingExposure = 1.12;
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xc7d9ce);
@@ -42,7 +42,10 @@ let cameraDistance = 33;
 scene.add(new THREE.HemisphereLight(0xfff1cf, 0x687557, 2.2));
 const sun = new THREE.DirectionalLight(0xffd89a, 3.4);
 sun.position.set(-12,24,10); sun.castShadow = true; sun.shadow.mapSize.set(2048,2048);
+sun.shadow.bias = -.0004;
 Object.assign(sun.shadow.camera, {left:-28,right:28,top:22,bottom:-22}); scene.add(sun);
+const warmFill = new THREE.PointLight(0xffb85c, 18, 38, 2);
+warmFill.position.set(12, 9, 8); scene.add(warmFill);
 
 const world = new THREE.Group(), buildLayer = new THREE.Group(), riderLayer = new THREE.Group();
 scene.add(world, buildLayer, riderLayer);
@@ -52,8 +55,19 @@ function addMesh(geometry, mat, position, parent=world) {
   const object = new THREE.Mesh(geometry, mat); object.position.copy(position); object.castShadow=true; object.receiveShadow=true; parent.add(object); return object;
 }
 
-const sand = addMesh(new THREE.BoxGeometry(36,1.5,24), material(0xe4a958,.94), new THREE.Vector3(0,-.78,0));
-const wood = material(0x9c6034,.8);
+function makeTexture(base, flecks, count, lines=false) {
+  const textureCanvas=document.createElement("canvas");textureCanvas.width=textureCanvas.height=512;const context=textureCanvas.getContext("2d");
+  context.fillStyle=base;context.fillRect(0,0,512,512);
+  if(lines){for(let i=0;i<34;i++){context.strokeStyle=`${flecks}${.1+(i%4)*.04})`;context.lineWidth=1+(i%3);context.beginPath();context.moveTo(0,i*17+Math.sin(i)*8);context.bezierCurveTo(140,i*17-8,360,i*17+11,512,i*17);context.stroke();}}
+  else{for(let i=0;i<count;i++){const alpha=.08+(i%7)*.018;context.fillStyle=`${flecks}${alpha})`;const radius=.4+(i%5)*.32;context.beginPath();context.arc((i*73.17)%512,(i*139.41)%512,radius,0,Math.PI*2);context.fill();}}
+  const texture=new THREE.CanvasTexture(textureCanvas);texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.repeat.set(lines?3:8,lines?1:5);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=renderer.capabilities.getMaxAnisotropy();return texture;
+}
+
+const sandTexture=makeTexture("#e8b45f","rgba(112,65,25,",2300);
+const sandMaterial=new THREE.MeshStandardMaterial({map:sandTexture,color:0xffe0a2,roughness:.97,bumpMap:sandTexture,bumpScale:.035});
+const sand = addMesh(new THREE.BoxGeometry(36,1.5,24), sandMaterial, new THREE.Vector3(0,-.78,0));
+const woodTexture=makeTexture("#a76234","rgba(72,34,16,",0,true);
+const wood = new THREE.MeshStandardMaterial({map:woodTexture,color:0xd18a4a,roughness:.8,bumpMap:woodTexture,bumpScale:.06});
 for (const [x,z,sx,sz] of [[0,-12.4,38,1],[0,12.4,38,1],[-18.4,0,1,26],[18.4,0,1,26]]) addMesh(new THREE.BoxGeometry(sx,2.1,sz),wood,new THREE.Vector3(x,-.35,z));
 const ground = addMesh(new THREE.PlaneGeometry(100,100),material(0x80936a,1),new THREE.Vector3(0,-1.58,0)); ground.rotation.x=-Math.PI/2;
 
@@ -66,6 +80,11 @@ function addWorldProps() {
   for(const x of [-1.2,1.1])for(const z of [-.88,.88]){const wheel=addMesh(new THREE.CylinderGeometry(.42,.42,.25,12),tire,new THREE.Vector3(x,.25,z),truck);wheel.rotation.x=Math.PI/2;}
   const shovel=new THREE.Group();shovel.position.set(16,0,7);shovel.rotation.z=-.2;world.add(shovel);
   addMesh(new THREE.CylinderGeometry(.11,.11,6,8),material(0xb88950),new THREE.Vector3(0,2.2,0),shovel);const blade=addMesh(new THREE.BoxGeometry(1.5,.18,1.7),red,new THREE.Vector3(0,-.75,0),shovel);blade.rotation.x=-.25;
+  const stick=material(0xc9995b,.78), white=material(0xf4e6c9,.55), coneOrange=material(0xe96a32,.38);
+  for(let i=0;i<10;i++){const post=addMesh(new THREE.BoxGeometry(.22,2.4,.18),stick,new THREE.Vector3(-10.8+i*2.35,.1,-14.1));post.rotation.z=(i%2?1:-1)*.025;}
+  for(const y of [-.25,.65])addMesh(new THREE.BoxGeometry(23,.2,.16),stick,new THREE.Vector3(-.2,y,-14.05));
+  for(const x of [-11,-7.5,8.5,12]){const cone=new THREE.Group();cone.position.set(x,0,-10.7);world.add(cone);addMesh(new THREE.ConeGeometry(.38,1.1,14),coneOrange,new THREE.Vector3(0,.55,0),cone);addMesh(new THREE.BoxGeometry(.9,.08,.9),coneOrange,new THREE.Vector3(0,.04,0),cone);addMesh(new THREE.TorusGeometry(.27,.045,6,14),white,new THREE.Vector3(0,.48,0),cone).rotation.x=Math.PI/2;}
+  const stone=material(0x8f8978,1);for(let i=0;i<12;i++){const rock=addMesh(new THREE.DodecahedronGeometry(.22+(i%3)*.12,0),stone,new THREE.Vector3(-15+(i*5.7)%30,.03,-9+(i*3.8)%18));rock.scale.y=.55;rock.rotation.set(i*.2,i*.7,0);}
 }
 addWorldProps();
 
@@ -87,9 +106,17 @@ function disposeObject(object){object.traverse(child=>{child.geometry?.dispose()
 function clearBuildObjects(){if(trackMesh)disposeObject(trackMesh);trackMesh=null;if(startMarker)disposeObject(startMarker);startMarker=null;if(finishMarker)disposeObject(finishMarker);finishMarker=null;obstacles.forEach(disposeObject);obstacles=[];}
 function undo(){if(!history.length)return;const state=history.pop();clearBuildObjects();path=state.path.map(p=>new THREE.Vector3(...p));rebuildTrack();if(state.start)startMarker=makeMarker("start",new THREE.Vector3(...state.start));if(state.finish)finishMarker=makeMarker("finish",new THREE.Vector3(...state.finish));state.obstacles.forEach(o=>obstacles.push(makeObstacle(o.type,new THREE.Vector3(...o.position))));}
 
-function rebuildTrack(){if(trackMesh)disposeObject(trackMesh);if(path.length<2){trackMesh=null;return;}raceCurve=new THREE.CatmullRomCurve3(path,false,"catmullrom",.35);trackMesh=new THREE.Mesh(new THREE.TubeGeometry(raceCurve,Math.max(40,path.length*3),.72,10,false),material(dirtColor,.98));trackMesh.scale.y=.13;trackMesh.position.y=.08;trackMesh.receiveShadow=true;buildLayer.add(trackMesh);}
+function ribbonGeometry(curve,width,y,samples){const positions=[],uvs=[],indices=[];for(let i=0;i<=samples;i++){const t=i/samples,p=curve.getPointAt(t),tangent=curve.getTangentAt(t).normalize(),side=new THREE.Vector3(-tangent.z,0,tangent.x).normalize();for(const sign of [-1,1]){positions.push(p.x+side.x*width*sign,y,p.z+side.z*width*sign);uvs.push((sign+1)/2,t*8);}}for(let i=0;i<samples;i++){const a=i*2,b=a+1,c=a+2,d=a+3;indices.push(a,b,c,b,d,c);}const geometry=new THREE.BufferGeometry();geometry.setAttribute("position",new THREE.Float32BufferAttribute(positions,3));geometry.setAttribute("uv",new THREE.Float32BufferAttribute(uvs,2));geometry.setIndex(indices);geometry.computeVertexNormals();return geometry;}
+function offsetCurve(curve,offset,samples){const points=[];for(let i=0;i<=samples;i++){const t=i/samples,p=curve.getPointAt(t),tangent=curve.getTangentAt(t).normalize(),side=new THREE.Vector3(-tangent.z,0,tangent.x);points.push(p.clone().addScaledVector(side,offset).setY(.105));}return new THREE.CatmullRomCurve3(points,false,"catmullrom",.35);}
+function rebuildTrack(){if(trackMesh)disposeObject(trackMesh);if(path.length<2){trackMesh=null;return;}raceCurve=new THREE.CatmullRomCurve3(path,false,"catmullrom",.35);const samples=Math.max(48,path.length*3);trackMesh=new THREE.Group();
+  const outer=new THREE.Mesh(ribbonGeometry(raceCurve,.92,.035,samples),material(0x643719,1));outer.receiveShadow=true;trackMesh.add(outer);
+  const trackTexture=sandTexture.clone();trackTexture.repeat.set(3,12);trackTexture.needsUpdate=true;const surfaceMat=new THREE.MeshStandardMaterial({color:0x96552c,roughness:.98,map:trackTexture,bumpMap:trackTexture,bumpScale:.018});const surface=new THREE.Mesh(ribbonGeometry(raceCurve,.72,.06,samples),surfaceMat);surface.receiveShadow=true;trackMesh.add(surface);
+  const rutMat=material(0x4d2b1a,1);for(const offset of [-.34,.34]){const rut=new THREE.Mesh(new THREE.TubeGeometry(offsetCurve(raceCurve,offset,samples),samples,.025,7,false),rutMat);trackMesh.add(rut);}
+  buildLayer.add(trackMesh);
+}
 function makeMarker(type,position){const group=new THREE.Group();group.position.copy(position);buildLayer.add(group);const dark=material(0x2b2925,.65),white=material(0xf7f0dc,.55);for(const x of [-.9,.9])addMesh(new THREE.BoxGeometry(.12,1.4,.12),dark,new THREE.Vector3(x,.7,0),group);for(let i=0;i<5;i++)addMesh(new THREE.BoxGeometry(.36,.32,.08),i%2?dark:white,new THREE.Vector3(-.72+i*.36,1.18,0),group);group.userData.type=type;return group;}
-function mound(parent,x,z,scale=1){const item=addMesh(new THREE.SphereGeometry(.7*scale,12,7,0,Math.PI*2,0,Math.PI/2),material(dirtColor,1),new THREE.Vector3(x,0,z),parent);item.scale.set(1.2,.9,1);return item;}
+function mound(parent,x,z,scale=1){const geometry=new THREE.SphereGeometry(.7*scale,16,9,0,Math.PI*2,0,Math.PI/2);const positions=geometry.attributes.position;for(let i=0;i<positions.count;i++){const noise=1+Math.sin(i*12.43+x*4.1)*.045;positions.setX(i,positions.getX(i)*noise);positions.setZ(i,positions.getZ(i)*(1+Math.cos(i*7.17)*.04));}geometry.computeVertexNormals();const item=addMesh(geometry,material(iColor(x,z),1),new THREE.Vector3(x,0,z),parent);item.scale.set(1.2,.9,1);return item;}
+function iColor(x,z){return new THREE.Color(dirtColor).offsetHSL(0,0,((Math.abs(x*7+z*11)%5)-2)*.012);}
 function makeObstacle(type,position){const group=new THREE.Group();group.position.copy(position);group.userData.type=type;buildLayer.add(group);
   if(type==="sand")addMesh(new THREE.CylinderGeometry(1.5,1.7,.09,20),material(0xf2c875,1),new THREE.Vector3(0,.04,0),group);
   else if(type==="berm")for(let i=0;i<7;i++){const a=-1.2+i*.4;mound(group,Math.sin(a)*1.4,Math.cos(a)*1.4,.65);}
@@ -99,12 +126,26 @@ function makeObstacle(type,position){const group=new THREE.Group();group.positio
 }
 
 function randomSkill(){return .15+Math.random()*.85;}
-function createBike(name,color,index){const group=new THREE.Group();group.scale.setScalar(.62);riderLayer.add(group);const plastic=material(color,.26,.04),dark=material(0x252524,.72),chrome=material(0xa7a49a,.28,.65);
-  for(const x of [-.85,.85]){const wheel=addMesh(new THREE.TorusGeometry(.42,.14,8,16),dark,new THREE.Vector3(x,.45,0),group);wheel.rotation.y=Math.PI/2;const hub=addMesh(new THREE.CylinderGeometry(.1,.1,.18,10),chrome,new THREE.Vector3(x,.45,0),group);hub.rotation.x=Math.PI/2;}
-  addMesh(new THREE.BoxGeometry(1.25,.34,.48),plastic,new THREE.Vector3(0,.72,0),group);const rear=addMesh(new THREE.BoxGeometry(.7,.16,.55),plastic,new THREE.Vector3(-.72,.98,0),group);rear.rotation.z=.12;const front=addMesh(new THREE.BoxGeometry(.72,.13,.52),plastic,new THREE.Vector3(.78,.97,0),group);front.rotation.z=-.15;
-  addMesh(new THREE.BoxGeometry(.42,.42,.42),dark,new THREE.Vector3(0,.52,0),group);const body=addMesh(new THREE.CapsuleGeometry(.22,.55,4,8),plastic,new THREE.Vector3(-.1,1.35,0),group);body.rotation.z=-.2;addMesh(new THREE.SphereGeometry(.36,12,8),plastic,new THREE.Vector3(.08,1.93,0),group);
+function createBike(name,color,index){
+  const group=new THREE.Group();group.scale.setScalar(.66);riderLayer.add(group);
+  const plastic=material(color,.22,.04),dark=material(0x222323,.75),chrome=material(0xb9b7ad,.2,.72),white=material(0xf5ecd7,.35),boot=material(0x30363a,.48);
+  for(const x of [-.9,.9]){const wheel=addMesh(new THREE.TorusGeometry(.44,.15,10,20),dark,new THREE.Vector3(x,.46,0),group);wheel.rotation.y=Math.PI/2;const hub=addMesh(new THREE.CylinderGeometry(.11,.11,.22,12),chrome,new THREE.Vector3(x,.46,0),group);hub.rotation.x=Math.PI/2;}
+  const frame=addMesh(new THREE.CylinderGeometry(.055,.055,1.25,8),chrome,new THREE.Vector3(-.12,.74,0),group);frame.rotation.z=Math.PI/2.8;
+  addMesh(new THREE.BoxGeometry(1.18,.34,.5),plastic,new THREE.Vector3(-.04,.78,0),group);
+  const rear=addMesh(new THREE.BoxGeometry(.72,.15,.58),plastic,new THREE.Vector3(-.74,1.01,0),group);rear.rotation.z=.13;
+  const front=addMesh(new THREE.BoxGeometry(.75,.13,.55),plastic,new THREE.Vector3(.82,1.02,0),group);front.rotation.z=-.16;
+  addMesh(new THREE.BoxGeometry(.48,.44,.46),dark,new THREE.Vector3(-.02,.55,0),group);
+  addMesh(new THREE.BoxGeometry(.7,.11,.42),material(0x343331,.7),new THREE.Vector3(-.25,1.08,0),group);
+  for(const z of [-.16,.16]){const fork=addMesh(new THREE.CylinderGeometry(.035,.035,.82,8),chrome,new THREE.Vector3(.73,.78,z),group);fork.rotation.z=-.22;}
+  const bar=addMesh(new THREE.CylinderGeometry(.035,.035,.72,8),chrome,new THREE.Vector3(.58,1.28,0),group);bar.rotation.x=Math.PI/2;
+  const plate=addMesh(new THREE.BoxGeometry(.12,.48,.55),white,new THREE.Vector3(.75,1.2,0),group);plate.rotation.z=-.12;
+  const torso=addMesh(new THREE.CapsuleGeometry(.23,.58,5,10),plastic,new THREE.Vector3(-.12,1.5,0),group);torso.rotation.z=-.22;
+  for(const z of [-.22,.22]){const leg=addMesh(new THREE.CapsuleGeometry(.105,.42,4,8),boot,new THREE.Vector3(-.12,1.05,z),group);leg.rotation.z=.38;}
+  const helmet=addMesh(new THREE.SphereGeometry(.38,16,12),plastic,new THREE.Vector3(.12,2.05,0),group);helmet.scale.set(1.08,.92,1);
+  const visor=addMesh(new THREE.BoxGeometry(.38,.07,.5),dark,new THREE.Vector3(.39,2.08,0),group);visor.rotation.z=-.12;
   const skills={jump:randomSkill(),whoops:randomSkill(),sand:randomSkill(),rollers:randomSkill(),hill:randomSkill(),start:randomSkill(),aggression:randomSkill(),consistency:randomSkill()};
-  return{group,name,number:2+Math.floor(Math.random()*987),personality:PERSONALITIES[Math.floor(Math.random()*PERSONALITIES.length)],skills,progress:skills.start*.015,speed:.075+skills.start*.045,lane:(index-2)*.28,targetLane:(index-2)*.28,checked:new Set(),crash:0,air:0,finished:false,messages:[],bounce:Math.random()*6};}
+  return{group,name,number:2+Math.floor(Math.random()*987),personality:PERSONALITIES[Math.floor(Math.random()*PERSONALITIES.length)],skills,progress:skills.start*.015,speed:.075+skills.start*.045,lane:(index-2)*.28,targetLane:(index-2)*.28,checked:new Set(),crash:0,air:0,finished:false,messages:[],bounce:Math.random()*6};
+}
 
 function nearestPathProgress(position){if(!raceCurve)return-1;let best=Infinity,bestT=-1;const samples=Math.max(80,path.length*5);for(let i=0;i<=samples;i++){const t=i/samples,d=raceCurve.getPointAt(t).distanceToSquared(position);if(d<best){best=d;bestT=t;}}return best<6?bestT:-1;}
 function startRace(){if(racing)return;if(path.length<3)return showFeedback("The toy bikes need a smooth track first.");racing=true;finishOrder=[];ui.again.hidden=true;ui.race.disabled=true;ui.status.classList.add("racing");ui.wrap.classList.add("racing");ui.mode.textContent="The sandbox is alive";document.querySelectorAll(".tool").forEach(b=>b.disabled=true);ui.banner.textContent="Ready...";setTimeout(()=>{if(racing)ui.banner.textContent="Go!";},650);setTimeout(()=>ui.banner.textContent="",1350);riders.forEach(r=>disposeObject(r.group));riders=[...COLORS].sort(()=>Math.random()-.5).slice(0,5).map(([name,color],i)=>createBike(name,color,i));raceCurve=new THREE.CatmullRomCurve3(path,false,"catmullrom",.35);showFeedback(`${riders[0].name} bike is ${riders[0].personality} this race.`);}

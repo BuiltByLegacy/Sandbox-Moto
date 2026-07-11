@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- feat: richer 3D browser art pass with textured sand and wood, layered track ruts, hand-shaped dirt features, detailed toy bikes, fence sticks, cones, stones, and warmer lighting.
 - feat: kid-style track names. Every sandbox now has a name on a cozy nameplate: suggested from what is actually on the track (a triple can roll "The Impossible Triple", sand rolls "Big Sand SX"), editable by clicking and typing (28-char cap, camera keys pause while typing), rerollable with New Name, persisted in the save file's reserved `track_name` field, and used to caption photo mode Polaroids. First Memory Book piece. Headless test in `tests/track_name_smoke.gd`.
 - feat: toy rider animation. Bikes now animate like toys brought to life, straight from the toy bike bible: slight bounce while riding (wobblier for low-consistency riders), takeoff wheelies, whole-bike tilt in the air (nose up then nose down), happy landing squash bounces with sand puffs, roost spray behind the rear wheel, crash dust clouds, and a soft shadow under airborne bikes. Hand-drawn capped particles, no physics. Headless test in `tests/rider_animation_smoke.gd`.
 - feat: obstacle move and pick-up tools. The kid's hand can now reach in: Hand / Move drags a placed toy to a new spot, Pick Up lifts it out of the sandbox, both leave a little dent in the sand, show a hover ring, support Undo, and autosave/persist like any other build change. Tool panel compacted so all tools fit a 720p window. Headless test in `tests/obstacle_edit_smoke.gd`.
