@@ -20,3 +20,9 @@ Thumbs.db
 .vscode/
 .idea/
 
+# Browser prototype tests
+node_modules/
+test-results/
+playwright-report/
+web/prototype-3d-*.png
+tests/prototype-3d-*.png

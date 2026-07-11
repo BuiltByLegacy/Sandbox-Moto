@@ -1,0 +1,10 @@
+{
+  "name": "sandbox-moto",
+  "private": true,
+  "scripts": {
+    "test:web": "playwright test tests/web-3d.spec.js --browser=chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1"
+  }
+}

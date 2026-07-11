@@ -2,7 +2,7 @@
 
 ## Browser Prototype Delivery
 
-The dependency-free prototype in `web/` is deployed through `.github/workflows/deploy-pages.yml`. GitHub Pages publishes only that folder from `main`, keeping the browser build isolated from Godot source and documentation. The canonical playable URL is `https://builtbylegacy.github.io/Sandbox-Moto/`.
+The browser prototype in `web/` is deployed through `.github/workflows/deploy-pages.yml`. It uses Three.js from a pinned CDN module to render a true 3D sandbox diorama, toy bikes, track geometry, obstacles, props, lighting, and shadows. GitHub Pages publishes only that folder from `main`. The canonical playable URL is `https://builtbylegacy.github.io/Sandbox-Moto/`.
 
 ## Target
 

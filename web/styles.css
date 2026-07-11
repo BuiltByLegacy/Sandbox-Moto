@@ -145,6 +145,21 @@ button { font: inherit; }
 #sandbox { display: block; width: 100%; height: 100%; cursor: crosshair; touch-action: none; }
 .sandbox-wrap.racing #sandbox { cursor: default; }
 
+.loading-state {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #6b3d1f;
+  background: #e8af5b;
+  font-size: 14px;
+  font-weight: 900;
+  transition: opacity .25s ease;
+  pointer-events: none;
+}
+
+.loading-state.ready { opacity: 0; }
+
 .sandbox-label {
   position: absolute;
   left: 20px;
@@ -208,15 +223,15 @@ button { font: inherit; }
 @keyframes bubble-in { from { opacity: 0; transform: translateY(12px) scale(.96); } }
 
 @media (max-width: 720px) {
-  body { overflow: auto; }
-  .game-shell { height: auto; min-height: 100dvh; grid-template-rows: 58px minmax(680px, calc(100dvh - 58px)) auto; }
+  body { width: 100%; overflow-x: hidden; overflow-y: auto; }
+  .game-shell { width: 100%; height: auto; min-height: 100dvh; grid-template-rows: 58px minmax(680px, calc(100dvh - 58px)) auto; }
   .topbar { grid-template-columns: 1fr 38px; padding-inline: 14px; }
   .status { display: none; }
   .brand-block { gap: 8px; }
-  .play-area { grid-template-columns: 1fr; grid-template-rows: auto minmax(540px, 1fr); }
-  .toolbox { border-right: 0; border-bottom: 1px solid var(--line); padding: 8px; }
+  .play-area { min-width: 0; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(540px, 1fr); overflow: hidden; }
+  .toolbox { min-width: 0; overflow: hidden; border-right: 0; border-bottom: 1px solid var(--line); padding: 8px; }
   .toolbox-heading { display: none; }
-  .tools { display: flex; overflow-x: auto; }
+  .tools { display: flex; width: 100%; max-width: 100%; overflow-x: auto; }
   .tool { min-width: 64px; min-height: 54px; }
   .race-button { min-width: 130px; margin: 7px 0 0; }
   .feedback { bottom: 12px; right: 12px; }

@@ -36,6 +36,7 @@
 
       <div class="sandbox-wrap">
         <canvas id="sandbox" aria-label="Interactive motocross sandbox"></canvas>
+        <div class="loading-state" id="loadingState">Opening the toy box...</div>
         <div class="sandbox-label">Dad's Garage Supercross</div>
         <div class="race-banner" id="raceBanner" aria-live="polite"></div>
         <div class="feedback" id="feedback" aria-live="polite">
@@ -48,9 +49,9 @@
 
     <footer class="footer-note">
       <span>Remember when every pile of dirt became a motocross track?</span>
-      <span class="controls-note">Draw with mouse or touch · Space to race · Z to undo</span>
+      <span class="controls-note">Draw with mouse or touch · Wheel to zoom · Shift-drag to pan · Space to race</span>
     </footer>
   </main>
-  <script src="game.js"></script>
+  <script type="module" src="game.js"></script>
 </body>
 </html>

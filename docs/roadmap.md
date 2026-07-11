@@ -5,6 +5,7 @@ This roadmap follows the Sandbox Moto north star: unlock imagination, not power.
 ## Version 1: Cozy Sandbox Prototype
 
 - Preserve the Godot 4.x prototype foundation.
+- Use a 3D miniature diorama presentation for the playable browser prototype.
 - Keep free-draw smooth track building.
 - Place start, finish, and core obstacles.
 - Spawn toy bike racers.
