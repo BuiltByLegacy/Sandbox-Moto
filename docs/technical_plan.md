@@ -64,6 +64,7 @@ Moves a tiny toy rider along the track:
 - Skill profiles influence obstacle outcomes.
 - Jump outcomes can be clear, roll, or crash.
 - Airborne riders draw above obstacles.
+- Toy animation per the toy bike bible: riding bob, consistency wobble, takeoff wheelie, whole-bike air tilt (nose up then nose down), landing squash bounce, roost/sand puffs, crash dust, and a soft airborne shadow. All hand-drawn dictionary particles (capped), applied through the draw transform - no physics or GPU particles.
 
 The current implementation is intentionally toy-like rather than physically realistic.
 
@@ -96,7 +97,7 @@ The prototype should preserve these visual priorities:
 1. ~~Add editable obstacle movement and deletion.~~ Done: Hand / Move and Pick Up tools in `TrackBuilder.gd`.
 2. Add path smoothing controls and track width visualization.
 3. Add simple berm placement and feedback.
-4. Add richer toy rider animation: wobble, tiny roost puffs, happy landings.
+4. ~~Add richer toy rider animation: wobble, tiny roost puffs, happy landings.~~ Done in `ToyRider.gd`.
 5. ~~Add save/load for created tracks.~~ Done: `SandboxSave.gd`, see `docs/SAVE_SYSTEM.md`.
 6. Replace placeholder colors with handmade art assets.
 7. Add environmental toy props: bucket, shovel, cones, grass blades, fence, toy pits.
@@ -111,6 +112,7 @@ Run from the project root with the Godot binary:
 - `godot --headless --path . --script res://tests/save_load_smoke.gd` - save/load unit coverage: roundtrip of every obstacle type, missing/empty/malformed/newer-version files, partial corruption, clear.
 - `godot --headless --path . --script res://tests/reload_integration.gd` - boots the real Main scene twice and confirms a built sandbox reloads into quiet Play Time with no riders.
 - `godot --headless --path . --script res://tests/obstacle_edit_smoke.gd` - move/pick-up coverage: grab, drag, drop, missed grabs, undo for both actions, dents, and freed-node safety.
+- `godot --headless --path . --script res://tests/rider_animation_smoke.gd` - rider animation state machine: takeoff/flight/landing, roost, puff cap and fade, crash dust, and that riders still finish races.
 
 Both exit non-zero on failure. Note for future tests: in `--script` mode `_ready` only fires once the main loop runs, so tests that instance scenes must `await process_frame`, and standalone scripts cannot use `class_name` types (no global class cache).
 

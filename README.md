@@ -60,6 +60,7 @@ The current Godot prototype includes:
 - Placeholder obstacle tools, plus Hand / Move and Pick Up for rearranging placed toys.
 - Play Race button.
 - Random toy riders with names, numbers, colors, and temporary skills.
+- Toy-like rider animation: riding bob, takeoff wheelies, whole-bike air tilt, landing bounces, roost puffs, and crash dust.
 - Simple obstacle risk/reward.
 - Imagination-style feedback bubbles.
 - Autosaved sandbox: the track, start/finish, obstacles, and wear quietly persist and reload on launch, like toys left out overnight (see `docs/SAVE_SYSTEM.md`; F9 clears the save in debug builds).
