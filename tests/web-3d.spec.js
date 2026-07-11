@@ -27,11 +27,21 @@ test("renders, builds, and starts a 3D race", async ({ page }) => {
   expect(after).not.toBe(before);
 
   await page.locator('[data-tool="double"]').click();
+  await page.mouse.move(box.x + box.width * .72, box.y + box.height * .28);
+  const preview = await page.evaluate(() => window.__sandboxMotoDebug.placementState());
+  expect(preview.preview.type).toBe("double");
+  expect(preview.preview.snapped).toBe(true);
+  expect(preview.preview.opacity).toBeLessThan(.5);
   await page.mouse.click(box.x + box.width * .72, box.y + box.height * .28);
   const placement = await page.evaluate(() => window.__sandboxMotoDebug.placementState());
   expect(placement.obstacles).toHaveLength(1);
   expect(placement.obstacles[0].snapped).toBe(true);
   expect(Number.isFinite(placement.obstacles[0].rotation)).toBe(true);
+  expect(placement.building).toBeGreaterThan(0);
+  await expect.poll(async () => {
+    const built = await page.evaluate(() => window.__sandboxMotoDebug.placementState());
+    return built.building;
+  }, { timeout: 3000 }).toBe(0);
 
   await page.locator("#raceButton").click();
   await expect(page.locator("#modeLabel")).toHaveText("The sandbox is alive");

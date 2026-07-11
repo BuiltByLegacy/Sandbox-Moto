@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- feat: translucent track-snapped placement previews followed by quick hand, shovel, or toy-dozer building animations.
 - fix: snap browser-prototype gates and obstacles onto the smooth track and orient them consistently with its riding direction.
 - feat: richer 3D browser art pass with textured sand and wood, layered track ruts, hand-shaped dirt features, detailed toy bikes, fence sticks, cones, stones, and warmer lighting.
 - feat: kid-style track names. Every sandbox now has a name on a cozy nameplate: suggested from what is actually on the track (a triple can roll "The Impossible Triple", sand rolls "Big Sand SX"), editable by clicking and typing (28-char cap, camera keys pause while typing), rerollable with New Name, persisted in the save file's reserved `track_name` field, and used to caption photo mode Polaroids. First Memory Book piece. Headless test in `tests/track_name_smoke.gd`.

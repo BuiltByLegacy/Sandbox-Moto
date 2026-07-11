@@ -94,3 +94,7 @@ Do not switch back to a blocky grid system. If grid logic is introduced later, i
 ## Track-Aware Placement
 
 Start gates, finish markers, jumps, and rhythm obstacles should snap to the nearest point on the smooth track when placed. Jumps and rhythm sections face along the riding direction; gates span across it. Placement should feel automatic and toy-like, with manual rotation reserved for a later refinement tool rather than required for basic building.
+
+## Placement Staging
+
+Before placement, show the selected feature as a translucent snapped preview so the player can read its position and direction. After placement, make the feature solid through a fast tactile animation: a hand sets gates and markers, a shovel shapes jumps and hills, and a toy dozer presses rhythm sections or sand. These animations should communicate imagination and material play without slowing repeated building.
