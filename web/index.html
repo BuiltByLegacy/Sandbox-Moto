@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#e7aa51">
+  <title>Sandbox Moto | HTML Prototype</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="game-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <span class="eyebrow">Play time</span>
+        <h1>Sandbox Moto</h1>
+      </div>
+      <div class="status" aria-live="polite">
+        <span class="status-light"></span>
+        <span id="modeLabel">Build your track</span>
+      </div>
+      <button class="icon-button" id="resetButton" type="button" title="Reset sandbox" aria-label="Reset sandbox">↻</button>
+    </header>
+
+    <section class="play-area">
+      <aside class="toolbox" aria-label="Toy box tools">
+        <div class="toolbox-heading">
+          <span>Toy box</span>
+          <small id="toolHint">Drag through the sand</small>
+        </div>
+        <div class="tools" id="tools"></div>
+        <button class="race-button" id="raceButton" type="button">
+          <span class="play-icon">▶</span>
+          Play race
+        </button>
+      </aside>
+
+      <div class="sandbox-wrap">
+        <canvas id="sandbox" aria-label="Interactive motocross sandbox"></canvas>
+        <div class="sandbox-label">Dad's Garage Supercross</div>
+        <div class="race-banner" id="raceBanner" aria-live="polite"></div>
+        <div class="feedback" id="feedback" aria-live="polite">
+          <div class="feedback-title">Today's idea</div>
+          <p id="feedbackText">Draw a track, add a few jumps, then wake up the toy bikes.</p>
+          <button id="oneMoreButton" type="button" hidden>One more race?</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer-note">
+      <span>Remember when every pile of dirt became a motocross track?</span>
+      <span class="controls-note">Draw with mouse or touch · Space to race · Z to undo</span>
+    </footer>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>

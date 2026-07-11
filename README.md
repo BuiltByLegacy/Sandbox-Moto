@@ -77,6 +77,10 @@ Examples include toy bikes, toy riders, shovels, buckets, rakes, molds, cones, f
 2. Open this folder as a Godot project.
 3. Run `scenes/Main.tscn`.
 
+### HTML Prototype
+
+Open `web/index.html` in a modern browser. It is a self-contained playable version of the core loop with smooth track drawing, obstacle placement, randomized toy riders, race stories, track wear, touch support, and no build step.
+
 ## Key Docs
 
 - `docs/GAME_VISION.md` - Canonical full concept, fantasy, loop, and boundaries.
