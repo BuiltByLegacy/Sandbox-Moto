@@ -69,7 +69,14 @@ function makeTexture(base, flecks, count, lines=false) {
 }
 
 const sandTexture=makeTexture("#e8b45f","rgba(112,65,25,",2300);
-const sandMaterial=new THREE.MeshStandardMaterial({map:sandTexture,color:0xffe0a2,roughness:.97,bumpMap:sandTexture,bumpScale:.035});
+// Soft raked grooves combed through the sand - the touchable, Sandcastle-like surface.
+function makeRakeBump(){const c=document.createElement("canvas");c.width=c.height=512;const x=c.getContext("2d");x.fillStyle="#808080";x.fillRect(0,0,512,512);for(let i=0;i<9;i++){const y=i*58+20;x.strokeStyle="rgba(38,38,38,0.9)";x.lineWidth=5;x.beginPath();x.moveTo(-20,y);x.bezierCurveTo(160,y-20,360,y+22,532,y-8);x.stroke();x.strokeStyle="rgba(232,232,232,0.7)";x.lineWidth=2;x.beginPath();x.moveTo(-20,y+5);x.bezierCurveTo(160,y-15,360,y+27,532,y-3);x.stroke();}const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(2,2);t.colorSpace=THREE.NoColorSpace;t.anisotropy=renderer.capabilities.getMaxAnisotropy();return t;}
+const sandRake=makeRakeBump();
+const sandMaterial=new THREE.MeshStandardMaterial({map:sandTexture,color:0xffdf9f,roughness:.98,bumpMap:sandRake,bumpScale:.12});
+// Packed, played-in dirt for sculpted track features - matte, grainy, warm.
+const dirtTexture=makeTexture("#9c6233","rgba(72,40,18,",1500);dirtTexture.repeat.set(3,3);
+const dirtPacked=new THREE.MeshStandardMaterial({map:dirtTexture,color:0xba7238,roughness:.98,bumpMap:dirtTexture,bumpScale:.025});
+const dirtWorn=new THREE.MeshStandardMaterial({color:0xd39a5b,roughness:.94}); // sun-lit worn line on top
 const sand = addMesh(new THREE.BoxGeometry(36,1.5,24), sandMaterial, new THREE.Vector3(0,-.78,0));
 const woodTexture=makeTexture("#a76234","rgba(72,34,16,",0,true);
 const wood = new THREE.MeshStandardMaterial({map:woodTexture,color:0xd18a4a,roughness:.8,bumpMap:woodTexture,bumpScale:.06});
@@ -143,11 +150,26 @@ function nearestTrackPlacement(position,acrossTrack=false){if(!raceCurve||path.l
 function makeMarker(type,position,savedRotation=null){const placement=savedRotation===null?nearestTrackPlacement(position,true):{position,rotation:savedRotation,snapped:true};const group=new THREE.Group();group.position.copy(placement.position);group.rotation.y=placement.rotation;buildLayer.add(group);const dark=material(0x2b2925,.65),white=material(0xf7f0dc,.55);for(const x of [-.9,.9])addMesh(new THREE.BoxGeometry(.12,1.4,.12),dark,new THREE.Vector3(x,.7,0),group);for(let i=0;i<5;i++)addMesh(new THREE.BoxGeometry(.36,.32,.08),i%2?dark:white,new THREE.Vector3(-.72+i*.36,1.18,0),group);group.userData.type=type;group.userData.snapped=placement.snapped;return group;}
 function mound(parent,x,z,scale=1){const geometry=new THREE.SphereGeometry(.7*scale,16,9,0,Math.PI*2,0,Math.PI/2);const positions=geometry.attributes.position;for(let i=0;i<positions.count;i++){const noise=1+Math.sin(i*12.43+x*4.1)*.045;positions.setX(i,positions.getX(i)*noise);positions.setZ(i,positions.getZ(i)*(1+Math.cos(i*7.17)*.04));}geometry.computeVertexNormals();const item=addMesh(geometry,material(iColor(x,z),1),new THREE.Vector3(x,0,z),parent);item.scale.set(1.2,.9,1);return item;}
 function iColor(x,z){return new THREE.Color(dirtColor).offsetHSL(0,0,((Math.abs(x*7+z*11)%5)-2)*.012);}
+// Sweep a 2D side profile (x=along track, y=up) across the track width into a
+// soft-edged dirt feature. Local +X is the riding direction, so takeoff faces
+// sit on the -X (approach) side and landings on +X.
+function sweepFeature(shape,width,mat,bevel=.09){const geo=new THREE.ExtrudeGeometry(shape,{depth:width,bevelEnabled:true,bevelThickness:bevel,bevelSize:bevel,bevelSegments:2,steps:1,curveSegments:14});geo.translate(0,0,-width/2);geo.computeVertexNormals();const mesh=new THREE.Mesh(geo,mat);mesh.castShadow=true;mesh.receiveShadow=true;return mesh;}
+function kickerShape(len,h){const s=new THREE.Shape();s.moveTo(-len,0);s.quadraticCurveTo(-len*.42,h*.2,-len*.06,h*.92);s.quadraticCurveTo(len*.04,h*1.02,len*.2,h*.94);s.quadraticCurveTo(len*.6,h*.5,len*.82,0);s.lineTo(-len,0);return s;}
+function tabletopShape(len,h,top){const s=new THREE.Shape();s.moveTo(-len,0);s.quadraticCurveTo(-len*.58,h*.62,-len*top,h);s.lineTo(len*top,h);s.quadraticCurveTo(len*.58,h*.62,len,0);s.lineTo(-len,0);return s;}
+function hillShape(len,h){const s=new THREE.Shape();s.moveTo(-len,0);s.quadraticCurveTo(-len*.5,h,0,h);s.quadraticCurveTo(len*.5,h,len,0);s.lineTo(-len,0);return s;}
+function addKicker(group,cx,len,h,width,lip=true){const face=sweepFeature(kickerShape(len,h),width,dirtPacked);face.position.x=cx;group.add(face);if(lip){const cap=sweepFeature(kickerShape(len*.9,h),width*.82,dirtWorn);cap.position.set(cx+len*.02,h*.06,0);cap.scale.set(1,.16,1);group.add(cap);}} // worn lip catches light
+// A banked toy berm: a curved wall that rises toward the outside of the turn.
+function bankedBerm(mat){const rIn=1.0,rOut=2.2,h=1.2,a0=-1.3,a1=1.3,seg=22;const pos=[],idx=[];for(let i=0;i<=seg;i++){const a=a0+(a1-a0)*i/seg,c=Math.cos(a),s=Math.sin(a);pos.push(c*rIn,0,s*rIn, c*rOut,h,s*rOut, c*rOut,0,s*rOut);}for(let i=0;i<seg;i++){const b=i*3,n=b+3;idx.push(b,b+1,n, b+1,n+1,n);idx.push(b+1,b+2,n+1, b+2,n+2,n+1);}const capA=[0,1,2],capB=[seg*3,seg*3+1,seg*3+2];idx.push(capA[0],capA[1],capA[2],capB[2],capB[1],capB[0]);const geo=new THREE.BufferGeometry();geo.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));geo.setIndex(idx);geo.computeVertexNormals();const m=mat.clone();m.side=THREE.DoubleSide;const mesh=new THREE.Mesh(geo,m);mesh.castShadow=true;mesh.receiveShadow=true;return mesh;}
 function makeObstacle(type,position,savedRotation=null){const placement=savedRotation===null?nearestTrackPlacement(position,false):{position,rotation:savedRotation,snapped:true};const group=new THREE.Group();group.position.copy(placement.position);group.rotation.y=placement.rotation;group.userData.type=type;group.userData.snapped=placement.snapped;buildLayer.add(group);
-  if(type==="sand")addMesh(new THREE.CylinderGeometry(1.5,1.7,.09,20),material(0xf2c875,1),new THREE.Vector3(0,.04,0),group);
-  else if(type==="berm")for(let i=0;i<7;i++){const a=-1.2+i*.4;mound(group,Math.sin(a)*1.4,Math.cos(a)*1.4,.65);}
-  else if(type==="tabletop")addMesh(new THREE.BoxGeometry(2.5,.65,1.35),material(dirtColor,1),new THREE.Vector3(0,.33,0),group);
-  else{const count=type==="triple"?3:type==="double"?2:type==="whoops"?6:type==="rollers"?4:1,gap=type==="whoops"?.48:type==="rollers"?.75:1.35;for(let i=0;i<count;i++)mound(group,(i-(count-1)/2)*gap,0,type==="whoops"?.38:type==="rollers"?.58:type==="hill"?1.45:.82);}
+  if(type==="sand"){addMesh(new THREE.CylinderGeometry(1.55,1.75,.12,24),material(0xdcb469,1),new THREE.Vector3(0,.02,0),group);const soft=addMesh(new THREE.CylinderGeometry(1.35,1.5,.14,24),material(0xf0cd86,1),new THREE.Vector3(0,.05,0),group);soft.scale.y=1;for(let i=0;i<9;i++){const a=i/9*Math.PI*2;addMesh(new THREE.TorusGeometry(.5+ (i%3)*.28,.05,5,16,Math.PI),material(0xe9c47d,1),new THREE.Vector3(Math.cos(a)*.2,.11,Math.sin(a)*.2),group).rotation.x=-Math.PI/2;}}
+  else if(type==="berm")group.add(bankedBerm(dirtPacked));
+  else if(type==="tabletop"){group.add(sweepFeature(tabletopShape(1.55,.6,.42),1.7,dirtPacked));const top=sweepFeature(tabletopShape(1.4,.6,.46),1.5,dirtWorn);top.scale.set(1,.06,1);top.position.y=.6*.95;group.add(top);}
+  else if(type==="whoops"){for(let i=0;i<6;i++)mound(group,(i-2.5)*.5,0,.4);}
+  else if(type==="rollers"){for(let i=0;i<4;i++)mound(group,(i-1.5)*.78,0,.6);}
+  else if(type==="hill")group.add(sweepFeature(hillShape(1.7,1.3),2.5,dirtPacked));
+  else if(type==="double"){addKicker(group,-.85,1.0,.66,1.7);addKicker(group,1.0,.95,.58,1.7);}
+  else if(type==="triple"){addKicker(group,-1.65,.95,.64,1.7);addKicker(group,0,.98,.7,1.7);addKicker(group,1.65,.95,.58,1.7);}
+  else addKicker(group,0,1.1,.68,1.8);
   return group;
 }
 

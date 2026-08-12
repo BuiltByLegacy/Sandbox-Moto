@@ -20,6 +20,7 @@ This roadmap follows the Sandbox Moto north star: unlock imagination, not power.
 - Tiny hand/tool animations.
 - Better toy-bike visuals and 1:12 collectible proportions.
 - Better obstacle risk/reward and toy-like jump behavior.
+- Graphics fidelity pass toward the Sandcastle bar (`docs/REFERENCES.md`): sculpted jump geometry (takeoff face, lip, landing) instead of blobby mounds, banked berms, warmer tactile sand with raked grooves (issue #33), softer warm light. In progress in the web build; Godot 2D silhouettes raised in parallel.
 - Played-in dirt: ruts, tire marks, worn jump faces, roost piles.
 - Done: local sandbox autosave and reload (`docs/SAVE_SYSTEM.md`) - the track, start/finish, obstacles, and wear survive closing the game. Foundation for the Memory Book and track sharing.
 

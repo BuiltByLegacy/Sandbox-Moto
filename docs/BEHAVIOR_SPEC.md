@@ -16,8 +16,10 @@ rule here wins; on *intent*, the design bible wins.
 
 ## Reference: the cozy sandbox diorama clip
 
-The originating reference is a 9-second portrait clip of a cozy top-down
-sandbox game ("free demo out now on steam!"). What matters is not its art —
+The originating reference is a 9-second portrait clip of **Sandcastle**
+(Bubblebird Studio) — a cozy top-down sandbox builder ("free demo out now on
+steam!"). It is our primary touchstone; see `docs/REFERENCES.md` for the full
+breakdown and the graphics bar it sets. What matters is not its art —
 ours is deliberately toy-like, not photoreal (see `docs/ART_BIBLE.md`) — but
 how it *moves and feels*:
 
