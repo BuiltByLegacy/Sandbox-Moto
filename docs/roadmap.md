@@ -50,6 +50,8 @@ Each location should have mood, lighting, sound, props, dirt/sand type, and unlo
 
 Environmental polish should make the sandbox feel alive: butterflies, leaves, wind, moving grass, ants, bird shadows, kids laughing, and cloud shadows.
 
+- Done (first piece): living camera. The view breathes and drifts gently while the player is still and hushes on touch, so the sandbox reads as alive even before ambient props exist. See `docs/BEHAVIOR_SPEC.md` and `docs/CAMERA_DESIGN.md` (Idle Life). Remaining ambience (raked sand, moving props, cloud shadows) still open.
+
 ## Version 5: Sharing And Community
 
 - Track sharing.

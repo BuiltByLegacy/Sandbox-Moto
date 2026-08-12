@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- feat: living camera. The sandbox now breathes when the player's hands are still - a slow, imperfect drift, breathing zoom, gentle sway, and faint tilt, like kneeling beside a diorama and admiring it. It hushes the instant the player touches the sand (draw, place, pan, zoom, or hover) so building stays crisp and direct, and eases back in after a short beat of stillness. During a race the camera softly follows the pack and leans back for readability, then returns the framing to the player. Answers the "the game should act like this" reference clip. New `docs/BEHAVIOR_SPEC.md` captures the behavior contract and acceptance criteria; `docs/CAMERA_DESIGN.md` gains an Idle Life section.
 - feat: translucent track-snapped placement previews followed by quick hand, shovel, or toy-dozer building animations.
 - fix: snap browser-prototype gates and obstacles onto the smooth track and orient them consistently with its riding direction.
 - feat: richer 3D browser art pass with textured sand and wood, layered track ruts, hand-shaped dirt features, detailed toy bikes, fence sticks, cones, stones, and warmer lighting.

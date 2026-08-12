@@ -37,7 +37,12 @@ scene.background = new THREE.Color(0xc7d9ce);
 scene.fog = new THREE.Fog(0xc7d9ce, 42, 72);
 const camera = new THREE.PerspectiveCamera(38, 1, .1, 120);
 const cameraTarget = new THREE.Vector3();
-let cameraDistance = 33;
+let cameraDistance = 33;                    // user-controlled zoom (kneeling closer / leaning back)
+let cameraYaw = 0;                          // user-controlled azimuth (reserved for future orbit)
+const CAM_ELEV = 0.82;                       // base "kneeling beside the sandbox" angle
+let cameraIdleSince = performance.now();     // when the player last touched the sandbox
+const camView = { tx: 0, tz: 0, dist: 33, yaw: 0, elev: CAM_ELEV }; // smoothed values actually rendered
+function pokeCamera(){ cameraIdleSince = performance.now(); } // the player is here - hush the drift
 
 scene.add(new THREE.HemisphereLight(0xfff1cf, 0x687557, 2.2));
 const sun = new THREE.DirectionalLight(0xffd89a, 3.4);
@@ -94,7 +99,25 @@ let trackMesh=null, raceCurve=null, drawing=false, panning=false, lastPointer=nu
 let previewObject=null, buildAnimations=[];
 let lastTime=performance.now(); const wearGroup=new THREE.Group(); buildLayer.add(wearGroup);
 
-function updateCamera(){camera.position.set(cameraTarget.x,Math.sin(.78)*cameraDistance,cameraTarget.z+Math.cos(.78)*cameraDistance);camera.lookAt(cameraTarget);}
+function applyCamera(){const horizon=Math.cos(camView.elev)*camView.dist;camera.position.set(camView.tx+Math.sin(camView.yaw)*horizon,Math.sin(camView.elev)*camView.dist,camView.tz+Math.cos(camView.yaw)*horizon);camera.lookAt(camView.tx,0,camView.tz);}
+// The sandbox should feel alive even when the player's hands are still: a slow, imperfect
+// breath and drift, like kneeling beside a diorama and slowly circling it. It hushes the
+// instant the player touches the sand, and gently eases back after a moment of stillness.
+function updateCameraFrame(dt,time){
+  const idle=THREE.MathUtils.clamp((performance.now()-cameraIdleSince-900)/2600,0,1);
+  const life=idle*idle*(3-2*idle);                       // smoothstep in after ~0.9s of stillness
+  let wantTx=cameraTarget.x+Math.sin(time*.00009)*.9*life;
+  let wantTz=cameraTarget.z+Math.cos(time*.000115)*.7*life;
+  let wantDist=cameraDistance+Math.sin(time*.00023)*1.7*life;   // slow breathing zoom
+  let wantYaw=cameraYaw+Math.sin(time*.000165)*.12*life;        // gentle sway around the sandbox
+  let wantElev=CAM_ELEV+Math.sin(time*.000135)*.015*life;
+  if(racing&&riders.length){let cx=0,cz=0;for(const r of riders){cx+=r.group.position.x;cz+=r.group.position.z;}cx/=riders.length;cz/=riders.length;wantTx=cx;wantTz=cz;wantDist=cameraDistance+2.4;wantYaw=cameraYaw;wantElev=CAM_ELEV;}
+  const ease=1-Math.pow(racing?.0008:.0016,dt);
+  if((panning||drawing)&&!racing){camView.tx=cameraTarget.x;camView.tz=cameraTarget.z;} // crisp direct panning
+  else{camView.tx+=(wantTx-camView.tx)*ease;camView.tz+=(wantTz-camView.tz)*ease;}
+  camView.dist+=(wantDist-camView.dist)*ease;camView.yaw+=(wantYaw-camView.yaw)*ease;camView.elev+=(wantElev-camView.elev)*ease;
+  applyCamera();
+}
 function resize(){const rect=canvas.getBoundingClientRect();renderer.setSize(rect.width,rect.height,false);camera.aspect=rect.width/Math.max(rect.height,1);camera.updateProjectionMatrix();}
 function pointerToSand(event){const rect=canvas.getBoundingClientRect();pointer.set(((event.clientX-rect.left)/rect.width)*2-1,-((event.clientY-rect.top)/rect.height)*2+1);raycaster.setFromCamera(pointer,camera);return raycaster.ray.intersectPlane(sandPlane,new THREE.Vector3());}
 function inside(point){return point&&Math.abs(point.x)<17.6&&Math.abs(point.z)<11.6;}
@@ -174,12 +197,12 @@ function updateRace(dt,time){if(!racing)return;for(const rider of riders){if(rid
 function endRace(){racing=false;ui.race.disabled=false;ui.status.classList.remove("racing");ui.wrap.classList.remove("racing");ui.mode.textContent="Everything is still again";document.querySelectorAll(".tool").forEach(b=>b.disabled=false);const winner=finishOrder[0],stories=riders.flatMap(r=>r.messages),story=stories.length?stories[Math.floor(Math.random()*stories.length)]:"That little moto felt fast!";showFeedback(`${winner.name} bike won the pretend moto. ${story}`);ui.again.hidden=false;}
 function showFeedback(message){ui.feedbackText.textContent=message;ui.feedback.classList.remove("pop");requestAnimationFrame(()=>ui.feedback.classList.add("pop"));}
 
-canvas.addEventListener("pointerdown",event=>{if(racing)return;lastPointer={x:event.clientX,y:event.clientY};if(event.shiftKey||event.button===1||event.button===2){panning=true;canvas.setPointerCapture(event.pointerId);return;}const point=pointerToSand(event);if(!inside(point))return;canvas.setPointerCapture(event.pointerId);snapshot();clearPreview();if(activeTool==="track"){path=[point];drawing=true;rebuildTrack();}else if(activeTool==="start"){if(startMarker)disposeObject(startMarker);startMarker=makeMarker("start",point);animatePlacement(startMarker,"start");}else if(activeTool==="finish"){if(finishMarker)disposeObject(finishMarker);finishMarker=makeMarker("finish",point);animatePlacement(finishMarker,"finish");}else if(activeTool==="dozer")obstacles=obstacles.filter(o=>{if(o.position.distanceTo(point)<2){disposeObject(o);return false;}return true;});else if(DIFFICULTY[activeTool]!==undefined){const obstacle=makeObstacle(activeTool,point);obstacles.push(obstacle);animatePlacement(obstacle,activeTool);}});
-canvas.addEventListener("pointermove",event=>{if(panning&&lastPointer){cameraTarget.x-=(event.clientX-lastPointer.x)*.025;cameraTarget.z-=(event.clientY-lastPointer.y)*.025;lastPointer={x:event.clientX,y:event.clientY};updateCamera();return;}if(racing)return;const point=pointerToSand(event);if(drawing){if(inside(point)&&(!path.length||path.at(-1).distanceTo(point)>.28)){path.push(point);rebuildTrack();}return;}updatePlacementPreview(point);});
-canvas.addEventListener("pointerup",event=>{drawing=false;panning=false;lastPointer=null;const point=pointerToSand(event);if(!racing)updatePlacementPreview(point);});canvas.addEventListener("pointercancel",()=>{drawing=false;panning=false;lastPointer=null;clearPreview();});canvas.addEventListener("pointerleave",()=>{if(!drawing&&!panning)clearPreview();});canvas.addEventListener("contextmenu",event=>event.preventDefault());canvas.addEventListener("wheel",event=>{event.preventDefault();cameraDistance=THREE.MathUtils.clamp(cameraDistance+event.deltaY*.018,19,45);updateCamera();},{passive:false});
+canvas.addEventListener("pointerdown",event=>{if(racing)return;pokeCamera();lastPointer={x:event.clientX,y:event.clientY};if(event.shiftKey||event.button===1||event.button===2){panning=true;canvas.setPointerCapture(event.pointerId);return;}const point=pointerToSand(event);if(!inside(point))return;canvas.setPointerCapture(event.pointerId);snapshot();clearPreview();if(activeTool==="track"){path=[point];drawing=true;rebuildTrack();}else if(activeTool==="start"){if(startMarker)disposeObject(startMarker);startMarker=makeMarker("start",point);animatePlacement(startMarker,"start");}else if(activeTool==="finish"){if(finishMarker)disposeObject(finishMarker);finishMarker=makeMarker("finish",point);animatePlacement(finishMarker,"finish");}else if(activeTool==="dozer")obstacles=obstacles.filter(o=>{if(o.position.distanceTo(point)<2){disposeObject(o);return false;}return true;});else if(DIFFICULTY[activeTool]!==undefined){const obstacle=makeObstacle(activeTool,point);obstacles.push(obstacle);animatePlacement(obstacle,activeTool);}});
+canvas.addEventListener("pointermove",event=>{pokeCamera();if(panning&&lastPointer){cameraTarget.x-=(event.clientX-lastPointer.x)*.025;cameraTarget.z-=(event.clientY-lastPointer.y)*.025;lastPointer={x:event.clientX,y:event.clientY};return;}if(racing)return;const point=pointerToSand(event);if(drawing){if(inside(point)&&(!path.length||path.at(-1).distanceTo(point)>.28)){path.push(point);rebuildTrack();}return;}updatePlacementPreview(point);});
+canvas.addEventListener("pointerup",event=>{drawing=false;panning=false;lastPointer=null;const point=pointerToSand(event);if(!racing)updatePlacementPreview(point);});canvas.addEventListener("pointercancel",()=>{drawing=false;panning=false;lastPointer=null;clearPreview();});canvas.addEventListener("pointerleave",()=>{if(!drawing&&!panning)clearPreview();});canvas.addEventListener("contextmenu",event=>event.preventDefault());canvas.addEventListener("wheel",event=>{event.preventDefault();pokeCamera();cameraDistance=THREE.MathUtils.clamp(cameraDistance+event.deltaY*.018,19,45);},{passive:false});
 function resetSandbox(){if(racing)return;clearPreview();snapshot();clearBuildObjects();path=[];riders.forEach(r=>disposeObject(r.group));riders=[];while(wearGroup.children.length)disposeObject(wearGroup.children[0]);ui.again.hidden=true;showFeedback("Fresh sand. What should we build this time?");}
-function animate(time){const elapsed=Math.min((time-lastTime)/1000,.1);lastTime=time;updateBuildAnimations(elapsed);updateRace(Math.min(elapsed,.035),time);renderer.render(scene,camera);requestAnimationFrame(animate);}
+function animate(time){const elapsed=Math.min((time-lastTime)/1000,.1);lastTime=time;updateBuildAnimations(elapsed);updateRace(Math.min(elapsed,.035),time);updateCameraFrame(elapsed,time);renderer.render(scene,camera);requestAnimationFrame(animate);}
 
 ui.race.onclick=startRace;ui.again.onclick=startRace;ui.reset.onclick=resetSandbox;window.addEventListener("resize",resize);window.addEventListener("keydown",event=>{if(event.code==="Space"){event.preventDefault();startRace();}if(event.key.toLowerCase()==="z"&&!racing)undo();});
-window.__sandboxMotoDebug={placementState:()=>({preview:previewObject&&{type:previewObject.userData.type,snapped:previewObject.userData.snapped,opacity:previewObject.children[0]?.material?.opacity},building:buildAnimations.length,start:startMarker&&{position:startMarker.position.toArray(),rotation:startMarker.rotation.y,snapped:startMarker.userData.snapped},finish:finishMarker&&{position:finishMarker.position.toArray(),rotation:finishMarker.rotation.y,snapped:finishMarker.userData.snapped},obstacles:obstacles.map(object=>({type:object.userData.type,position:object.position.toArray(),rotation:object.rotation.y,snapped:object.userData.snapped}))})};
-createTools();updateCamera();resize();requestAnimationFrame(animate);requestAnimationFrame(()=>ui.loading.classList.add("ready"));
+window.__sandboxMotoDebug={camera:()=>({position:camera.position.toArray(),target:[camView.tx,camView.tz],idleMs:performance.now()-cameraIdleSince}),placementState:()=>({preview:previewObject&&{type:previewObject.userData.type,snapped:previewObject.userData.snapped,opacity:previewObject.children[0]?.material?.opacity},building:buildAnimations.length,start:startMarker&&{position:startMarker.position.toArray(),rotation:startMarker.rotation.y,snapped:startMarker.userData.snapped},finish:finishMarker&&{position:finishMarker.position.toArray(),rotation:finishMarker.rotation.y,snapped:finishMarker.userData.snapped},obstacles:obstacles.map(object=>({type:object.userData.type,position:object.position.toArray(),rotation:object.rotation.y,snapped:object.userData.snapped}))})};
+createTools();applyCamera();resize();pokeCamera();requestAnimationFrame(animate);requestAnimationFrame(()=>ui.loading.classList.add("ready"));
