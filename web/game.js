@@ -18,11 +18,31 @@ const TOOL_DEFS = [
   ["berm", "C", "Berm", "Place a banked toy turn"], ["hill", "A", "Hill", "Build a tiny mountain"],
   ["dozer", "X", "Dozer", "Remove nearby pieces"], ["undo", "<-", "Undo", "Take back the last change"]
 ];
+// Little toy illustrations for the toy-box buttons - each shows the actual
+// dirt feature or tool, in the warm sandbox palette, so the menu reads like a
+// tray of toys instead of typed symbols.
+const ICON = (inner)=>`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="21" rx="9.4" ry="1.5" fill="#5a3a1a" opacity=".13"/>${inner}</svg>`;
+const kick=(cx,s)=>`<path d="M${cx-6*s} 19 Q${cx-2.4*s} 18 ${cx-0.5*s} 7.5 Q${cx} 6.4 ${cx+0.9*s} 7.5 Q${cx+3.4*s} 15 ${cx+6*s} 19 Z" fill="#b5713a"/><path d="M${cx-6*s} 19 Q${cx-2.4*s} 18 ${cx-0.5*s} 7.5 L${cx+0.4*s} 7.6 Q${cx-1.4*s} 15 ${cx-2.6*s} 19 Z" fill="#c98c4e"/><path d="M${cx-0.6*s} 7.2 L${cx+1*s} 7.4" stroke="#e2b174" stroke-width="1.5" stroke-linecap="round"/>`;
+const TOOL_ICONS = {
+  track: ICON(`<path d="M2.5 17 C6 9 10 20 13 13 S19 6.5 21.5 9.5" fill="none" stroke="#b5713a" stroke-width="5.2" stroke-linecap="round"/><path d="M2.5 17 C6 9 10 20 13 13 S19 6.5 21.5 9.5" fill="none" stroke="#e2b174" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="1.2 3.2"/>`),
+  start: ICON(`<rect x="4.4" y="6.5" width="2.3" height="13.5" rx="1" fill="#835a34"/><rect x="17.3" y="6.5" width="2.3" height="13.5" rx="1" fill="#835a34"/><path d="M4 5.6 h16 a1 1 0 0 1 1 1 v3.2 a1 1 0 0 1-1 1 h-16 a1 1 0 0 1-1-1 v-3.2 a1 1 0 0 1 1-1 z" fill="#d94b35"/><rect x="6" y="7" width="12" height="1.5" fill="#f4ead0" opacity=".85"/><circle cx="12" cy="9.4" r="1.1" fill="#7fd08a"/>`),
+  finish: ICON(`<rect x="5" y="4" width="2.2" height="16" rx="1" fill="#835a34"/><g>${[0,1,2,3].map(r=>[0,1,2,3].map(c=>`<rect x="${7.2+c*3.1}" y="${4.4+r*2.1}" width="3.1" height="2.1" fill="${(r+c)%2?'#f4ead0':'#2b2925'}"/>`).join('')).join('')}</g>`),
+  single: ICON(kick(12,1.4)),
+  double: ICON(kick(8,1)+kick(16.5,0.9)),
+  triple: ICON(kick(6,0.82)+kick(12,0.86)+kick(18,0.78)),
+  tabletop: ICON(`<path d="M3 19 L7.6 8 L16.4 8 L21 19 Z" fill="#b5713a"/><path d="M3 19 L7.6 8 L11.5 8 L8.5 19 Z" fill="#c98c4e"/><rect x="7.4" y="6.9" width="9.2" height="2" rx="1" fill="#e2b174"/>`),
+  whoops: ICON(`<path d="M2.5 19 Q4.5 12.5 6.5 19 Q8.5 12.5 10.5 19 Q12.5 12.5 14.5 19 Q16.5 12.5 18.5 19 Q20.5 13.5 21.5 19 Z" fill="#b5713a"/><path d="M2.5 19 Q4.5 12.5 6.5 19 Q8.5 12.5 10.5 19 Q12.5 12.5 14.5 19 Q16.5 12.5 18.5 19 Q20.5 13.5 21.5 19" fill="none" stroke="#e2b174" stroke-width="1" opacity=".7"/>`),
+  rollers: ICON(`<path d="M2.5 19 Q6 9.5 9.5 19 Q13 9.5 16.5 19 Q19 12 21.5 19 Z" fill="#b5713a"/><path d="M2.5 19 Q6 9.5 9.5 19 Q13 9.5 16.5 19" fill="none" stroke="#e2b174" stroke-width="1.1" opacity=".7"/>`),
+  sand: ICON(`<path d="M3 18.5 Q12 8.5 21 18.5 Z" fill="#edcb84"/><path d="M3 18.5 Q12 8.5 21 18.5" fill="none" stroke="#d8b268" stroke-width="1"/><path d="M7.5 16.4 Q12 13 16.5 16.4 M9.5 18.2 Q12 16.6 14.5 18.2" fill="none" stroke="#fbe6ad" stroke-width="1" stroke-linecap="round" opacity=".8"/>`),
+  berm: ICON(`<path d="M3.5 20 Q3.5 6 18 6 L18 11 Q10 11 9.2 20 Z" fill="#b5713a"/><path d="M3.5 20 Q3.5 6 18 6 L18 8.4 Q7.5 8.4 6.4 20 Z" fill="#c98c4e"/>`),
+  hill: ICON(`<path d="M2.5 19 Q12 3.5 21.5 19 Z" fill="#b5713a"/><path d="M2.5 19 Q12 3.5 21.5 19" fill="none" stroke="#8a4f27" stroke-width="0"/><path d="M8 12 Q12 6.5 16 12" fill="none" stroke="#e2b174" stroke-width="1.3" stroke-linecap="round" opacity=".7"/>`),
+  dozer: ICON(`<circle cx="9" cy="16" r="2.4" fill="#3a3330"/><circle cx="14.5" cy="16" r="2.4" fill="#3a3330"/><circle cx="9" cy="16" r=".9" fill="#7a716a"/><circle cx="14.5" cy="16" r=".9" fill="#7a716a"/><rect x="7" y="9.5" width="9" height="5" rx="1.4" fill="#e4aa2f"/><rect x="12" y="6.5" width="4" height="4" rx="1" fill="#efc25a"/><path d="M4.6 8.5 L6.4 8.5 L6.4 16 L4.6 16 Q3.8 12 4.6 8.5 Z" fill="#c88f1e"/>`),
+  undo: ICON(`<path d="M7.5 12 A5.5 5.5 0 1 1 9 16.2" fill="none" stroke="#835a34" stroke-width="2.6" stroke-linecap="round"/><path d="M7.5 7.5 L7.2 12.4 L12 11.6 Z" fill="#835a34"/>`)
+};
 const COLORS = [["Red",0xd94b35],["Blue",0x347cc2],["Green",0x4c955b],["Yellow",0xe4b73f],["Purple",0x825da2],["Orange",0xe87938]];
 const PERSONALITIES = ["fearless","careful","always sends it","smooth","a bad starter","a great jumper","loves whoops"];
 const DIFFICULTY = {single:.22,double:.5,triple:.74,tabletop:.4,whoops:.54,rollers:.34,sand:.56,berm:.28,hill:.46};
 const JUMPS = new Set(["single","double","triple","tabletop"]);
-const dirtColor = 0x98592d;
 
 const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -83,19 +103,40 @@ const wood = new THREE.MeshStandardMaterial({map:woodTexture,color:0xd18a4a,roug
 for (const [x,z,sx,sz] of [[0,-12.4,38,1],[0,12.4,38,1],[-18.4,0,1,26],[18.4,0,1,26]]) addMesh(new THREE.BoxGeometry(sx,2.1,sz),wood,new THREE.Vector3(x,-.35,z));
 const ground = addMesh(new THREE.PlaneGeometry(100,100),material(0x80936a,1),new THREE.Vector3(0,-1.58,0)); ground.rotation.x=-Math.PI/2;
 
+function toyPlastic(color){return new THREE.MeshStandardMaterial({color,roughness:.34,metalness:.02});}
 function addWorldProps() {
-  const green=material(0x4d7246,.9);
-  for(let i=0;i<38;i++){const blade=addMesh(new THREE.ConeGeometry(.09,1.2+(i%4)*.25,4),green,new THREE.Vector3(-19+(i%19)*2.1,-.6,i<19?-13.2:13.2));blade.rotation.z=(i%3-1)*.15;}
-  const red=material(0xd14c34,.35); const bucket=addMesh(new THREE.CylinderGeometry(1.5,1.15,2.7,20,1,true),red,new THREE.Vector3(15.7,.3,-9.5));bucket.rotation.z=-.1;
-  const truck=new THREE.Group();truck.position.set(-15,-.15,9.3);world.add(truck);const yellow=material(0xe4aa2f,.4),tire=material(0x282623,.8);
-  addMesh(new THREE.BoxGeometry(3.1,1.15,1.7),yellow,new THREE.Vector3(0,.7,0),truck);addMesh(new THREE.BoxGeometry(1.2,1.1,1.65),yellow,new THREE.Vector3(-1.5,1.05,0),truck);
-  for(const x of [-1.2,1.1])for(const z of [-.88,.88]){const wheel=addMesh(new THREE.CylinderGeometry(.42,.42,.25,12),tire,new THREE.Vector3(x,.25,z),truck);wheel.rotation.x=Math.PI/2;}
-  const shovel=new THREE.Group();shovel.position.set(16,0,7);shovel.rotation.z=-.2;world.add(shovel);
-  addMesh(new THREE.CylinderGeometry(.11,.11,6,8),material(0xb88950),new THREE.Vector3(0,2.2,0),shovel);const blade=addMesh(new THREE.BoxGeometry(1.5,.18,1.7),red,new THREE.Vector3(0,-.75,0),shovel);blade.rotation.x=-.25;
-  const stick=material(0xc9995b,.78), white=material(0xf4e6c9,.55), coneOrange=material(0xe96a32,.38);
+  // grass tufts (a few leaning blades each) along the sandbox rim
+  const green=material(0x4d7246,.9),green2=material(0x5f8a50,.9);
+  for(let i=0;i<22;i++){const tuft=new THREE.Group();tuft.position.set(-18.5+(i%11)*3.7,-.55,i<11?-13.3:13.3);world.add(tuft);for(let b=0;b<3;b++){const blade=addMesh(new THREE.ConeGeometry(.08,.95+(b%2)*.5,4),b%2?green2:green,new THREE.Vector3((b-1)*.17,.42,(b-1)*.05),tuft);blade.rotation.z=(b-1)*.24;}}
+  // premium toy bucket with rim, arched handle, and sand inside
+  const bucket=new THREE.Group();bucket.position.set(15.6,0,-9.4);bucket.rotation.y=-.35;world.add(bucket);const bred=toyPlastic(0xdd4a33);
+  addMesh(new THREE.CylinderGeometry(1.18,.86,1.9,22),bred,new THREE.Vector3(0,.95,0),bucket);
+  addMesh(new THREE.TorusGeometry(1.18,.1,10,24),bred,new THREE.Vector3(0,1.9,0),bucket).rotation.x=Math.PI/2;
+  addMesh(new THREE.TorusGeometry(1.05,.05,8,20,Math.PI),material(0x9a938a,.4,.3),new THREE.Vector3(0,1.9,0),bucket);
+  addMesh(new THREE.CylinderGeometry(1.02,1.02,.4,22),material(0xedcb84,1),new THREE.Vector3(0,1.55,0),bucket);
+  // toy dump truck: tilted bed with a sand pile, cab, chunky wheels
+  const truck=new THREE.Group();truck.position.set(-14.8,0,9.2);truck.rotation.y=.42;world.add(truck);const yellow=toyPlastic(0xe7b23c),ydark=toyPlastic(0xcaa02f),tire=material(0x2a2724,.7),hub=material(0xb9b7ad,.35,.4);
+  addMesh(new THREE.BoxGeometry(4,.42,1.7),ydark,new THREE.Vector3(.2,.55,0),truck);
+  const bed=addMesh(new THREE.BoxGeometry(2.6,1,1.85),yellow,new THREE.Vector3(-.35,1.2,0),truck);bed.rotation.z=.13;
+  addMesh(new THREE.CylinderGeometry(.85,1.05,.5,16),material(0xedcb84,1),new THREE.Vector3(-.5,1.75,0),truck);
+  addMesh(new THREE.BoxGeometry(1.15,1.15,1.7),yellow,new THREE.Vector3(1.65,1.1,0),truck);
+  addMesh(new THREE.BoxGeometry(.7,.6,1.5),material(0x9cc3e0,.3,.2),new THREE.Vector3(1.78,1.42,0),truck);
+  for(const x of [-1.0,1.6])for(const z of [-.92,.92]){const w=addMesh(new THREE.CylinderGeometry(.52,.52,.32,16),tire,new THREE.Vector3(x,.4,z),truck);w.rotation.x=Math.PI/2;addMesh(new THREE.CylinderGeometry(.19,.19,.34,10),hub,new THREE.Vector3(x,.4,z),truck).rotation.x=Math.PI/2;}
+  // a little rake leaning in the sand - the tool that combs the grooves
+  const rake=new THREE.Group();rake.position.set(12.8,0,8.6);rake.rotation.set(0,.55,-.34);world.add(rake);const rakeMeta=material(0x6f6a63,.4,.3);
+  addMesh(new THREE.CylinderGeometry(.09,.09,5.4,8),material(0xc79a5b,.6),new THREE.Vector3(0,2.35,0),rake);
+  addMesh(new THREE.BoxGeometry(1.7,.16,.16),rakeMeta,new THREE.Vector3(0,.12,0),rake);
+  for(let i=0;i<7;i++)addMesh(new THREE.BoxGeometry(.07,.42,.07),rakeMeta,new THREE.Vector3(-.72+i*.24,-.14,0),rake);
+  // plastic shovel standing in the sand
+  const shovel=new THREE.Group();shovel.position.set(17,0,6.6);shovel.rotation.z=-.2;world.add(shovel);
+  addMesh(new THREE.CylinderGeometry(.11,.11,6,8),material(0xc79a5b,.6),new THREE.Vector3(0,2.2,0),shovel);addMesh(new THREE.CylinderGeometry(.3,.3,.16,14),toyPlastic(0xdd4a33),new THREE.Vector3(0,5.2,0),shovel);const blade=addMesh(new THREE.BoxGeometry(1.5,.18,1.7),toyPlastic(0xdd4a33),new THREE.Vector3(0,-.75,0),shovel);blade.rotation.x=-.25;
+  // popsicle-stick fence along the back
+  const stick=material(0xc9995b,.78), white=material(0xf4e6c9,.55), coneOrange=toyPlastic(0xef6f34);
   for(let i=0;i<10;i++){const post=addMesh(new THREE.BoxGeometry(.22,2.4,.18),stick,new THREE.Vector3(-10.8+i*2.35,.1,-14.1));post.rotation.z=(i%2?1:-1)*.025;}
   for(const y of [-.25,.65])addMesh(new THREE.BoxGeometry(23,.2,.16),stick,new THREE.Vector3(-.2,y,-14.05));
-  for(const x of [-11,-7.5,8.5,12]){const cone=new THREE.Group();cone.position.set(x,0,-10.7);world.add(cone);addMesh(new THREE.ConeGeometry(.38,1.1,14),coneOrange,new THREE.Vector3(0,.55,0),cone);addMesh(new THREE.BoxGeometry(.9,.08,.9),coneOrange,new THREE.Vector3(0,.04,0),cone);addMesh(new THREE.TorusGeometry(.27,.045,6,14),white,new THREE.Vector3(0,.48,0),cone).rotation.x=Math.PI/2;}
+  // tiny toy cones
+  for(const x of [-11,-7.5,8.5,12]){const cone=new THREE.Group();cone.position.set(x,0,-10.7);world.add(cone);addMesh(new THREE.ConeGeometry(.38,1.1,16),coneOrange,new THREE.Vector3(0,.55,0),cone);addMesh(new THREE.BoxGeometry(.9,.08,.9),coneOrange,new THREE.Vector3(0,.04,0),cone);addMesh(new THREE.TorusGeometry(.27,.045,6,16),white,new THREE.Vector3(0,.48,0),cone).rotation.x=Math.PI/2;}
+  // rocks as mountains
   const stone=material(0x8f8978,1);for(let i=0;i<12;i++){const rock=addMesh(new THREE.DodecahedronGeometry(.22+(i%3)*.12,0),stone,new THREE.Vector3(-15+(i*5.7)%30,.03,-9+(i*3.8)%18));rock.scale.y=.55;rock.rotation.set(i*.2,i*.7,0);}
 }
 addWorldProps();
@@ -129,7 +170,7 @@ function resize(){const rect=canvas.getBoundingClientRect();renderer.setSize(rec
 function pointerToSand(event){const rect=canvas.getBoundingClientRect();pointer.set(((event.clientX-rect.left)/rect.width)*2-1,-((event.clientY-rect.top)/rect.height)*2+1);raycaster.setFromCamera(pointer,camera);return raycaster.ray.intersectPlane(sandPlane,new THREE.Vector3());}
 function inside(point){return point&&Math.abs(point.x)<17.6&&Math.abs(point.z)<11.6;}
 
-function createTools(){for(const [id,symbol,label,hint] of TOOL_DEFS){const button=document.createElement("button");button.type="button";button.className=`tool${id===activeTool?" active":""}`;button.dataset.tool=id;button.title=hint;button.innerHTML=`<span class="tool-symbol">${symbol}</span><span>${label}</span>`;button.onclick=()=>selectTool(id,hint);ui.tools.append(button);}}
+function createTools(){for(const [id,symbol,label,hint] of TOOL_DEFS){const button=document.createElement("button");button.type="button";button.className=`tool${id===activeTool?" active":""}`;button.dataset.tool=id;button.title=hint;button.innerHTML=`<span class="tool-symbol">${TOOL_ICONS[id]||symbol}</span><span>${label}</span>`;button.onclick=()=>selectTool(id,hint);ui.tools.append(button);}}
 function selectTool(tool,hint){if(racing)return;clearPreview();if(tool==="undo")return undo();activeTool=tool;ui.hint.textContent=hint;document.querySelectorAll(".tool").forEach(button=>button.classList.toggle("active",button.dataset.tool===tool));}
 function savedTransform(object){return object?{position:object.position.toArray(),rotation:object.rotation.y}:null;}
 function stateSnapshot(){return{path:path.map(p=>p.toArray()),start:savedTransform(startMarker),finish:savedTransform(finishMarker),obstacles:obstacles.map(o=>({type:o.userData.type,...savedTransform(o)}))};}
@@ -147,9 +188,16 @@ function rebuildTrack(){if(trackMesh)disposeObject(trackMesh);if(path.length<2){
   buildLayer.add(trackMesh);
 }
 function nearestTrackPlacement(position,acrossTrack=false){if(!raceCurve||path.length<2)return{position:position.clone(),rotation:0,snapped:false,progress:0};let bestDistance=Infinity,bestT=0;const samples=Math.max(120,path.length*6);for(let i=0;i<=samples;i++){const t=i/samples,distance=raceCurve.getPointAt(t).distanceToSquared(position);if(distance<bestDistance){bestDistance=distance;bestT=t;}}const snappedPosition=raceCurve.getPointAt(bestT);snappedPosition.y=0;const tangent=raceCurve.getTangentAt(bestT).normalize();const alongTrack=-Math.atan2(tangent.z,tangent.x);return{position:snappedPosition,rotation:alongTrack+(acrossTrack?Math.PI/2:0),snapped:true,progress:bestT};}
-function makeMarker(type,position,savedRotation=null){const placement=savedRotation===null?nearestTrackPlacement(position,true):{position,rotation:savedRotation,snapped:true};const group=new THREE.Group();group.position.copy(placement.position);group.rotation.y=placement.rotation;buildLayer.add(group);const dark=material(0x2b2925,.65),white=material(0xf7f0dc,.55);for(const x of [-.9,.9])addMesh(new THREE.BoxGeometry(.12,1.4,.12),dark,new THREE.Vector3(x,.7,0),group);for(let i=0;i<5;i++)addMesh(new THREE.BoxGeometry(.36,.32,.08),i%2?dark:white,new THREE.Vector3(-.72+i*.36,1.18,0),group);group.userData.type=type;group.userData.snapped=placement.snapped;return group;}
-function mound(parent,x,z,scale=1){const geometry=new THREE.SphereGeometry(.7*scale,16,9,0,Math.PI*2,0,Math.PI/2);const positions=geometry.attributes.position;for(let i=0;i<positions.count;i++){const noise=1+Math.sin(i*12.43+x*4.1)*.045;positions.setX(i,positions.getX(i)*noise);positions.setZ(i,positions.getZ(i)*(1+Math.cos(i*7.17)*.04));}geometry.computeVertexNormals();const item=addMesh(geometry,material(iColor(x,z),1),new THREE.Vector3(x,0,z),parent);item.scale.set(1.2,.9,1);return item;}
-function iColor(x,z){return new THREE.Color(dirtColor).offsetHSL(0,0,((Math.abs(x*7+z*11)%5)-2)*.012);}
+function checkerTexture(){const c=document.createElement("canvas");c.width=128;c.height=48;const x=c.getContext("2d");const cols=8,rows=3,w=c.width/cols,h=c.height/rows;for(let r=0;r<rows;r++)for(let col=0;col<cols;col++){x.fillStyle=(r+col)%2?"#f6ecd2":"#2b2925";x.fillRect(col*w,r*h,w,h);}const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=renderer.capabilities.getMaxAnisotropy();return t;}
+const checkerTex=checkerTexture();
+// Proper toy gates: two rounded posts with cap balls and a banner across the
+// top - a red "go" banner for the start, a checkered banner for the finish.
+function makeMarker(type,position,savedRotation=null){const placement=savedRotation===null?nearestTrackPlacement(position,true):{position,rotation:savedRotation,snapped:true};const group=new THREE.Group();group.position.copy(placement.position);group.rotation.y=placement.rotation;buildLayer.add(group);
+  const postMat=material(0x8a5a30,.66),red=material(0xd8452f,.32),cream=material(0xf6ecd2,.4),dark=material(0x2b2925,.5),green=material(0x62c47a,.28);
+  for(const x of [-1.05,1.05]){addMesh(new THREE.CylinderGeometry(.1,.12,1.5,12),postMat,new THREE.Vector3(x,.75,0),group);addMesh(new THREE.SphereGeometry(.17,14,10),type==="finish"?dark:red,new THREE.Vector3(x,1.56,0),group);}
+  if(type==="finish"){const banner=new THREE.Mesh(new THREE.BoxGeometry(2.55,.58,.1),new THREE.MeshStandardMaterial({map:checkerTex,roughness:.72}));banner.position.set(0,1.4,0);banner.castShadow=true;banner.receiveShadow=true;group.add(banner);}
+  else{addMesh(new THREE.BoxGeometry(2.55,.58,.1),red,new THREE.Vector3(0,1.4,0),group);addMesh(new THREE.BoxGeometry(2.55,.16,.12),cream,new THREE.Vector3(0,1.4,0),group);addMesh(new THREE.SphereGeometry(.12,12,8),green,new THREE.Vector3(0,1.68,.07),group);}
+  group.userData.type=type;group.userData.snapped=placement.snapped;return group;}
 // Sweep a 2D side profile (x=along track, y=up) across the track width into a
 // soft-edged dirt feature. Local +X is the riding direction, so takeoff faces
 // sit on the -X (approach) side and landings on +X.
@@ -157,6 +205,8 @@ function sweepFeature(shape,width,mat,bevel=.09){const geo=new THREE.ExtrudeGeom
 function kickerShape(len,h){const s=new THREE.Shape();s.moveTo(-len,0);s.quadraticCurveTo(-len*.42,h*.2,-len*.06,h*.92);s.quadraticCurveTo(len*.04,h*1.02,len*.2,h*.94);s.quadraticCurveTo(len*.6,h*.5,len*.82,0);s.lineTo(-len,0);return s;}
 function tabletopShape(len,h,top){const s=new THREE.Shape();s.moveTo(-len,0);s.quadraticCurveTo(-len*.58,h*.62,-len*top,h);s.lineTo(len*top,h);s.quadraticCurveTo(len*.58,h*.62,len,0);s.lineTo(-len,0);return s;}
 function hillShape(len,h){const s=new THREE.Shape();s.moveTo(-len,0);s.quadraticCurveTo(-len*.5,h,0,h);s.quadraticCurveTo(len*.5,h,len,0);s.lineTo(-len,0);return s;}
+// A washboard rhythm section: a row of rounded humps on a thin dirt base.
+function bumpsShape(count,spacing,r,h){const s=new THREE.Shape();const total=(count-1)*spacing,x0=-total/2-r,x1=total/2+r,b=.12;s.moveTo(x0,b);for(let i=0;i<count;i++){const cx=-total/2+i*spacing;s.lineTo(cx-r,b);s.quadraticCurveTo(cx,b+h,cx+r,b);}s.lineTo(x1,b);s.lineTo(x1,0);s.lineTo(x0,0);s.closePath();return s;}
 function addKicker(group,cx,len,h,width,lip=true){const face=sweepFeature(kickerShape(len,h),width,dirtPacked);face.position.x=cx;group.add(face);if(lip){const cap=sweepFeature(kickerShape(len*.9,h),width*.82,dirtWorn);cap.position.set(cx+len*.02,h*.06,0);cap.scale.set(1,.16,1);group.add(cap);}} // worn lip catches light
 // A banked toy berm: a curved wall that rises toward the outside of the turn.
 function bankedBerm(mat){const rIn=1.0,rOut=2.2,h=1.2,a0=-1.3,a1=1.3,seg=22;const pos=[],idx=[];for(let i=0;i<=seg;i++){const a=a0+(a1-a0)*i/seg,c=Math.cos(a),s=Math.sin(a);pos.push(c*rIn,0,s*rIn, c*rOut,h,s*rOut, c*rOut,0,s*rOut);}for(let i=0;i<seg;i++){const b=i*3,n=b+3;idx.push(b,b+1,n, b+1,n+1,n);idx.push(b+1,b+2,n+1, b+2,n+2,n+1);}const capA=[0,1,2],capB=[seg*3,seg*3+1,seg*3+2];idx.push(capA[0],capA[1],capA[2],capB[2],capB[1],capB[0]);const geo=new THREE.BufferGeometry();geo.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));geo.setIndex(idx);geo.computeVertexNormals();const m=mat.clone();m.side=THREE.DoubleSide;const mesh=new THREE.Mesh(geo,m);mesh.castShadow=true;mesh.receiveShadow=true;return mesh;}
@@ -164,8 +214,8 @@ function makeObstacle(type,position,savedRotation=null){const placement=savedRot
   if(type==="sand"){addMesh(new THREE.CylinderGeometry(1.55,1.75,.12,24),material(0xdcb469,1),new THREE.Vector3(0,.02,0),group);const soft=addMesh(new THREE.CylinderGeometry(1.35,1.5,.14,24),material(0xf0cd86,1),new THREE.Vector3(0,.05,0),group);soft.scale.y=1;for(let i=0;i<9;i++){const a=i/9*Math.PI*2;addMesh(new THREE.TorusGeometry(.5+ (i%3)*.28,.05,5,16,Math.PI),material(0xe9c47d,1),new THREE.Vector3(Math.cos(a)*.2,.11,Math.sin(a)*.2),group).rotation.x=-Math.PI/2;}}
   else if(type==="berm")group.add(bankedBerm(dirtPacked));
   else if(type==="tabletop"){group.add(sweepFeature(tabletopShape(1.55,.6,.42),1.7,dirtPacked));const top=sweepFeature(tabletopShape(1.4,.6,.46),1.5,dirtWorn);top.scale.set(1,.06,1);top.position.y=.6*.95;group.add(top);}
-  else if(type==="whoops"){for(let i=0;i<6;i++)mound(group,(i-2.5)*.5,0,.4);}
-  else if(type==="rollers"){for(let i=0;i<4;i++)mound(group,(i-1.5)*.78,0,.6);}
+  else if(type==="whoops")group.add(sweepFeature(bumpsShape(6,.5,.26,.34),1.6,dirtPacked,.05));
+  else if(type==="rollers")group.add(sweepFeature(bumpsShape(4,.8,.42,.52),1.7,dirtPacked,.05));
   else if(type==="hill")group.add(sweepFeature(hillShape(1.7,1.3),2.5,dirtPacked));
   else if(type==="double"){addKicker(group,-.85,1.0,.66,1.7);addKicker(group,1.0,.95,.58,1.7);}
   else if(type==="triple"){addKicker(group,-1.65,.95,.64,1.7);addKicker(group,0,.98,.7,1.7);addKicker(group,1.65,.95,.58,1.7);}
