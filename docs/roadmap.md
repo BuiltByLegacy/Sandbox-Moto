@@ -18,7 +18,7 @@ This roadmap follows the Sandbox Moto north star: unlock imagination, not power.
 - Better sculpting tools: pile, smooth, flatten, carve, shape, water, repair, knock down, rebuild.
 - Editable track sections and obstacle movement. (Obstacle move and pick-up done: Hand / Move and Pick Up tools; track section editing still open.)
 - Tiny hand/tool animations.
-- Better toy-bike visuals and 1:12 collectible proportions.
+- Better toy-bike visuals and 1:12 collectible proportions. (Web build done: chunky knobby wheels, glossy plastic bodywork, oversized fenders, engine + exhaust, numbered plates, and an action-figure rider - per `docs/TOY_BIKE_BIBLE.md`.)
 - Better obstacle risk/reward and toy-like jump behavior.
 - Graphics fidelity pass toward the Sandcastle bar (`docs/REFERENCES.md`): sculpted jump geometry (takeoff face, lip, landing) instead of blobby mounds, banked berms, warmer tactile sand with raked grooves (issue #33), softer warm light. In progress in the web build; Godot 2D silhouettes raised in parallel.
 - Played-in dirt: ruts, tire marks, worn jump faces, roost piles.

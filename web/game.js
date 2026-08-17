@@ -237,25 +237,47 @@ function animatePlacement(object,type){const kind=type==="start"||type==="finish
 function updateBuildAnimations(delta){for(let i=buildAnimations.length-1;i>=0;i--){const animation=buildAnimations[i];animation.elapsed+=delta;const p=Math.min(animation.elapsed/animation.duration,1),back=1+2.6*Math.pow(p-1,3)+1.6*Math.pow(p-1,2);animation.object.scale.setScalar(Math.max(.06,back));if(animation.kind==="dozer")animation.helper.position.set(animation.start.x-3.5+p*5,animation.start.y+.15,animation.start.z+1.2);else if(animation.kind==="shovel")animation.helper.position.set(animation.start.x+1.5-p*.9,animation.start.y+1.1+Math.abs(Math.sin(p*Math.PI*3))*.9,animation.start.z+.6);else animation.helper.position.set(animation.start.x+(1-p)*2.2,animation.start.y+1.1+Math.sin(p*Math.PI)*1.8,animation.start.z-1.3*(1-p));if(p>=1){animation.object.scale.setScalar(1);animation.object.userData.building=false;disposeObject(animation.helper);buildAnimations.splice(i,1);}}}
 
 function randomSkill(){return .15+Math.random()*.85;}
+function numberTexture(num,bg){const c=document.createElement("canvas");c.width=c.height=64;const x=c.getContext("2d");x.fillStyle=bg;x.fillRect(0,0,64,64);x.fillStyle="#2b2925";x.font=`bold ${String(num).length>2?32:46}px Arial, sans-serif`;x.textAlign="center";x.textBaseline="middle";x.fillText(String(num),32,35);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=renderer.capabilities.getMaxAnisotropy();return t;}
+// A premium 1:12 toy motocross bike with an action-figure rider (Toy Bike Bible):
+// chunky glossy bodywork, oversized fenders, a real number plate, simplified
+// engine and pipe. Local +X is forward. Return shape/data is unchanged.
 function createBike(name,color,index){
   const group=new THREE.Group();group.scale.setScalar(.66);riderLayer.add(group);
-  const plastic=material(color,.22,.04),dark=material(0x222323,.75),chrome=material(0xb9b7ad,.2,.72),white=material(0xf5ecd7,.35),boot=material(0x30363a,.48);
-  for(const x of [-.9,.9]){const wheel=addMesh(new THREE.TorusGeometry(.44,.15,10,20),dark,new THREE.Vector3(x,.46,0),group);wheel.rotation.y=Math.PI/2;const hub=addMesh(new THREE.CylinderGeometry(.11,.11,.22,12),chrome,new THREE.Vector3(x,.46,0),group);hub.rotation.x=Math.PI/2;}
-  const frame=addMesh(new THREE.CylinderGeometry(.055,.055,1.25,8),chrome,new THREE.Vector3(-.12,.74,0),group);frame.rotation.z=Math.PI/2.8;
-  addMesh(new THREE.BoxGeometry(1.18,.34,.5),plastic,new THREE.Vector3(-.04,.78,0),group);
-  const rear=addMesh(new THREE.BoxGeometry(.72,.15,.58),plastic,new THREE.Vector3(-.74,1.01,0),group);rear.rotation.z=.13;
-  const front=addMesh(new THREE.BoxGeometry(.75,.13,.55),plastic,new THREE.Vector3(.82,1.02,0),group);front.rotation.z=-.16;
-  addMesh(new THREE.BoxGeometry(.48,.44,.46),dark,new THREE.Vector3(-.02,.55,0),group);
-  addMesh(new THREE.BoxGeometry(.7,.11,.42),material(0x343331,.7),new THREE.Vector3(-.25,1.08,0),group);
-  for(const z of [-.16,.16]){const fork=addMesh(new THREE.CylinderGeometry(.035,.035,.82,8),chrome,new THREE.Vector3(.73,.78,z),group);fork.rotation.z=-.22;}
-  const bar=addMesh(new THREE.CylinderGeometry(.035,.035,.72,8),chrome,new THREE.Vector3(.58,1.28,0),group);bar.rotation.x=Math.PI/2;
-  const plate=addMesh(new THREE.BoxGeometry(.12,.48,.55),white,new THREE.Vector3(.75,1.2,0),group);plate.rotation.z=-.12;
-  const torso=addMesh(new THREE.CapsuleGeometry(.23,.58,5,10),plastic,new THREE.Vector3(-.12,1.5,0),group);torso.rotation.z=-.22;
-  for(const z of [-.22,.22]){const leg=addMesh(new THREE.CapsuleGeometry(.105,.42,4,8),boot,new THREE.Vector3(-.12,1.05,z),group);leg.rotation.z=.38;}
-  const helmet=addMesh(new THREE.SphereGeometry(.38,16,12),plastic,new THREE.Vector3(.12,2.05,0),group);helmet.scale.set(1.08,.92,1);
-  const visor=addMesh(new THREE.BoxGeometry(.38,.07,.5),dark,new THREE.Vector3(.39,2.08,0),group);visor.rotation.z=-.12;
+  const number=2+Math.floor(Math.random()*97);
+  const col=new THREE.Color(color),body=new THREE.MeshStandardMaterial({color,roughness:.3,metalness:.05}),bodyD=material(col.clone().multiplyScalar(.66).getHex(),.34,.05),rubber=material(0x1e1e1f,.85),chrome=material(0xcbc9c3,.26,.78),engine=material(0x3b3e41,.5,.35),seat=material(0x272623,.6),skin=material(0xe6b184,.5),glove=material(0x2b2b2b,.5),pants=material(0x2f3338,.6),bootMat=material(0x1f2124,.5);
+  // chunky knobby wheels with chrome hubs and spokes (disc in XY plane, axle Z)
+  for(const x of [-.86,.9]){addMesh(new THREE.TorusGeometry(.4,.17,12,22),rubber,new THREE.Vector3(x,.44,0),group);const hub=addMesh(new THREE.CylinderGeometry(.14,.14,.18,16),chrome,new THREE.Vector3(x,.44,0),group);hub.rotation.x=Math.PI/2;for(let s=0;s<4;s++){const sp=addMesh(new THREE.BoxGeometry(.52,.03,.03),chrome,new THREE.Vector3(x,.44,0),group);sp.rotation.z=s*Math.PI/4;}}
+  // simplified engine with cooling fins
+  addMesh(new THREE.BoxGeometry(.5,.4,.4),engine,new THREE.Vector3(.04,.5,0),group);
+  for(let i=0;i<3;i++)addMesh(new THREE.BoxGeometry(.46,.03,.46),chrome,new THREE.Vector3(.04,.4+i*.1,0),group);
+  // swingarm + fork legs + handlebar
+  const swing=addMesh(new THREE.BoxGeometry(.95,.07,.09),chrome,new THREE.Vector3(-.45,.48,.13),group);swing.rotation.z=.04;
+  for(const z of [-.13,.13]){const fork=addMesh(new THREE.CylinderGeometry(.035,.035,.92,8),chrome,new THREE.Vector3(.82,.78,z),group);fork.rotation.z=-.33;}
+  const bar=addMesh(new THREE.CylinderGeometry(.03,.03,.66,8),chrome,new THREE.Vector3(.62,1.3,0),group);bar.rotation.x=Math.PI/2;
+  // chunky plastic bodywork: shroud/tank, seat, accent
+  const shroud=addMesh(new THREE.BoxGeometry(.86,.42,.56),body,new THREE.Vector3(.1,.82,0),group);shroud.rotation.z=-.05;
+  addMesh(new THREE.BoxGeometry(.5,.12,.42),bodyD,new THREE.Vector3(.24,1.02,0),group);
+  const seatM=addMesh(new THREE.BoxGeometry(.72,.14,.44),seat,new THREE.Vector3(-.52,.88,0),group);seatM.rotation.z=.06;
+  // oversized fenders
+  const ff=addMesh(new THREE.BoxGeometry(.72,.07,.52),body,new THREE.Vector3(.94,1.04,0),group);ff.rotation.z=-.2;
+  const rf=addMesh(new THREE.BoxGeometry(.78,.07,.5),body,new THREE.Vector3(-.82,1.06,0),group);rf.rotation.z=.17;
+  // plastic number plates (front + sides) with the racing number
+  const plateMat=new THREE.MeshStandardMaterial({map:numberTexture(number,"#f4ead0"),roughness:.45});
+  const fp=addMesh(new THREE.BoxGeometry(.09,.42,.5),plateMat,new THREE.Vector3(.75,1.14,0),group);fp.rotation.z=-.16;
+  for(const z of [-.3,.3])addMesh(new THREE.BoxGeometry(.46,.32,.05),plateMat,new THREE.Vector3(-.16,.86,z),group);
+  // chrome exhaust curving to the rear
+  const pipe=addMesh(new THREE.CylinderGeometry(.055,.05,1.15,10),chrome,new THREE.Vector3(-.3,.66,.19),group);pipe.rotation.set(0,.18,Math.PI/2.25);
+  // action-figure rider leaning into the bars
+  addMesh(new THREE.BoxGeometry(.32,.24,.42),pants,new THREE.Vector3(-.08,1.14,0),group);
+  const torso=addMesh(new THREE.CapsuleGeometry(.2,.5,6,12),body,new THREE.Vector3(.08,1.52,0),group);torso.rotation.z=-.52;
+  for(const z of [-.2,.2]){const arm=addMesh(new THREE.CapsuleGeometry(.075,.5,4,8),body,new THREE.Vector3(.38,1.38,z),group);arm.rotation.z=-1.02;addMesh(new THREE.BoxGeometry(.13,.13,.13),glove,new THREE.Vector3(.62,1.28,z),group);}
+  for(const z of [-.25,.25]){const thigh=addMesh(new THREE.CapsuleGeometry(.1,.32,4,8),pants,new THREE.Vector3(-.12,1.0,z),group);thigh.rotation.z=.75;addMesh(new THREE.BoxGeometry(.3,.16,.17),bootMat,new THREE.Vector3(.06,.62,z),group);}
+  addMesh(new THREE.CylinderGeometry(.09,.09,.16,8),skin,new THREE.Vector3(.16,1.78,0),group);
+  const helmet=addMesh(new THREE.SphereGeometry(.26,16,12),body,new THREE.Vector3(.2,1.93,0),group);helmet.scale.set(1.14,1,1.02);
+  addMesh(new THREE.BoxGeometry(.5,.1,.46),material(0xf4ead0,.4),new THREE.Vector3(.2,2.0,0),group);
+  addMesh(new THREE.BoxGeometry(.14,.11,.4),material(0x26282b,.4,.3),new THREE.Vector3(.43,1.9,0),group);
   const skills={jump:randomSkill(),whoops:randomSkill(),sand:randomSkill(),rollers:randomSkill(),hill:randomSkill(),start:randomSkill(),aggression:randomSkill(),consistency:randomSkill()};
-  return{group,name,number:2+Math.floor(Math.random()*987),personality:PERSONALITIES[Math.floor(Math.random()*PERSONALITIES.length)],skills,progress:skills.start*.015,speed:.075+skills.start*.045,lane:(index-2)*.28,targetLane:(index-2)*.28,checked:new Set(),crash:0,air:0,finished:false,messages:[],bounce:Math.random()*6};
+  return{group,name,number,personality:PERSONALITIES[Math.floor(Math.random()*PERSONALITIES.length)],skills,progress:skills.start*.015,speed:.075+skills.start*.045,lane:(index-2)*.28,targetLane:(index-2)*.28,checked:new Set(),crash:0,air:0,finished:false,messages:[],bounce:Math.random()*6};
 }
 
 function nearestPathProgress(position){if(!raceCurve)return-1;let best=Infinity,bestT=-1;const samples=Math.max(80,path.length*5);for(let i=0;i<=samples;i++){const t=i/samples,d=raceCurve.getPointAt(t).distanceToSquared(position);if(d<best){best=d;bestT=t;}}return best<6?bestT:-1;}
