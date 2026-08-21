@@ -106,9 +106,9 @@ function makeRakeBump(){const c=document.createElement("canvas");c.width=c.heigh
 const sandRake=makeRakeBump();
 const sandMaterial=new THREE.MeshStandardMaterial({map:sandTexture,color:0xffdf9f,roughness:.98,bumpMap:sandRake,bumpScale:.12});
 // Packed, played-in dirt for sculpted track features - matte, grainy, warm.
-const dirtTexture=makeTexture("#9c6233","rgba(72,40,18,",1500);dirtTexture.repeat.set(3,3);
-const dirtPacked=new THREE.MeshStandardMaterial({map:dirtTexture,color:0xba7238,roughness:.98,bumpMap:dirtTexture,bumpScale:.025});
-const dirtWorn=new THREE.MeshStandardMaterial({color:0xd39a5b,roughness:.94}); // sun-lit worn line on top
+const dirtTexture=makeTexture("#b07a44","rgba(96,60,28,",1500);dirtTexture.repeat.set(3,3);
+const dirtPacked=new THREE.MeshStandardMaterial({map:dirtTexture,color:0xcb9150,roughness:.98,bumpMap:dirtTexture,bumpScale:.022}); // packed dirt, warmed to match the groomed track
+const dirtWorn=new THREE.MeshStandardMaterial({color:0xe3b972,roughness:.94}); // sun-lit worn line on top
 const sand = addMesh(new THREE.BoxGeometry(36,1.5,24), sandMaterial, new THREE.Vector3(0,-.78,0));
 const woodTexture=makeTexture("#a76234","rgba(72,34,16,",0,true);
 const wood = new THREE.MeshStandardMaterial({map:woodTexture,color:0xd18a4a,roughness:.8,bumpMap:woodTexture,bumpScale:.06});
@@ -201,9 +201,15 @@ function undo(){if(!history.length)return;const state=history.pop();clearBuildOb
 function ribbonGeometry(curve,width,y,samples){const positions=[],uvs=[],indices=[];for(let i=0;i<=samples;i++){const t=i/samples,p=curve.getPointAt(t),tangent=curve.getTangentAt(t).normalize(),side=new THREE.Vector3(-tangent.z,0,tangent.x).normalize();for(const sign of [-1,1]){positions.push(p.x+side.x*width*sign,y,p.z+side.z*width*sign);uvs.push((sign+1)/2,t*8);}}for(let i=0;i<samples;i++){const a=i*2,b=a+1,c=a+2,d=a+3;indices.push(a,b,c,b,d,c);}const geometry=new THREE.BufferGeometry();geometry.setAttribute("position",new THREE.Float32BufferAttribute(positions,3));geometry.setAttribute("uv",new THREE.Float32BufferAttribute(uvs,2));geometry.setIndex(indices);geometry.computeVertexNormals();return geometry;}
 function offsetCurve(curve,offset,samples){const points=[];for(let i=0;i<=samples;i++){const t=i/samples,p=curve.getPointAt(t),tangent=curve.getTangentAt(t).normalize(),side=new THREE.Vector3(-tangent.z,0,tangent.x);points.push(p.clone().addScaledVector(side,offset).setY(.105));}return new THREE.CatmullRomCurve3(points,false,"catmullrom",.35);}
 function rebuildTrack(){if(trackMesh)disposeObject(trackMesh);if(path.length<2){trackMesh=null;return;}raceCurve=new THREE.CatmullRomCurve3(path,false,"catmullrom",.35);const samples=Math.max(48,path.length*3);trackMesh=new THREE.Group();
-  const outer=new THREE.Mesh(ribbonGeometry(raceCurve,.92,.035,samples),material(0x643719,1));outer.receiveShadow=true;trackMesh.add(outer);
-  const trackTexture=sandTexture.clone();trackTexture.repeat.set(3,12);trackTexture.needsUpdate=true;const surfaceMat=new THREE.MeshStandardMaterial({color:0x96552c,roughness:.98,map:trackTexture,bumpMap:trackTexture,bumpScale:.018});const surface=new THREE.Mesh(ribbonGeometry(raceCurve,.72,.06,samples),surfaceMat);surface.receiveShadow=true;trackMesh.add(surface);
-  const rutMat=material(0x4d2b1a,1);for(const offset of [-.34,.34]){const rut=new THREE.Mesh(new THREE.TubeGeometry(offsetCurve(raceCurve,offset,samples),samples,.025,7,false),rutMat);trackMesh.add(rut);}
+  // soft sandy shoulder that blends into the floor (no hard dark border)
+  const shoulder=new THREE.Mesh(ribbonGeometry(raceCurve,1.02,.028,samples),material(0xe0b775,1));shoulder.receiveShadow=true;trackMesh.add(shoulder);
+  // groomed packed-sand surface: warm and light, with fleck map + raked grooming
+  const surfTex=sandTexture.clone();surfTex.repeat.set(3,14);surfTex.needsUpdate=true;
+  const surfBump=sandRake.clone();surfBump.repeat.set(1,11);surfBump.needsUpdate=true;
+  const surfaceMat=new THREE.MeshStandardMaterial({color:0xcf9f5c,roughness:.99,map:surfTex,bumpMap:surfBump,bumpScale:.05});
+  const surface=new THREE.Mesh(ribbonGeometry(raceCurve,.8,.048,samples),surfaceMat);surface.receiveShadow=true;trackMesh.add(surface);
+  // two soft wheel ruts - subtle grooming lines, not dark gouges
+  const rutMat=material(0xb07d42,1);for(const offset of [-.32,.32]){const rut=new THREE.Mesh(new THREE.TubeGeometry(offsetCurve(raceCurve,offset,samples),samples,.018,7,false),rutMat);trackMesh.add(rut);}
   buildLayer.add(trackMesh);
 }
 function nearestTrackPlacement(position,acrossTrack=false){if(!raceCurve||path.length<2)return{position:position.clone(),rotation:0,snapped:false,progress:0};let bestDistance=Infinity,bestT=0;const samples=Math.max(120,path.length*6);for(let i=0;i<=samples;i++){const t=i/samples,distance=raceCurve.getPointAt(t).distanceToSquared(position);if(distance<bestDistance){bestDistance=distance;bestT=t;}}const snappedPosition=raceCurve.getPointAt(bestT);snappedPosition.y=0;const tangent=raceCurve.getTangentAt(bestT).normalize();const alongTrack=-Math.atan2(tangent.z,tangent.x);return{position:snappedPosition,rotation:alongTrack+(acrossTrack?Math.PI/2:0),snapped:true,progress:bestT};}
