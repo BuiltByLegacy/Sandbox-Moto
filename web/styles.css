@@ -245,3 +245,37 @@ button { font: inherit; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
+
+/* Photo mode: hide the chrome, frame the sandbox like a Polaroid memory. */
+.game-shell.photo { background: #1b140c; grid-template-rows: 0 minmax(0, 1fr) 0; }
+.game-shell.photo .topbar,
+.game-shell.photo .toolbox,
+.game-shell.photo .footer-note,
+.game-shell.photo .feedback,
+.game-shell.photo .race-banner,
+.game-shell.photo .sandbox-label { display: none !important; }
+.game-shell.photo .play-area { grid-row: 2; padding: 22px; grid-template-columns: 1fr; grid-template-rows: 1fr; }
+.game-shell.photo .sandbox-wrap {
+  border: 16px solid #fbf3e2;
+  border-bottom-width: 72px;
+  border-radius: 3px;
+  box-shadow: 0 26px 64px rgba(0, 0, 0, .55);
+  overflow: visible; /* let the caption show in the bottom border */
+}
+.photo-caption {
+  position: absolute;
+  left: 0; right: 0; bottom: -55px;
+  text-align: center;
+  color: #3a2a17;
+  font: 700 22px/1 "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+  transform: rotate(-.6deg);
+  pointer-events: none;
+}
+.photo-bar { position: absolute; top: 14px; right: 14px; display: flex; gap: 8px; z-index: 5; }
+.photo-bar button {
+  border: 0; border-radius: 7px; padding: 9px 14px;
+  font-weight: 900; font-size: 12px; cursor: pointer;
+  color: #fff; background: var(--accent);
+  box-shadow: 0 5px 16px rgba(0, 0, 0, .35);
+}
+.photo-bar button#closePhoto { background: #6b5636; }

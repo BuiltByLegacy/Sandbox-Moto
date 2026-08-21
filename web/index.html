@@ -18,6 +18,7 @@
         <span class="status-light"></span>
         <span id="modeLabel">Build your track</span>
       </div>
+      <button class="icon-button" id="photoButton" type="button" title="Photo mode" aria-label="Photo mode">▣</button>
       <button class="icon-button" id="resetButton" type="button" title="Reset sandbox" aria-label="Reset sandbox">↻</button>
     </header>
 
@@ -38,6 +39,11 @@
         <canvas id="sandbox" aria-label="Interactive motocross sandbox"></canvas>
         <div class="loading-state" id="loadingState">Opening the toy box...</div>
         <div class="sandbox-label">Dad's Garage Supercross</div>
+        <div class="photo-caption" id="photoCaption" hidden></div>
+        <div class="photo-bar" id="photoBar" hidden>
+          <button id="savePhoto" type="button">Save photo</button>
+          <button id="closePhoto" type="button">Done</button>
+        </div>
         <div class="race-banner" id="raceBanner" aria-live="polite"></div>
         <div class="feedback" id="feedback" aria-live="polite">
           <div class="feedback-title">Today's idea</div>

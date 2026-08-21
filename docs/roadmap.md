@@ -61,7 +61,7 @@ Environmental polish should make the sandbox feel alive: butterflies, leaves, wi
 - Community sandbox gallery.
 - Shareable Polaroid/scrapbook pages.
 - Custom toy collections.
-- Photo mode with tilt shift, golden hour, Polaroid frames, scrapbook borders, hide UI, and screenshot shortcut.
+- Photo mode with tilt shift, golden hour, Polaroid frames, scrapbook borders, hide UI, and screenshot shortcut. (Started in the web build: hide UI, golden-hour wash + vignette, Polaroid frame with the track name and a kid caption, and a Save-photo PNG export - P key or the camera button. Tilt-shift and scrapbook borders still open.)
 
 ## Steam Early Access Preparation
 

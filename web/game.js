@@ -6,7 +6,9 @@ const ui = {
   tools: $("#tools"), race: $("#raceButton"), reset: $("#resetButton"), mode: $("#modeLabel"),
   feedback: $("#feedback"), feedbackText: $("#feedbackText"), again: $("#oneMoreButton"),
   banner: $("#raceBanner"), wrap: $(".sandbox-wrap"), status: $(".status"),
-  hint: $("#toolHint"), loading: $("#loadingState")
+  hint: $("#toolHint"), loading: $("#loadingState"),
+  shell: $(".game-shell"), label: $(".sandbox-label"), photoBtn: $("#photoButton"),
+  photoBar: $("#photoBar"), savePhoto: $("#savePhoto"), closePhoto: $("#closePhoto"), photoCaption: $("#photoCaption")
 };
 
 const TOOL_DEFS = [
@@ -330,6 +332,32 @@ canvas.addEventListener("pointerup",event=>{drawing=false;panning=false;lastPoin
 function resetSandbox(){if(racing)return;clearPreview();snapshot();clearBuildObjects();path=[];riders.forEach(r=>disposeObject(r.group));riders=[];while(wearGroup.children.length)disposeObject(wearGroup.children[0]);clearCombs();ui.again.hidden=true;showFeedback("Fresh sand. What should we build this time?");}
 function animate(time){const elapsed=Math.min((time-lastTime)/1000,.1);lastTime=time;updateBuildAnimations(elapsed);updateRace(Math.min(elapsed,.035),time);updateCameraFrame(elapsed,time);renderer.render(scene,camera);requestAnimationFrame(animate);}
 
-ui.race.onclick=startRace;ui.again.onclick=startRace;ui.reset.onclick=resetSandbox;window.addEventListener("resize",resize);window.addEventListener("keydown",event=>{if(event.code==="Space"){event.preventDefault();startRace();}if(event.key.toLowerCase()==="z"&&!racing)undo();});
-window.__sandboxMotoDebug={camera:()=>({position:camera.position.toArray(),target:[camView.tx,camView.tz],idleMs:performance.now()-cameraIdleSince}),placementState:()=>({preview:previewObject&&{type:previewObject.userData.type,snapped:previewObject.userData.snapped,opacity:previewObject.children[0]?.material?.opacity},building:buildAnimations.length,start:startMarker&&{position:startMarker.position.toArray(),rotation:startMarker.rotation.y,snapped:startMarker.userData.snapped},finish:finishMarker&&{position:finishMarker.position.toArray(),rotation:finishMarker.rotation.y,snapped:finishMarker.userData.snapped},obstacles:obstacles.map(object=>({type:object.userData.type,position:object.position.toArray(),rotation:object.rotation.y,snapped:object.userData.snapped}))})};
+// Photo mode: frame the sandbox like a handmade memory and save a Polaroid PNG.
+const PHOTO_SUBS=["one more race!","the sandbox came alive","best track ever","built it myself","just like when we were kids"];
+let photoMode=false;
+function setPhotoMode(on){photoMode=on;ui.shell.classList.toggle("photo",on);ui.photoBar.hidden=!on;ui.photoCaption.hidden=!on;ui.photoBtn.setAttribute("aria-pressed",on?"true":"false");if(on){ui.photoCaption.textContent=ui.label.textContent;cameraDistance=Math.min(cameraDistance,27);pokeCamera();}resize();}
+function savePhoto(download=true){
+  if(!canvas.width||!canvas.height)return""; // layout not ready
+  renderer.render(scene,camera); // capture a fresh frame from the drawing buffer
+  const W=1080,H=1320,pad=54,capH=214,pw=W-pad*2,ph=H-pad*2-capH,px=pad,py=pad;
+  const pc=document.createElement("canvas");pc.width=W;pc.height=H;const g=pc.getContext("2d");
+  g.fillStyle="#fbf3e2";g.fillRect(0,0,W,H);
+  g.save();g.beginPath();g.rect(px,py,pw,ph);g.clip();
+  const src=canvas,sAsp=src.width/src.height,dAsp=pw/ph;let sw,sh,sx,sy;
+  if(sAsp>dAsp){sh=src.height;sw=sh*dAsp;sx=(src.width-sw)/2;sy=0;}else{sw=src.width;sh=sw/dAsp;sx=0;sy=(src.height-sh)/2;}
+  g.drawImage(src,sx,sy,sw,sh,px,py,pw,ph);
+  const warm=g.createLinearGradient(0,py,0,py+ph);warm.addColorStop(0,"rgba(255,206,120,.10)");warm.addColorStop(1,"rgba(255,150,60,.17)");g.fillStyle=warm;g.fillRect(px,py,pw,ph);
+  const vig=g.createRadialGradient(W/2,py+ph*.5,ph*.32,W/2,py+ph*.5,ph*.78);vig.addColorStop(0,"rgba(0,0,0,0)");vig.addColorStop(1,"rgba(38,20,5,.24)");g.fillStyle=vig;g.fillRect(px,py,pw,ph);
+  g.restore();
+  g.strokeStyle="rgba(120,80,40,.22)";g.lineWidth=2;g.strokeRect(px+1,py+1,pw-2,ph-2);
+  const label=(ui.label.textContent||"My Sandbox Track").trim();
+  g.textAlign="center";g.fillStyle="#3a2a17";g.font="700 60px 'Segoe Print','Bradley Hand','Comic Sans MS',cursive";g.fillText(label,W/2,py+ph+94);
+  g.fillStyle="#8a6a3f";g.font="600 32px 'Segoe Print','Comic Sans MS',cursive";g.fillText(PHOTO_SUBS[Math.floor(Math.random()*PHOTO_SUBS.length)],W/2,py+ph+150);
+  const url=pc.toDataURL("image/png");
+  if(download){const a=document.createElement("a");a.href=url;a.download=(label.replace(/[^a-z0-9]+/gi,"_").replace(/^_+|_+$/g,"")||"sandbox_moto")+".png";document.body.appendChild(a);a.click();a.remove();}
+  return url;
+}
+ui.photoBtn.onclick=()=>setPhotoMode(!photoMode);ui.closePhoto.onclick=()=>setPhotoMode(false);ui.savePhoto.onclick=()=>savePhoto(true);
+ui.race.onclick=startRace;ui.again.onclick=startRace;ui.reset.onclick=resetSandbox;window.addEventListener("resize",resize);window.addEventListener("keydown",event=>{if(event.code==="Space"){event.preventDefault();startRace();}if(event.key.toLowerCase()==="z"&&!racing)undo();if(event.key.toLowerCase()==="p"){event.preventDefault();setPhotoMode(!photoMode);}if(event.key==="Escape"&&photoMode)setPhotoMode(false);});
+window.__sandboxMotoDebug={camera:()=>({position:camera.position.toArray(),target:[camView.tx,camView.tz],idleMs:performance.now()-cameraIdleSince}),photo:()=>({on:photoMode,url:savePhoto(false)}),placementState:()=>({preview:previewObject&&{type:previewObject.userData.type,snapped:previewObject.userData.snapped,opacity:previewObject.children[0]?.material?.opacity},building:buildAnimations.length,start:startMarker&&{position:startMarker.position.toArray(),rotation:startMarker.rotation.y,snapped:startMarker.userData.snapped},finish:finishMarker&&{position:finishMarker.position.toArray(),rotation:finishMarker.rotation.y,snapped:finishMarker.userData.snapped},obstacles:obstacles.map(object=>({type:object.userData.type,position:object.position.toArray(),rotation:object.rotation.y,snapped:object.userData.snapped}))})};
 createTools();applyCamera();resize();pokeCamera();requestAnimationFrame(animate);requestAnimationFrame(()=>ui.loading.classList.add("ready"));
