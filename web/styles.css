@@ -271,7 +271,8 @@ button { font: inherit; }
   transform: rotate(-.6deg);
   pointer-events: none;
 }
-.photo-bar { position: absolute; top: 14px; right: 14px; display: flex; gap: 8px; z-index: 5; }
+.photo-bar { position: absolute; top: 14px; right: 14px; gap: 8px; z-index: 5; }
+.photo-bar:not([hidden]) { display: flex; }
 .photo-bar button {
   border: 0; border-radius: 7px; padding: 9px 14px;
   font-weight: 900; font-size: 12px; cursor: pointer;
