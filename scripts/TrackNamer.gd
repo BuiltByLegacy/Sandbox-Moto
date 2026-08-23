@@ -36,7 +36,6 @@ const FEATURE_WORDS := {
 	"tabletop": "Tabletop",
 	"whoops": "Whoop",
 	"sand": "Sand",
-	"berm": "Berm",
 	"rollers": "Roller",
 	"hill": "Hill"
 }
@@ -44,7 +43,6 @@ const FEATURE_WORDS := {
 # Whole names that only make sense when their feature is really there.
 const FEATURE_SPECIALS := {
 	"triple": ["The Impossible Triple", "Triple Trouble"],
-	"berm": ["Bucket Turn Speedway", "Berm City"],
 	"sand": ["Big Sand SX", "The Sand Trap"],
 	"whoops": ["Wobble Whoops Raceway"],
 	"hill": ["Dragon Hill", "King Of The Hill"],

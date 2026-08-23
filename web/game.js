@@ -17,7 +17,7 @@ const TOOL_DEFS = [
   ["double", "^^", "Double", "Place a risky double"], ["triple", "^^^", "Triple", "Place the brave line"],
   ["tabletop", "=", "Tabletop", "Place a friendly big jump"], ["whoops", "www", "Whoops", "Stamp a bumpy rhythm"],
   ["rollers", "ooo", "Rollers", "Stamp a smooth rhythm"], ["sand", "...", "Deep sand", "Place a soft slow section"],
-  ["berm", "C", "Berm", "Place a banked toy turn"], ["hill", "A", "Hill", "Build a tiny mountain"],
+  ["hill", "A", "Hill", "Build a tiny mountain"],
   ["dozer", "X", "Dozer", "Remove nearby pieces"], ["undo", "<-", "Undo", "Take back the last change"]
 ];
 // Little toy illustrations for the toy-box buttons - each shows the actual
@@ -36,7 +36,6 @@ const TOOL_ICONS = {
   whoops: ICON(`<path d="M2.5 19 Q4.5 12.5 6.5 19 Q8.5 12.5 10.5 19 Q12.5 12.5 14.5 19 Q16.5 12.5 18.5 19 Q20.5 13.5 21.5 19 Z" fill="#b5713a"/><path d="M2.5 19 Q4.5 12.5 6.5 19 Q8.5 12.5 10.5 19 Q12.5 12.5 14.5 19 Q16.5 12.5 18.5 19 Q20.5 13.5 21.5 19" fill="none" stroke="#e2b174" stroke-width="1" opacity=".7"/>`),
   rollers: ICON(`<path d="M2.5 19 Q6 9.5 9.5 19 Q13 9.5 16.5 19 Q19 12 21.5 19 Z" fill="#b5713a"/><path d="M2.5 19 Q6 9.5 9.5 19 Q13 9.5 16.5 19" fill="none" stroke="#e2b174" stroke-width="1.1" opacity=".7"/>`),
   sand: ICON(`<path d="M3 18.5 Q12 8.5 21 18.5 Z" fill="#edcb84"/><path d="M3 18.5 Q12 8.5 21 18.5" fill="none" stroke="#d8b268" stroke-width="1"/><path d="M7.5 16.4 Q12 13 16.5 16.4 M9.5 18.2 Q12 16.6 14.5 18.2" fill="none" stroke="#fbe6ad" stroke-width="1" stroke-linecap="round" opacity=".8"/>`),
-  berm: ICON(`<path d="M3.5 20 Q3.5 6 18 6 L18 11 Q10 11 9.2 20 Z" fill="#b5713a"/><path d="M3.5 20 Q3.5 6 18 6 L18 8.4 Q7.5 8.4 6.4 20 Z" fill="#c98c4e"/>`),
   hill: ICON(`<path d="M2.5 19 Q12 3.5 21.5 19 Z" fill="#b5713a"/><path d="M2.5 19 Q12 3.5 21.5 19" fill="none" stroke="#8a4f27" stroke-width="0"/><path d="M8 12 Q12 6.5 16 12" fill="none" stroke="#e2b174" stroke-width="1.3" stroke-linecap="round" opacity=".7"/>`),
   dozer: ICON(`<circle cx="9" cy="16" r="2.4" fill="#3a3330"/><circle cx="14.5" cy="16" r="2.4" fill="#3a3330"/><circle cx="9" cy="16" r=".9" fill="#7a716a"/><circle cx="14.5" cy="16" r=".9" fill="#7a716a"/><rect x="7" y="9.5" width="9" height="5" rx="1.4" fill="#e4aa2f"/><rect x="12" y="6.5" width="4" height="4" rx="1" fill="#efc25a"/><path d="M4.6 8.5 L6.4 8.5 L6.4 16 L4.6 16 Q3.8 12 4.6 8.5 Z" fill="#c88f1e"/>`),
   undo: ICON(`<path d="M7.5 12 A5.5 5.5 0 1 1 9 16.2" fill="none" stroke="#835a34" stroke-width="2.6" stroke-linecap="round"/><path d="M7.5 7.5 L7.2 12.4 L12 11.6 Z" fill="#835a34"/>`)
@@ -53,7 +52,7 @@ const COLORS = [
   ["Orange",0xe87938,0x2f6fb0,"Backyard Factory"]
 ];
 const PERSONALITIES = ["is fearless","is careful","always sends it","is feeling smooth","is a bad starter","is a great jumper","loves the whoops"];
-const DIFFICULTY = {single:.22,double:.5,triple:.74,tabletop:.4,whoops:.54,rollers:.34,sand:.56,berm:.28,hill:.46};
+const DIFFICULTY = {single:.22,double:.5,triple:.74,tabletop:.4,whoops:.54,rollers:.34,sand:.56,hill:.46};
 const JUMPS = new Set(["single","double","triple","tabletop"]);
 
 const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
@@ -233,11 +232,8 @@ function hillShape(len,h){const s=new THREE.Shape();s.moveTo(-len,0);s.quadratic
 // A washboard rhythm section: a row of rounded humps on a thin dirt base.
 function bumpsShape(count,spacing,r,h){const s=new THREE.Shape();const total=(count-1)*spacing,x0=-total/2-r,x1=total/2+r,b=.12;s.moveTo(x0,b);for(let i=0;i<count;i++){const cx=-total/2+i*spacing;s.lineTo(cx-r,b);s.quadraticCurveTo(cx,b+h,cx+r,b);}s.lineTo(x1,b);s.lineTo(x1,0);s.lineTo(x0,0);s.closePath();return s;}
 function addKicker(group,cx,len,h,width,lip=true){const face=sweepFeature(kickerShape(len,h),width,dirtPacked);face.position.x=cx;group.add(face);if(lip){const cap=sweepFeature(kickerShape(len*.9,h),width*.82,dirtWorn);cap.position.set(cx+len*.02,h*.06,0);cap.scale.set(1,.16,1);group.add(cap);}} // worn lip catches light
-// A banked toy berm: a curved wall that rises toward the outside of the turn.
-function bankedBerm(mat){const rIn=1.0,rOut=2.2,h=1.2,a0=-1.3,a1=1.3,seg=22;const pos=[],idx=[];for(let i=0;i<=seg;i++){const a=a0+(a1-a0)*i/seg,c=Math.cos(a),s=Math.sin(a);pos.push(c*rIn,0,s*rIn, c*rOut,h,s*rOut, c*rOut,0,s*rOut);}for(let i=0;i<seg;i++){const b=i*3,n=b+3;idx.push(b,b+1,n, b+1,n+1,n);idx.push(b+1,b+2,n+1, b+2,n+2,n+1);}const capA=[0,1,2],capB=[seg*3,seg*3+1,seg*3+2];idx.push(capA[0],capA[1],capA[2],capB[2],capB[1],capB[0]);const geo=new THREE.BufferGeometry();geo.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));geo.setIndex(idx);geo.computeVertexNormals();const m=mat.clone();m.side=THREE.DoubleSide;const mesh=new THREE.Mesh(geo,m);mesh.castShadow=true;mesh.receiveShadow=true;return mesh;}
 function makeObstacle(type,position,savedRotation=null){const placement=savedRotation===null?nearestTrackPlacement(position,false):{position,rotation:savedRotation,snapped:true};const group=new THREE.Group();group.position.copy(placement.position);group.rotation.y=placement.rotation;group.userData.type=type;group.userData.snapped=placement.snapped;buildLayer.add(group);
   if(type==="sand"){addMesh(new THREE.CylinderGeometry(1.55,1.75,.12,24),material(0xdcb469,1),new THREE.Vector3(0,.02,0),group);const soft=addMesh(new THREE.CylinderGeometry(1.35,1.5,.14,24),material(0xf0cd86,1),new THREE.Vector3(0,.05,0),group);soft.scale.y=1;for(let i=0;i<9;i++){const a=i/9*Math.PI*2;addMesh(new THREE.TorusGeometry(.5+ (i%3)*.28,.05,5,16,Math.PI),material(0xe9c47d,1),new THREE.Vector3(Math.cos(a)*.2,.11,Math.sin(a)*.2),group).rotation.x=-Math.PI/2;}}
-  else if(type==="berm")group.add(bankedBerm(dirtPacked));
   else if(type==="tabletop"){group.add(sweepFeature(tabletopShape(1.55,.6,.42),1.7,dirtPacked));const top=sweepFeature(tabletopShape(1.4,.6,.46),1.5,dirtWorn);top.scale.set(1,.06,1);top.position.y=.6*.95;group.add(top);}
   else if(type==="whoops")group.add(sweepFeature(bumpsShape(6,.5,.26,.34),1.6,dirtPacked,.05));
   else if(type==="rollers")group.add(sweepFeature(bumpsShape(4,.8,.42,.52),1.7,dirtPacked,.05));
@@ -322,7 +318,7 @@ function nearestPathProgress(position){if(!raceCurve)return-1;let best=Infinity,
 function startRace(){if(racing)return;if(path.length<3)return showFeedback("The toy bikes need a smooth track first.");clearPreview();racing=true;finishOrder=[];ui.again.hidden=true;ui.race.disabled=true;ui.status.classList.add("racing");ui.wrap.classList.add("racing");ui.mode.textContent="The sandbox is alive";document.querySelectorAll(".tool").forEach(b=>b.disabled=true);ui.banner.textContent="Ready...";setTimeout(()=>{if(racing)ui.banner.textContent="Go!";},650);setTimeout(()=>ui.banner.textContent="",1350);riders.forEach(r=>disposeObject(r.group));riders=[...COLORS].sort(()=>Math.random()-.5).slice(0,5).map((def,i)=>createBike(def,i));raceCurve=new THREE.CatmullRomCurve3(path,false,"catmullrom",.35);showFeedback(`${riders[0].name} bike ${riders[0].personality} this race.`);}
 function checkObstacles(rider){obstacles.forEach((obstacle,index)=>{if(rider.checked.has(index))return;const at=nearestPathProgress(obstacle.position);if(at<0||rider.progress<at)return;rider.checked.add(index);const type=obstacle.userData.type,key=JUMPS.has(type)?"jump":type,skill=rider.skills[key]??.5,difficulty=DIFFICULTY[type],confidence=skill*.7+rider.skills.consistency*.3;
     if(JUMPS.has(type)){if(confidence>difficulty){rider.air=.34+difficulty*.42;rider.speed=Math.min(.15,rider.speed+.008);rider.messages.push(`${rider.name} bike cleared the ${type}!`);}else if(rider.skills.aggression+Math.random()*.2>difficulty+.25){rider.crash=.5;rider.speed*=.62;rider.messages.push(`${rider.name} bike almost cleared the ${type}!`);}else{rider.speed*=.82;rider.messages.push(`${rider.name} bike rolled the ${type}.`);}}
-    else if(confidence>difficulty){rider.speed=Math.min(.14,rider.speed+.004);rider.messages.push(type==="berm"?`${rider.name} bike loved that berm.`:`${rider.name} bike flew through the ${type}.`);}else{rider.speed*=.74;rider.messages.push(type==="sand"?`${rider.name} bike got stuck in the sand again.`:`${rider.name} bike bobbled through the ${type}.`);}rider.speed=Math.max(.045,rider.speed);});}
+    else if(confidence>difficulty){rider.speed=Math.min(.14,rider.speed+.004);rider.messages.push(`${rider.name} bike flew through the ${type}.`);}else{rider.speed*=.74;rider.messages.push(type==="sand"?`${rider.name} bike got stuck in the sand again.`:`${rider.name} bike bobbled through the ${type}.`);}rider.speed=Math.max(.045,rider.speed);});}
 function addWear(point,heavy){if(wearGroup.children.length>460)disposeObject(wearGroup.children[0]);const r=(heavy?.16:.08)+Math.random()*(heavy?.14:.12);const mark=addMesh(new THREE.CircleGeometry(r,8),new THREE.MeshBasicMaterial({color:heavy?0x4a2a15:0x66391f,transparent:true,opacity:heavy?.2:.13,depthWrite:false}),new THREE.Vector3(point.x+(Math.random()-.5)*.45,.015,point.z+(Math.random()-.5)*.35),wearGroup);mark.rotation.x=-Math.PI/2;mark.scale.x=2;}
 // Roost: light sand fanned out onto the ground beside the track, thrown by the
 // rear wheel - reads against the dark dirt where the ridden-line marks can't.

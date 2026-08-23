@@ -175,10 +175,7 @@ func _handle_obstacle(obstacle) -> void:
 	else:
 		if obstacle_confidence > difficulty:
 			speed += 8.0
-			if obstacle.obstacle_type == "berm":
-				feedback.append(_color_name() + " bike loved that berm.")
-			else:
-				feedback.append(_color_name() + " bike loved the " + obstacle.obstacle_type + ".")
+			feedback.append(_color_name() + " bike loved the " + obstacle.obstacle_type + ".")
 		else:
 			speed *= 0.62
 			if obstacle.obstacle_type == "sand":

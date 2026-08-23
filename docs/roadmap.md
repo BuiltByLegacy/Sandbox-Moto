@@ -20,7 +20,8 @@ This roadmap follows the Sandbox Moto north star: unlock imagination, not power.
 - Tiny hand/tool animations.
 - Better toy-bike visuals and 1:12 collectible proportions. (Web build done: chunky knobby wheels, glossy plastic bodywork, oversized fenders, engine + exhaust, numbered plates, and an action-figure rider - per `docs/TOY_BIKE_BIBLE.md`.)
 - Better obstacle risk/reward and toy-like jump behavior.
-- Graphics fidelity pass toward the Sandcastle bar (`docs/REFERENCES.md`): sculpted jump geometry (takeoff face, lip, landing) instead of blobby mounds, banked berms, warmer tactile sand with raked grooves (issue #33), softer warm light. In progress in the web build; Godot 2D silhouettes raised in parallel.
+- Graphics fidelity pass toward the Sandcastle bar (`docs/REFERENCES.md`): sculpted jump geometry (takeoff face, lip, landing) instead of blobby mounds, warmer tactile sand with raked grooves (issue #33), softer warm light, and a soft groomed track surface. In progress in the web build; Godot 2D silhouettes raised in parallel.
+- Berms are made by sculpting, not stamping. The stamped berm tool was removed from both prototypes; a berm is dirt piled on the outside of a turn with the shovel/rake/dozer (see `docs/building_tools.md`). This is part of the manual terrain-sculpting workflow tracked in the sculpting epic (issue #29 / #31).
 - Played-in dirt: ruts, tire marks, worn jump faces, roost piles.
 - Done: local sandbox autosave and reload (`docs/SAVE_SYSTEM.md`) - the track, start/finish, obstacles, and wear survive closing the game. Foundation for the Memory Book and track sharing.
 

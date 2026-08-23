@@ -18,7 +18,6 @@ const TOOLS := [
 	{"label": "Tabletop", "tool": "tabletop"},
 	{"label": "Whoops", "tool": "whoops"},
 	{"label": "Sand", "tool": "sand"},
-	{"label": "Berm", "tool": "berm"},
 	{"label": "Rollers", "tool": "rollers"},
 	{"label": "Hill", "tool": "hill"},
 	{"label": "Dozer", "tool": "dozer"},

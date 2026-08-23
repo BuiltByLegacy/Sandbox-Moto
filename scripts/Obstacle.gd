@@ -8,7 +8,6 @@ const COLORS := {
 	"tabletop": Color(0.73, 0.45, 0.24),
 	"whoops": Color(0.80, 0.56, 0.30),
 	"sand": Color(0.94, 0.80, 0.52, 0.92),
-	"berm": Color(0.74, 0.45, 0.22),
 	"rollers": Color(0.78, 0.52, 0.28),
 	"hill": Color(0.70, 0.46, 0.24),
 	"dozer": Color(0.92, 0.70, 0.18)
@@ -22,7 +21,6 @@ const LABELS := {
 	"tabletop": "Table",
 	"whoops": "Whoops",
 	"sand": "Sand",
-	"berm": "Berm",
 	"rollers": "Rollers",
 	"hill": "Hill",
 	"dozer": "Dozer"
@@ -49,8 +47,6 @@ func get_difficulty() -> float:
 			return 0.58
 		"sand":
 			return 0.62
-		"berm":
-			return 0.35
 		"rollers":
 			return 0.42
 		"hill":
@@ -64,8 +60,6 @@ func get_skill_key() -> String:
 			return "whoop_skill"
 		"sand":
 			return "sand_skill"
-		"berm":
-			return "roller_skill"
 		"rollers":
 			return "roller_skill"
 		"hill":
@@ -116,11 +110,6 @@ func _draw() -> void:
 			for i in range(6):
 				var a := float(i) / 6.0 * TAU
 				draw_arc(Vector2(cos(a) * 6, sin(a) * 6), 10 + (i % 3) * 8, PI * 0.1, PI * 0.9, 14, Color(0.98, 0.86, 0.58, 0.5), 2.0)
-		"berm":
-			# banked wall: darker outer bank, lit inner ride line
-			draw_arc(Vector2.ZERO, 32, PI * 0.15, PI * 1.15, 28, color.darkened(0.22), 16.0)
-			draw_arc(Vector2.ZERO, 24, PI * 0.15, PI * 1.15, 26, color, 8.0)
-			draw_arc(Vector2.ZERO, 19, PI * 0.15, PI * 1.15, 24, color.lightened(0.32), 3.0)
 		"dozer":
 			draw_rect(Rect2(Vector2(-24, -16), Vector2(48, 32)), color, true)
 			draw_rect(Rect2(Vector2(18, -24), Vector2(16, 48)), Color(0.55, 0.42, 0.24), true)
