@@ -17,7 +17,7 @@ const TOOL_DEFS = [
   ["double", "^^", "Double", "Place a risky double"], ["triple", "^^^", "Triple", "Place the brave line"],
   ["tabletop", "=", "Tabletop", "Place a friendly big jump"], ["whoops", "www", "Whoops", "Stamp a bumpy rhythm"],
   ["rollers", "ooo", "Rollers", "Stamp a smooth rhythm"], ["sand", "...", "Deep sand", "Place a soft slow section"],
-  ["hill", "A", "Hill", "Build a tiny mountain"],
+  ["hill", "A", "Hill", "Sculpt a big rounded hill in the sand"],
   ["pile", "^", "Pile", "Push sand up - drag to build mounds and berms"], ["smooth", "-", "Smooth", "Smooth the sand flatter"],
   ["carve", "v", "Carve", "Scoop sand away"],
   ["dozer", "X", "Dozer", "Remove nearby pieces"], ["undo", "<-", "Undo", "Take back the last change"]
@@ -57,7 +57,7 @@ const COLORS = [
   ["Orange",0xe87938,0x2f6fb0,"Backyard Factory"]
 ];
 const PERSONALITIES = ["is fearless","is careful","always sends it","is feeling smooth","is a bad starter","is a great jumper","loves the whoops"];
-const DIFFICULTY = {single:.22,double:.5,triple:.74,tabletop:.4,whoops:.54,rollers:.34,sand:.56,hill:.46};
+const DIFFICULTY = {single:.22,double:.5,triple:.74,tabletop:.4,whoops:.54,rollers:.34,sand:.56};
 const JUMPS = new Set(["single","double","triple","tabletop"]);
 
 const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
@@ -124,19 +124,24 @@ const hcol=heightGeo.attributes.color;
 // own material so height shading (peaks lit, hollows shaded) makes sculpted dirt read from above
 const heightMat=new THREE.MeshStandardMaterial({map:sandTexture,color:0xffdf9f,roughness:.98,bumpMap:sandRake,bumpScale:.12,vertexColors:true});
 const heightMesh=new THREE.Mesh(heightGeo,heightMat);heightMesh.receiveShadow=true;heightMesh.castShadow=true;world.add(heightMesh);
-const SCULPT=new Set(["pile","smooth","carve"]);
+const SCULPT=new Set(["pile","smooth","carve","hill"]);
+function brushRadius(tool){return tool==="smooth"?3.4:tool==="hill"?4.6:2.1;}
+// soft cursor ring so you can see the brush footprint on the sand
+const brushRing=new THREE.Mesh(new THREE.RingGeometry(.9,1.0,48),new THREE.MeshBasicMaterial({color:0x5a3b1c,transparent:true,opacity:.55,side:THREE.DoubleSide,depthWrite:false}));
+brushRing.rotation.x=-Math.PI/2;brushRing.visible=false;world.add(brushRing);
+function updateBrushRing(point){if(!SCULPT.has(activeTool)||racing||!inside(point)){brushRing.visible=false;return;}brushRing.visible=true;brushRing.position.set(point.x,.07,point.z);brushRing.scale.setScalar(brushRadius(activeTool));}
 let terrainDirty=false;
 // Bake directional relief shading into vertex colours from the terrain normals,
 // so piles and hollows read clearly even under the flat, warm scene lighting.
-function shadeTerrain(){const nrm=heightGeo.attributes.normal,lx=-.44,ly=.78,lz=.44;for(let i=0;i<hpos.count;i++){const nd=nrm.getX(i)*lx+nrm.getY(i)*ly+nrm.getZ(i)*lz;const m=THREE.MathUtils.clamp(.6+.52*nd+hpos.getY(i)*.05,.48,1.0);hcol.setXYZ(i,m,m,m*.98);}hcol.needsUpdate=true;}
+function shadeTerrain(){const nrm=heightGeo.attributes.normal,lx=-.44,ly=.76,lz=.48;for(let i=0;i<hpos.count;i++){const nd=nrm.getX(i)*lx+nrm.getY(i)*ly+nrm.getZ(i)*lz;const m=THREE.MathUtils.clamp(.46+.66*nd+hpos.getY(i)*.06,.34,1.0);hcol.setXYZ(i,m,m*.96,m*.88);}hcol.needsUpdate=true;}
 function refreshTerrain(){heightGeo.computeVertexNormals();shadeTerrain();}
 function readHeights(){const a=new Float32Array(hpos.count);for(let i=0;i<hpos.count;i++)a[i]=hpos.getY(i);return a;}
 function writeHeights(a){for(let i=0;i<hpos.count;i++)hpos.setY(i,a[i]);hpos.needsUpdate=true;refreshTerrain();}
 function flattenHeights(){for(let i=0;i<hpos.count;i++)hpos.setY(i,0);hpos.needsUpdate=true;refreshTerrain();}
-function applySculpt(px,pz,tool){const r=tool==="smooth"?3.3:2.1,r2=r*r,hits=[];for(let i=0;i<hpos.count;i++){const dx=hpos.getX(i)-px,dz=hpos.getZ(i)-pz,d2=dx*dx+dz*dz;if(d2<r2)hits.push([i,Math.sqrt(d2)]);}
+function applySculpt(px,pz,tool){const r=brushRadius(tool),r2=r*r,hits=[];for(let i=0;i<hpos.count;i++){const dx=hpos.getX(i)-px,dz=hpos.getZ(i)-pz,d2=dx*dx+dz*dz;if(d2<r2)hits.push([i,Math.sqrt(d2)]);}
   if(!hits.length)return;
   if(tool==="smooth"){let sum=0;for(const h of hits)sum+=hpos.getY(h[0]);const avg=sum/hits.length;for(const [i,d] of hits){const f=(1-d/r)*.45,y=hpos.getY(i);hpos.setY(i,y+(avg-y)*f);}}
-  else{const dir=tool==="carve"?-1:1;for(const [i,d] of hits){const f=(1-d/r)*(1-d/r),y=THREE.MathUtils.clamp(hpos.getY(i)+dir*f*.16,-.8,3.0);hpos.setY(i,y);}}
+  else{const dir=tool==="carve"?-1:1,str=tool==="hill"?.22:.18;for(const [i,d] of hits){const t=1-d/r,f=t*t*(3-2*t),y=THREE.MathUtils.clamp(hpos.getY(i)+dir*f*str,-.9,3.4);hpos.setY(i,y);}}
   hpos.needsUpdate=true;terrainDirty=true;} // normals + shading refreshed once per frame in animate()
 const woodTexture=makeTexture("#a76234","rgba(72,34,16,",0,true);
 const wood = new THREE.MeshStandardMaterial({map:woodTexture,color:0xd18a4a,roughness:.8,bumpMap:woodTexture,bumpScale:.06});
@@ -258,7 +263,6 @@ function makeMarker(type,position,savedRotation=null){const placement=savedRotat
 function sweepFeature(shape,width,mat,bevel=.09){const geo=new THREE.ExtrudeGeometry(shape,{depth:width,bevelEnabled:true,bevelThickness:bevel,bevelSize:bevel,bevelSegments:2,steps:1,curveSegments:14});geo.translate(0,0,-width/2);geo.computeVertexNormals();const mesh=new THREE.Mesh(geo,mat);mesh.castShadow=true;mesh.receiveShadow=true;return mesh;}
 function kickerShape(len,h){const s=new THREE.Shape();s.moveTo(-len,0);s.quadraticCurveTo(-len*.42,h*.2,-len*.06,h*.92);s.quadraticCurveTo(len*.04,h*1.02,len*.2,h*.94);s.quadraticCurveTo(len*.6,h*.5,len*.82,0);s.lineTo(-len,0);return s;}
 function tabletopShape(len,h,top){const s=new THREE.Shape();s.moveTo(-len,0);s.quadraticCurveTo(-len*.58,h*.62,-len*top,h);s.lineTo(len*top,h);s.quadraticCurveTo(len*.58,h*.62,len,0);s.lineTo(-len,0);return s;}
-function hillShape(len,h){const s=new THREE.Shape();s.moveTo(-len,0);s.quadraticCurveTo(-len*.5,h,0,h);s.quadraticCurveTo(len*.5,h,len,0);s.lineTo(-len,0);return s;}
 // A washboard rhythm section: a row of rounded humps on a thin dirt base.
 function bumpsShape(count,spacing,r,h){const s=new THREE.Shape();const total=(count-1)*spacing,x0=-total/2-r,x1=total/2+r,b=.12;s.moveTo(x0,b);for(let i=0;i<count;i++){const cx=-total/2+i*spacing;s.lineTo(cx-r,b);s.quadraticCurveTo(cx,b+h,cx+r,b);}s.lineTo(x1,b);s.lineTo(x1,0);s.lineTo(x0,0);s.closePath();return s;}
 function addKicker(group,cx,len,h,width,lip=true){const face=sweepFeature(kickerShape(len,h),width,dirtPacked);face.position.x=cx;group.add(face);if(lip){const cap=sweepFeature(kickerShape(len*.9,h),width*.82,dirtWorn);cap.position.set(cx+len*.02,h*.06,0);cap.scale.set(1,.16,1);group.add(cap);}} // worn lip catches light
@@ -267,7 +271,6 @@ function makeObstacle(type,position,savedRotation=null){const placement=savedRot
   else if(type==="tabletop"){group.add(sweepFeature(tabletopShape(1.55,.6,.42),1.7,dirtPacked));const top=sweepFeature(tabletopShape(1.4,.6,.46),1.5,dirtWorn);top.scale.set(1,.06,1);top.position.y=.6*.95;group.add(top);}
   else if(type==="whoops")group.add(sweepFeature(bumpsShape(6,.5,.26,.34),1.6,dirtPacked,.05));
   else if(type==="rollers")group.add(sweepFeature(bumpsShape(4,.8,.42,.52),1.7,dirtPacked,.05));
-  else if(type==="hill")group.add(sweepFeature(hillShape(1.7,1.3),2.5,dirtPacked));
   else if(type==="double"){addKicker(group,-.85,1.0,.66,1.7);addKicker(group,1.0,.95,.58,1.7);}
   else if(type==="triple"){addKicker(group,-1.65,.95,.64,1.7);addKicker(group,0,.98,.7,1.7);addKicker(group,1.65,.95,.58,1.7);}
   else addKicker(group,0,1.1,.68,1.8);
@@ -359,8 +362,8 @@ function endRace(){racing=false;ui.race.disabled=false;ui.status.classList.remov
 function showFeedback(message){ui.feedbackText.textContent=message;ui.feedback.classList.remove("pop");requestAnimationFrame(()=>ui.feedback.classList.add("pop"));}
 
 canvas.addEventListener("pointerdown",event=>{if(racing)return;pokeCamera();lastPointer={x:event.clientX,y:event.clientY};if(event.shiftKey||event.button===1||event.button===2){panning=true;canvas.setPointerCapture(event.pointerId);return;}const point=pointerToSand(event);if(!inside(point))return;canvas.setPointerCapture(event.pointerId);snapshot();clearPreview();if(SCULPT.has(activeTool)){sculpting=true;lastSculpt=point.clone();applySculpt(point.x,point.z,activeTool);return;}if(activeTool==="track"){path=[point];drawing=true;rebuildTrack();}else if(activeTool==="start"){if(startMarker)disposeObject(startMarker);startMarker=makeMarker("start",point);animatePlacement(startMarker,"start");}else if(activeTool==="finish"){if(finishMarker)disposeObject(finishMarker);finishMarker=makeMarker("finish",point);animatePlacement(finishMarker,"finish");}else if(activeTool==="dozer"){obstacles=obstacles.filter(o=>{if(o.position.distanceTo(point)<2){disposeObject(o);return false;}return true;});combRing(point);}else if(DIFFICULTY[activeTool]!==undefined){const obstacle=makeObstacle(activeTool,point);obstacles.push(obstacle);animatePlacement(obstacle,activeTool);combRing(point);}if(activeTool==="start"||activeTool==="finish")combRing(point);});
-canvas.addEventListener("pointermove",event=>{pokeCamera();if(panning&&lastPointer){cameraTarget.x-=(event.clientX-lastPointer.x)*.025;cameraTarget.z-=(event.clientY-lastPointer.y)*.025;lastPointer={x:event.clientX,y:event.clientY};return;}if(racing)return;const point=pointerToSand(event);if(drawing){if(inside(point)&&(!path.length||path.at(-1).distanceTo(point)>.28)){const prev=path.at(-1);path.push(point);rebuildTrack();if(prev){const dx=point.x-prev.x,dz=point.z-prev.z,a=Math.atan2(-dz,dx),pl=Math.hypot(dx,dz)||1,px=-dz/pl,pz=dx/pl;for(const s of [-1,1]){const off=.95+Math.random()*.55;addComb(point.x+px*off*s,point.z+pz*off*s,a);}if(Math.random()<.4)addComb(point.x+px*(1.8+Math.random())*(Math.random()<.5?1:-1),point.z+pz*(1.8+Math.random()),a,true);}}return;}if(sculpting){if(inside(point)&&(!lastSculpt||lastSculpt.distanceToSquared(point)>.05)){applySculpt(point.x,point.z,activeTool);lastSculpt=point.clone();}return;}updatePlacementPreview(point);});
-canvas.addEventListener("pointerup",event=>{drawing=false;panning=false;sculpting=false;lastSculpt=null;lastPointer=null;const point=pointerToSand(event);if(!racing)updatePlacementPreview(point);});canvas.addEventListener("pointercancel",()=>{drawing=false;panning=false;sculpting=false;lastSculpt=null;lastPointer=null;clearPreview();});canvas.addEventListener("pointerleave",()=>{if(!drawing&&!panning)clearPreview();});canvas.addEventListener("contextmenu",event=>event.preventDefault());canvas.addEventListener("wheel",event=>{event.preventDefault();pokeCamera();cameraDistance=THREE.MathUtils.clamp(cameraDistance+event.deltaY*.018,19,45);},{passive:false});
+canvas.addEventListener("pointermove",event=>{pokeCamera();if(panning&&lastPointer){cameraTarget.x-=(event.clientX-lastPointer.x)*.025;cameraTarget.z-=(event.clientY-lastPointer.y)*.025;lastPointer={x:event.clientX,y:event.clientY};return;}if(racing)return;const point=pointerToSand(event);updateBrushRing(point);if(drawing){if(inside(point)&&(!path.length||path.at(-1).distanceTo(point)>.28)){const prev=path.at(-1);path.push(point);rebuildTrack();if(prev){const dx=point.x-prev.x,dz=point.z-prev.z,a=Math.atan2(-dz,dx),pl=Math.hypot(dx,dz)||1,px=-dz/pl,pz=dx/pl;for(const s of [-1,1]){const off=.95+Math.random()*.55;addComb(point.x+px*off*s,point.z+pz*off*s,a);}if(Math.random()<.4)addComb(point.x+px*(1.8+Math.random())*(Math.random()<.5?1:-1),point.z+pz*(1.8+Math.random()),a,true);}}return;}if(sculpting){if(inside(point)&&(!lastSculpt||lastSculpt.distanceToSquared(point)>.05)){applySculpt(point.x,point.z,activeTool);lastSculpt=point.clone();}return;}updatePlacementPreview(point);});
+canvas.addEventListener("pointerup",event=>{drawing=false;panning=false;sculpting=false;lastSculpt=null;lastPointer=null;const point=pointerToSand(event);if(!racing)updatePlacementPreview(point);});canvas.addEventListener("pointercancel",()=>{drawing=false;panning=false;sculpting=false;lastSculpt=null;lastPointer=null;clearPreview();});canvas.addEventListener("pointerleave",()=>{brushRing.visible=false;if(!drawing&&!panning)clearPreview();});canvas.addEventListener("contextmenu",event=>event.preventDefault());canvas.addEventListener("wheel",event=>{event.preventDefault();pokeCamera();cameraDistance=THREE.MathUtils.clamp(cameraDistance+event.deltaY*.018,19,45);},{passive:false});
 function resetSandbox(){if(racing)return;clearPreview();snapshot();clearBuildObjects();path=[];riders.forEach(r=>disposeObject(r.group));riders=[];while(wearGroup.children.length)disposeObject(wearGroup.children[0]);clearCombs();flattenHeights();ui.again.hidden=true;showFeedback("Fresh sand. What should we build this time?");}
 function animate(time){const elapsed=Math.min((time-lastTime)/1000,.1);lastTime=time;if(terrainDirty){refreshTerrain();terrainDirty=false;}updateBuildAnimations(elapsed);updateRace(Math.min(elapsed,.035),time);updateCameraFrame(elapsed,time);renderer.render(scene,camera);requestAnimationFrame(animate);}
 
