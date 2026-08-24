@@ -133,7 +133,23 @@ function updateBrushRing(point){if(!SCULPT.has(activeTool)||racing||!inside(poin
 let terrainDirty=false;
 // Bake directional relief shading into vertex colours from the terrain normals,
 // so piles and hollows read clearly even under the flat, warm scene lighting.
-function shadeTerrain(){const nrm=heightGeo.attributes.normal,lx=-.44,ly=.76,lz=.48;for(let i=0;i<hpos.count;i++){const nd=nrm.getX(i)*lx+nrm.getY(i)*ly+nrm.getZ(i)*lz;const m=THREE.MathUtils.clamp(.46+.66*nd+hpos.getY(i)*.06,.34,1.0);hcol.setXYZ(i,m,m*.96,m*.88);}hcol.needsUpdate=true;}
+const HF_COLS=HF_SX+1;
+function shadeTerrain(){const nrm=heightGeo.attributes.normal,lx=-.44,ly=.76,lz=.48,N=hpos.count;
+  for(let i=0;i<N;i++){
+    const y=hpos.getY(i),ix=i%HF_COLS;
+    // local curvature -> cheap ambient occlusion: hollows and mound-bases (concave)
+    // darken, peaks (convex) brighten, so relief reads even under flat light
+    let sum=0,n=0;
+    if(ix>0){sum+=hpos.getY(i-1);n++;}
+    if(ix<HF_COLS-1){sum+=hpos.getY(i+1);n++;}
+    if(i>=HF_COLS){sum+=hpos.getY(i-HF_COLS);n++;}
+    if(i+HF_COLS<N){sum+=hpos.getY(i+HF_COLS);n++;}
+    const curv=n?y-sum/n:0;
+    const nd=nrm.getX(i)*lx+nrm.getY(i)*ly+nrm.getZ(i)*lz;
+    const m=THREE.MathUtils.clamp(.6+.34*nd+curv*9+y*.05,.3,1.0);
+    hcol.setXYZ(i,m,m*.96,m*.87);
+  }
+  hcol.needsUpdate=true;}
 function refreshTerrain(){heightGeo.computeVertexNormals();shadeTerrain();}
 function readHeights(){const a=new Float32Array(hpos.count);for(let i=0;i<hpos.count;i++)a[i]=hpos.getY(i);return a;}
 function writeHeights(a){for(let i=0;i<hpos.count;i++)hpos.setY(i,a[i]);hpos.needsUpdate=true;refreshTerrain();}
