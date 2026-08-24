@@ -1,0 +1,38 @@
+name: Web prototype tests
+
+on:
+  pull_request:
+    paths:
+      - "web/**"
+      - "tests/web-3d.spec.js"
+      - "package.json"
+      - "package-lock.json"
+      - "playwright.config.js"
+      - ".github/workflows/ci.yml"
+  workflow_dispatch:
+
+jobs:
+  web-3d:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run web prototype tests
+        run: npm run test:web
+      - name: Upload artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-output
+          path: |
+            test-results/
+            tests/prototype-3d-mobile.png
+          if-no-files-found: ignore
+          retention-days: 7
