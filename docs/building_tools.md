@@ -16,7 +16,6 @@ Play Time should feel like dragging fingers through sand: loose, tactile, revers
 - Bucket.
 - Water.
 - Toy bulldozer.
-- Berm tool.
 - Jump mold.
 - Whoop stamp.
 - Roller stamp.
@@ -24,6 +23,11 @@ Play Time should feel like dragging fingers through sand: loose, tactile, revers
 - Finish marker.
 - Flags and cones.
 - Dozer or flatten tool.
+
+There is no berm stamp. A berm is sculpted dirt, so it is made by hand with the
+shovel, rake, and dozer (pile it up on the outside of a turn, then smooth the
+face) - see "Shape berms" under Tool Feel. The stamped berm tool was removed
+from both prototypes; berms remain a real track feature, just a sculpted one.
 
 ## Track Features
 

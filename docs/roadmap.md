@@ -18,8 +18,11 @@ This roadmap follows the Sandbox Moto north star: unlock imagination, not power.
 - Better sculpting tools: pile, smooth, flatten, carve, shape, water, repair, knock down, rebuild.
 - Editable track sections and obstacle movement. (Obstacle move and pick-up done: Hand / Move and Pick Up tools; track section editing still open.)
 - Tiny hand/tool animations.
-- Better toy-bike visuals and 1:12 collectible proportions.
+- Better toy-bike visuals and 1:12 collectible proportions. (Web build done: chunky knobby wheels, glossy plastic bodywork, oversized fenders, engine + exhaust, numbered plates, and an action-figure rider - per `docs/TOY_BIKE_BIBLE.md`.)
 - Better obstacle risk/reward and toy-like jump behavior.
+- Graphics fidelity pass toward the Sandcastle bar (`docs/REFERENCES.md`): sculpted jump geometry (takeoff face, lip, landing) instead of blobby mounds, warmer tactile sand with raked grooves (issue #33), softer warm light, and a soft groomed track surface. In progress in the web build; Godot 2D silhouettes raised in parallel.
+- Berms are made by sculpting, not stamping. The stamped berm tool was removed from both prototypes; a berm is dirt piled on the outside of a turn with the shovel/rake/dozer (see `docs/building_tools.md`). This is part of the manual terrain-sculpting workflow tracked in the sculpting epic (issue #29 / #31).
+- Started: deformable-dirt sculpting in the web build. The sand floor is a heightfield with Pile / Carve / Smooth / Hill brushes (drag to shape), a brush-ring cursor, undo, reset, and baked relief shading. Hill is the first feature migrated from a placed mesh to sculpted terrain. First slice of the sculpting epic - the mechanic works; stronger shaping/shading and letting jumps and berms emerge from the terrain (instead of being placed objects) are the next steps.
 - Played-in dirt: ruts, tire marks, worn jump faces, roost piles.
 - Done: local sandbox autosave and reload (`docs/SAVE_SYSTEM.md`) - the track, start/finish, obstacles, and wear survive closing the game. Foundation for the Memory Book and track sharing.
 
@@ -50,6 +53,8 @@ Each location should have mood, lighting, sound, props, dirt/sand type, and unlo
 
 Environmental polish should make the sandbox feel alive: butterflies, leaves, wind, moving grass, ants, bird shadows, kids laughing, and cloud shadows.
 
+- Done (first piece): living camera. The view breathes and drifts gently while the player is still and hushes on touch, so the sandbox reads as alive even before ambient props exist. See `docs/BEHAVIOR_SPEC.md` and `docs/CAMERA_DESIGN.md` (Idle Life). Remaining ambience (raked sand, moving props, cloud shadows) still open.
+
 ## Version 5: Sharing And Community
 
 - Track sharing.
@@ -58,7 +63,7 @@ Environmental polish should make the sandbox feel alive: butterflies, leaves, wi
 - Community sandbox gallery.
 - Shareable Polaroid/scrapbook pages.
 - Custom toy collections.
-- Photo mode with tilt shift, golden hour, Polaroid frames, scrapbook borders, hide UI, and screenshot shortcut.
+- Photo mode with tilt shift, golden hour, Polaroid frames, scrapbook borders, hide UI, and screenshot shortcut. (Started in the web build: hide UI, golden-hour wash + vignette, Polaroid frame with the track name and a kid caption, and a Save-photo PNG export - P key or the camera button. Tilt-shift and scrapbook borders still open.)
 
 ## Steam Early Access Preparation
 

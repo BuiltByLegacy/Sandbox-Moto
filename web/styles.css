@@ -34,7 +34,7 @@ button { font: inherit; }
 
 .topbar {
   display: grid;
-  grid-template-columns: 1fr auto 44px;
+  grid-template-columns: 1fr auto auto;
   align-items: center;
   gap: 20px;
   padding: 0 18px 0 22px;
@@ -42,6 +42,7 @@ button { font: inherit; }
   background: rgba(255, 250, 237, 0.94);
 }
 
+.topbar-actions { display: flex; align-items: center; gap: 8px; }
 .brand-block { display: flex; align-items: baseline; gap: 12px; }
 .brand-block h1 { margin: 0; font-size: 22px; line-height: 1; letter-spacing: 0; }
 .eyebrow { color: var(--accent); font-size: 11px; font-weight: 800; text-transform: uppercase; }
@@ -116,7 +117,9 @@ button { font: inherit; }
   font-weight: 800;
 }
 
-.tool-symbol { font-size: 18px; line-height: 1; }
+.tool-symbol { font-size: 18px; line-height: 1; display: flex; align-items: center; justify-content: center; }
+.tool-symbol svg { width: 30px; height: 30px; display: block; filter: drop-shadow(0 1px 1px rgba(90, 58, 26, .18)); }
+.tool.active .tool-symbol svg { filter: drop-shadow(0 1px 2px rgba(139, 80, 38, .35)); }
 .tool:hover { border-color: rgba(100, 61, 29, .25); background: rgba(118, 82, 45, .1); }
 .tool.active { border-color: #8b5026; color: var(--ink); background: #edd09a; box-shadow: inset 0 0 0 1px rgba(255,255,255,.5); }
 .tool:disabled { opacity: .4; cursor: not-allowed; }
@@ -243,3 +246,38 @@ button { font: inherit; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
+
+/* Photo mode: hide the chrome, frame the sandbox like a Polaroid memory. */
+.game-shell.photo { background: #1b140c; grid-template-rows: 0 minmax(0, 1fr) 0; }
+.game-shell.photo .topbar,
+.game-shell.photo .toolbox,
+.game-shell.photo .footer-note,
+.game-shell.photo .feedback,
+.game-shell.photo .race-banner,
+.game-shell.photo .sandbox-label { display: none !important; }
+.game-shell.photo .play-area { grid-row: 2; padding: 22px; grid-template-columns: 1fr; grid-template-rows: 1fr; }
+.game-shell.photo .sandbox-wrap {
+  border: 16px solid #fbf3e2;
+  border-bottom-width: 72px;
+  border-radius: 3px;
+  box-shadow: 0 26px 64px rgba(0, 0, 0, .55);
+  overflow: visible; /* let the caption show in the bottom border */
+}
+.photo-caption {
+  position: absolute;
+  left: 0; right: 0; bottom: -55px;
+  text-align: center;
+  color: #3a2a17;
+  font: 700 22px/1 "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+  transform: rotate(-.6deg);
+  pointer-events: none;
+}
+.photo-bar { position: absolute; top: 14px; right: 14px; gap: 8px; z-index: 5; }
+.photo-bar:not([hidden]) { display: flex; }
+.photo-bar button {
+  border: 0; border-radius: 7px; padding: 9px 14px;
+  font-weight: 900; font-size: 12px; cursor: pointer;
+  color: #fff; background: var(--accent);
+  box-shadow: 0 5px 16px rgba(0, 0, 0, .35);
+}
+.photo-bar button#closePhoto { background: #6b5636; }

@@ -286,7 +286,7 @@ func _handle_press(mouse_pos: Vector2) -> void:
 				_remove_obstacles_near(mouse_pos)
 				track_changed.emit()
 				queue_redraw()
-			elif active_tool in ["single", "double", "triple", "tabletop", "whoops", "sand", "berm", "rollers", "hill"]:
+			elif active_tool in ["single", "double", "triple", "tabletop", "whoops", "sand", "rollers", "hill"]:
 				_add_obstacle(active_tool, mouse_pos)
 
 func _add_obstacle(obstacle_type: String, pos: Vector2) -> void:
