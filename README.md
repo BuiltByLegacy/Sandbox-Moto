@@ -50,6 +50,10 @@ Play Time / Build Track
 6. Unlock imagination, not power.
 7. The world should feel tiny, warm, handmade, playful, and emotionally familiar.
 
+## Runtime Direction
+
+The canonical Steam shipping runtime is **Godot 4 in 3D**. The Three.js browser prototype remains a rapid visual/interaction lab and executable reference. See `docs/ADR_001_CANONICAL_3D_RUNTIME.md` and `docs/technical_plan.md`.
+
 ## Current Prototype
 
 The current Godot prototype includes:
@@ -66,7 +70,7 @@ The current Godot prototype includes:
 - Autosaved sandbox: the track, start/finish, obstacles, and wear quietly persist and reload on launch, like toys left out overnight (see `docs/SAVE_SYSTEM.md`; F9 clears the save in debug builds).
 - Kid-style track names: every sandbox gets a suggested name ("The Impossible Triple", "Big Sand SX"), editable on the nameplate, saved with the track, and used as the Polaroid caption.
 
-Important implementation note: keep the current free-draw smooth track system as the baseline for now. Do not switch back to a blocky grid system. If grid logic is introduced later, it should only guide editing while visuals remain smooth and natural.
+Important implementation note: keep the current free-draw smooth track system as a useful prototype/reference baseline while the production 3D terrain and hidden rideable-course architecture is developed. Do not expose a blocky grid or conventional spline editor to the player.
 
 ## Progression Direction
 
@@ -88,6 +92,7 @@ Play the latest version online at **https://builtbylegacy.github.io/Sandbox-Moto
 
 ## Key Docs
 
+- `docs/ADR_001_CANONICAL_3D_RUNTIME.md` - Canonical Godot 4 3D shipping-runtime decision and migration strategy.
 - `docs/GAME_VISION.md` - Canonical full concept, fantasy, loop, and boundaries.
 - `docs/NORTH_STAR.md` - One-page design filter.
 - `docs/EMOTIONAL_PILLARS.md` - Emotional goals and feature support.
@@ -119,6 +124,7 @@ Play the latest version online at **https://builtbylegacy.github.io/Sandbox-Moto
 - `docs/sound_and_mood.md` - Cozy ambience and sound direction.
 - `docs/toy_bike_art_direction.md` - 1:12 fictional toy bike art direction.
 - `docs/signature_moments.md` - Emotional moments the game should create.
+- `docs/technical_plan.md` - Production architecture and execution wave.
 - `docs/roadmap.md` - Development phases.
 - `CLAUDE.md` - Root agent directive: roles, session-start routine, workflow rules.
 - `prompts/claude_code_master_prompt.md` - Claude Code alignment prompt.
