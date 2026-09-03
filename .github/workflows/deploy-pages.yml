@@ -1,12 +1,12 @@
 name: Deploy HTML prototype to GitHub Pages
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "web/**"
-      - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
+    inputs:
+      reason:
+        description: Why this production release is being published
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -24,6 +24,9 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+      - name: Record release intent
+        run: echo "Production release authorized: ${{ inputs.reason }}"
+
       - name: Check out repository
         uses: actions/checkout@v4
 
